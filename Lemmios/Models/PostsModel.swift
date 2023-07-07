@@ -24,9 +24,11 @@ class PostsModel: ObservableObject, Hashable {
     
     init(path: String) {
         self.path = path
-        if let data = UserDefaults.standard.data(forKey: "settings"), let decoded = try? JSONDecoder().decode(SettingsModel.SavedSettings.self, from: data) {
-            self.sort = decoded.defaultPostSort
-            self.time = decoded.defaultPostSortTime
+        if let defaultPostSort = UserDefaults.standard.string(forKey: "defaultPostSort") {
+            self.sort = LemmyHttp.Sort(rawValue: defaultPostSort)!
+        }
+        if let defaultPostSortTime = UserDefaults.standard.string(forKey: "defaultPostSortTime") {
+            self.time = LemmyHttp.TopTime(rawValue: defaultPostSortTime)!
         }
     }
     
@@ -34,7 +36,7 @@ class PostsModel: ObservableObject, Hashable {
         guard case let .ready(page) = pageStatus else {
             return
         }
-        if posts.count == 0 && !specialPostPathList.contains(self.path) {
+        if posts.isEmpty && !specialPostPathList.contains(self.path) {
             apiModel.lemmyHttp!.getCommunity(name: self.path) { posts, error in
                 if error == nil {
                     self.communityView = posts!
@@ -44,7 +46,7 @@ class PostsModel: ObservableObject, Hashable {
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp!.getPosts(path: path, page: page, sort: sort, time: time) { posts, error in
             if error == nil {
-                if posts!.posts.count == 0 {
+                if posts!.posts.isEmpty {
                     self.pageStatus = .done
                 } else {
                     self.posts.append(contentsOf: posts!.posts)

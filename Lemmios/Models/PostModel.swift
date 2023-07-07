@@ -37,8 +37,8 @@ class PostModel: VotableModel, Hashable {
         self.score = post.counts.score
         self.saved = post.saved ?? false
         self.likes = post.my_vote ?? 0
-        if let data = UserDefaults.standard.data(forKey: "settings"), let decoded = try? JSONDecoder().decode(SettingsModel.SavedSettings.self, from: data) {
-            self.sort = decoded.defaultCommentSort
+        if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
+            self.sort = LemmyHttp.Sort(rawValue: defaultCommentSort)!
         }
     }
     
@@ -50,8 +50,8 @@ class PostModel: VotableModel, Hashable {
         self.score = 0
         self.saved = false
         self.likes = 0
-        if let data = UserDefaults.standard.data(forKey: "settings"), let decoded = try? JSONDecoder().decode(SettingsModel.SavedSettings.self, from: data) {
-            self.sort = decoded.defaultCommentSort
+        if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
+            self.sort = LemmyHttp.Sort(rawValue: defaultCommentSort)!
         }
     }
     

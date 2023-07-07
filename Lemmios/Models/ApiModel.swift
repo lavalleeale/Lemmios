@@ -4,26 +4,24 @@ import SimpleKeychain
 import SwiftUI
 
 class ApiModel: ObservableObject {
+    @AppStorage("serverUrl") public var url = ""
+    @AppStorage("selectedAccount") var selectedAccount = ""
+    @AppStorage("seen") var seen: [Int] = []
+    
     @Published var lemmyHttp: LemmyHttp?
     @Published var serverSelected = false
-    @AppStorage("serverUrl") public var url = ""
-    private let simpleKeychain = SimpleKeychain()
-    @AppStorage("selectedAccount") var selectedAccount = ""
     @Published var accounts = [StoredAccount]()
     @Published var subscribed: [String: [LemmyHttp.ApiCommunityData]]?
+    
+    var showAuth: (() -> Void)?
+    
+    private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
     private var cancellable = Set<AnyCancellable>()
-    var showAuth: (() -> Void)?
     
     init() {
         if self.url != "" {
-            if (self.selectServer(url: self.url) == "") {
-                if try! self.simpleKeychain.hasItem(forKey: "accounts for \(url)") {
-                    let data = try! self.simpleKeychain.data(forKey: "accounts for \(url)")
-                    self.accounts = try! JSONDecoder().decode([StoredAccount].self, from: data)
-                    self.updateAuth()
-                }
-            }
+            _ = self.selectServer(url: self.url)
         }
     }
     
@@ -36,10 +34,23 @@ class ApiModel: ObservableObject {
     }
     
     func selectServer(url: String) -> String {
+        self.accounts = []
         do {
             self.lemmyHttp = try LemmyHttp(baseUrl: url)
             self.url = url
             self.serverSelected = true
+            if try! self.simpleKeychain.hasItem(forKey: "accounts for \(url)") {
+                let data = try! self.simpleKeychain.data(forKey: "accounts for \(url)")
+                self.accounts = try! JSONDecoder().decode([StoredAccount].self, from: data)
+                if !self.accounts.contains(where: { $0.username == selectedAccount }), !self.accounts.isEmpty {
+                    self.selectedAccount = self.accounts[0].username
+                } else {
+                    self.selectedAccount = ""
+                }
+            } else {
+                self.selectedAccount = ""
+            }
+            self.updateAuth()
         } catch LemmyHttp.LemmyError.invalidUrl {
             return "Invalid URL"
         } catch {
@@ -50,7 +61,7 @@ class ApiModel: ObservableObject {
     
     func addAuth(username: String, jwt: String) {
         self.accounts.append(StoredAccount(username: username, jwt: jwt))
-        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(url)")
+        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
         self.lemmyHttp?.setJwt(jwt: jwt)
         self.selectedAccount = username
     }
@@ -77,7 +88,7 @@ class ApiModel: ObservableObject {
                     if let array = self.subscribed![firstCharacter] {
                         var newArray = array
                         newArray.append(community)
-                        self.subscribed![firstCharacter] = newArray.sorted {$0.name > $1.name}
+                        self.subscribed![firstCharacter] = newArray.sorted { $0.name > $1.name }
                     } else {
                         self.subscribed![firstCharacter] = [community]
                     }
@@ -89,10 +100,13 @@ class ApiModel: ObservableObject {
     private func updateAuth() {
         if self.selectedAccount != "" {
             self.selectAuth(username: self.selectedAccount)
+        } else {
+            self.lemmyHttp?.setJwt(jwt: nil)
+            self.subscribed = [:]
         }
     }
     
-    struct StoredAccount: Codable, Identifiable {
+    struct StoredAccount: Codable, Identifiable, Equatable {
         var id: String { self.jwt }
         
         let username: String

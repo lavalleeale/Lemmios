@@ -105,12 +105,15 @@ class LemmyHttp {
         return makeRequestWithBody(path: path, query: query, responseType: responseType, body: NoBody(), receiveValue: receiveValue)
     }
     
-    func getUser(name: String, page: Int, sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, receiveValue: @escaping (LemmyHttp.PersonView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+    func getUser(name: String, page: Int, sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, saved: Bool, receiveValue: @escaping (LemmyHttp.PersonView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
         var sortString: String = sort.rawValue
         if sort == .Top {
             sortString += time.rawValue
         }
-        let query = [URLQueryItem(name: "sort", value: sortString), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "username", value: name)]
+        var query = [URLQueryItem(name: "sort", value: sortString), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "username", value: name)]
+        if saved {
+            query.append(URLQueryItem(name: "saved_only", value: "true"))
+        }
         return makeRequest(path: "user", query: query, responseType: PersonView.self, receiveValue: receiveValue)
     }
     
@@ -151,6 +154,7 @@ class LemmyHttp {
         var id: Int {
             person.id
         }
+
         let person: ApiUserData
         let counts: ApiUserCounts
     }
@@ -171,6 +175,7 @@ class LemmyHttp {
         let post: ApiPostData
         let counts: ApiCommentCounts
         let my_vote: Int?
+        let saved: Bool?
     }
     
     struct ApiCommentData: Codable {
@@ -198,7 +203,7 @@ class LemmyHttp {
         let avatar: URL?
         
         var icon: URL? {
-            self.avatar
+            avatar
         }
     }
     
@@ -297,6 +302,7 @@ protocol WithCounts: Identifiable {
     associatedtype T: WithPublished
     var counts: T { get }
     var id: Int { get }
+    var saved: Bool? { get }
 }
 
 public extension Publisher {

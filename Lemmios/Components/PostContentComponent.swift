@@ -12,6 +12,8 @@ struct PostContentComponent: View {
     @State var preview: Bool
     @Environment(\.openURL) private var openURL
     @EnvironmentObject var apiModel: ApiModel
+    
+    var previewType: LinkPreviewType = .auto
 
     var body: some View {
         VStack {
@@ -35,6 +37,7 @@ struct PostContentComponent: View {
                 })
             } else if let url = post.url {
                 LinkPreview(url: url)
+                    .type(previewType)
                     .frame(minHeight: 50)
             } else if preview, let body = post.body {
                 HStack {

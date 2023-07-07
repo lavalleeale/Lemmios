@@ -26,6 +26,9 @@ struct PostView: View {
             }
             .onAppear {
                 postModel.getPostDetails(apiModel: apiModel)
+                if !apiModel.seen.contains(postModel.post.id) {
+                    apiModel.seen.append(postModel.post.id)
+                }
             }
             .padding(.all, 10)
             .contentShape(Rectangle())

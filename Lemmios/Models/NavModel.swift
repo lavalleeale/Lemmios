@@ -5,11 +5,10 @@ class NavModel: ObservableObject {
     @Published var path: NavigationPath
 
     init(startNavigated: Bool) {
-        print(startNavigated)
         self.path = NavigationPath()
-        if startNavigated, let data = UserDefaults.standard.data(forKey: "settings"), let decoded = try? JSONDecoder().decode(SettingsModel.SavedSettings.self, from: data) {
+        if startNavigated {
             DispatchQueue.main.async {
-                self.path.append(PostsModel(path: decoded.defaultStart.rawValue.replacing("c/", with: "")))
+                self.path.append(PostsModel(path: UserDefaults.standard.string(forKey: "defaultStart")?.replacing("c/", with: "") ?? "All"))
             }
         }
     }

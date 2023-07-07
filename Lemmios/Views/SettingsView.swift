@@ -1,17 +1,42 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var settingsModel: SettingsModel
+    @AppStorage("defaultStart") var defaultStart = DefaultStart.Subscribed
+    @AppStorage("defaultPostSort") var defaultPostSort = LemmyHttp.Sort.Active
+    @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyHttp.Sort.Hot
+    @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyHttp.TopTime.All
+    @State var showingChangeInstance = false
+    @EnvironmentObject var apiModel: ApiModel
+
+    init() {
+        if let data = UserDefaults.standard.data(forKey: "settings"), let decoded = try? JSONDecoder().decode(OldSettings.self, from: data) {
+            self.defaultStart = decoded.defaultStart
+            self.defaultPostSort = decoded.defaultPostSort
+            self.defaultCommentSort = decoded.defaultCommentSort
+            self.defaultPostSortTime = decoded.defaultPostSortTime
+            UserDefaults.standard.removeObject(forKey: "settings")
+            return
+        }
+    }
+
     var body: some View {
         List {
             Section("Posts") {
-                SettingViewSuboption(selection: $settingsModel.defaultPostSort, suboption: $settingsModel.defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
+                SettingViewSuboption(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
             }
             Section("Comments") {
-                SettingView(selection: $settingsModel.defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
+                SettingView(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
             }
             Section("Other") {
-                SettingViewCustom(selection: $settingsModel.defaultStart, desciption: "Default Community", options: SettingsModel.DefaultStart.allCases, base: "c/", customDescription: "Community Name")
+                SettingViewCustom(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
+                Button("Change Instance") {
+                    self.showingChangeInstance = true
+                }
+                .popupNavigationView(isPresented: $showingChangeInstance) {
+                    ServerSelectorView() {
+                        self.showingChangeInstance = false
+                    }
+                }
             }
         }
     }
@@ -137,6 +162,42 @@ extension LemmyHttp.Sort: HasCustom {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
-            .environmentObject(SettingsModel())
     }
+}
+
+enum DefaultStart: RawRepresentable, Codable, CaseIterable {
+    init?(rawValue: String) {
+        switch rawValue {
+        case "All":
+            self = .All
+        case "Subscribed":
+            self = .Subscribed
+        case let str where str.contains("c/"):
+            self = .Community(name: String(rawValue.dropFirst(2)))
+        default:
+            self = .All
+        }
+    }
+
+    static var allCases: [DefaultStart] = [.All, .Subscribed, .Community(name: "")]
+
+    var rawValue: String {
+        switch self {
+        case .All:
+            return "All"
+        case .Subscribed:
+            return "Subscribed"
+        case .Community(name: let name):
+            return "c/\(name)"
+        }
+    }
+
+    case All, Subscribed, Community(name: String)
+}
+
+struct OldSettings: Codable {
+    let defaultStart: DefaultStart
+    let defaultPostSort: LemmyHttp.Sort
+    let defaultPostSortTime: LemmyHttp.TopTime
+    let defaultCommentSort: LemmyHttp.Sort
 }

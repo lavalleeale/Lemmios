@@ -25,6 +25,8 @@
 		FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */; };
 		FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6972A573DAD001AFA61 /* Extensions.swift */; };
 		FA72A69B2A577D8A001AFA61 /* LinkPreview in Frameworks */ = {isa = PBXBuildFile; productRef = FA72A69A2A577D8A001AFA61 /* LinkPreview */; };
+		FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */; };
+		FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145072A581F23009DDA23 /* MixedListComponent.swift */; };
 		FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAF8592A524D9500C9BFD8 /* PostPreviewComponent.swift */; };
 		FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAF85B2A524F0F00C9BFD8 /* PostView.swift */; };
 		FAAAF8612A5256EB00C9BFD8 /* SortSelectorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAF8602A5256EB00C9BFD8 /* SortSelectorComponent.swift */; };
@@ -40,7 +42,6 @@
 		FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E622A5346E400DE15BB /* ScoreComponent.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
-		FABEC30A2A540D4C00620E9A /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3092A540D4C00620E9A /* SettingsModel.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
 		FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD20462A5204B4002CE443 /* Assets.xcassets */; };
@@ -76,6 +77,8 @@
 		FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowFromComponent.swift; sourceTree = "<group>"; };
 		FA72A6972A573DAD001AFA61 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lemmios.entitlements; sourceTree = "<group>"; };
+		FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeaderComponent.swift; sourceTree = "<group>"; };
+		FAA145072A581F23009DDA23 /* MixedListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedListComponent.swift; sourceTree = "<group>"; };
 		FAAAF8592A524D9500C9BFD8 /* PostPreviewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewComponent.swift; sourceTree = "<group>"; };
 		FAAAF85B2A524F0F00C9BFD8 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		FAAAF8602A5256EB00C9BFD8 /* SortSelectorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortSelectorComponent.swift; sourceTree = "<group>"; };
@@ -88,7 +91,6 @@
 		FAB93E622A5346E400DE15BB /* ScoreComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreComponent.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		FABEC3092A540D4C00620E9A /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADD20422A5204B3002CE443 /* ArtemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisApp.swift; sourceTree = "<group>"; };
 		FADD20442A5204B3002CE443 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -147,6 +149,8 @@
 				FAF5D5412A53EC2800FDA8D9 /* PostActionsComponent.swift */,
 				FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */,
 				FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */,
+				FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */,
+				FAA145072A581F23009DDA23 /* MixedListComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -232,7 +236,6 @@
 				FAB93E5E2A533FE800DE15BB /* CommentModel.swift */,
 				FAB93E602A5345CA00DE15BB /* VotableModel.swift */,
 				FABEC3052A54064E00620E9A /* NavModel.swift */,
-				FABEC3092A540D4C00620E9A /* SettingsModel.swift */,
 				FA2EE9122A547BE800546BFF /* UserModel.swift */,
 				FA72A68D2A57228A001AFA61 /* SearchModel.swift */,
 				FA72A6912A5729AE001AFA61 /* SearchedModel.swift */,
@@ -332,6 +335,7 @@
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
 				FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */,
+				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
 				FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */,
 				FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */,
 				FADD20452A5204B3002CE443 /* ContentView.swift in Sources */,
@@ -346,7 +350,6 @@
 				FADD20562A5209E7002CE443 /* PostsView.swift in Sources */,
 				FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */,
 				FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */,
-				FABEC30A2A540D4C00620E9A /* SettingsModel.swift in Sources */,
 				FAB93E592A5337B400DE15BB /* PostModel.swift in Sources */,
 				FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */,
 				FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */,
@@ -369,6 +372,7 @@
 				FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
+				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

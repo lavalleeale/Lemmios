@@ -7,6 +7,9 @@ struct ServerSelectorView: View {
     @State var selected = defaultServers[0]
     @State var errorString = ""
     @EnvironmentObject var apiModel: ApiModel
+    
+    var callback: (()->Void)?
+    
     var body: some View {
         VStack {
             Text(errorString)
@@ -33,6 +36,9 @@ struct ServerSelectorView: View {
                 }
                 Button("Submit") {
                     errorString = apiModel.selectServer(url: selected == "custom" ? serverUrl : selected)
+                    if errorString == "" {
+                        callback?()
+                    }
                 }
             }
         }

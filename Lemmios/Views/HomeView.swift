@@ -2,7 +2,6 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var apiModel: ApiModel
-    @EnvironmentObject var settingsModel: SettingsModel
     @State var homeShowing = true
     var body: some View {
         ZStack {

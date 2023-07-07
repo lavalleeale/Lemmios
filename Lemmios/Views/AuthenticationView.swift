@@ -10,7 +10,7 @@ struct AuthenticationView: View {
         ZStack {
             if !apiModel.serverSelected {
                 ServerSelectorView()
-            } else if apiModel.accounts.count == 0 {
+            } else if apiModel.accounts.isEmpty {
                 VStack {
                     Text("No accounts found")
                     Button("Sign in") {
@@ -147,7 +147,6 @@ class ScriptMessageHandler: NSObject, WKScriptMessageHandler {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(1)
         self.webview?.configuration.processPool = WKProcessPool()
         self.webview?.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
             cookies.forEach { cookie in

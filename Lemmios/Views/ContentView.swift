@@ -3,7 +3,6 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var apiModel = ApiModel()
-    @ObservedObject var settingsModel = SettingsModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
@@ -71,7 +70,6 @@ struct ContentView: View {
             AuthenticationView()
         }
         .environmentObject(apiModel)
-        .environmentObject(settingsModel)
     }
 }
 

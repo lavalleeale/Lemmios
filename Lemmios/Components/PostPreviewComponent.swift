@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftUIKit
+import LinkPreview
 
 struct PostPreviewComponent: View {
     @EnvironmentObject var apiModel: ApiModel
@@ -10,8 +11,10 @@ struct PostPreviewComponent: View {
 
     let showCommunity: Bool
     let showUser: Bool
+    let urlStyle: LinkPreviewType
 
-    init(post: LemmyHttp.ApiPost, showCommunity: Bool, showUser: Bool) {
+    init(post: LemmyHttp.ApiPost, showCommunity: Bool, showUser: Bool, urlStyle: LinkPreviewType = .auto) {
+        self.urlStyle = urlStyle
         self.postModel = PostModel(post: post)
         self.showCommunity = showCommunity
         self.showUser = showUser
@@ -30,7 +33,7 @@ struct PostPreviewComponent: View {
                             .multilineTextAlignment(.leading)
                         Spacer()
                     }
-                    PostContentComponent(post: postModel.post, preview: true)
+                    PostContentComponent(post: postModel.post, preview: true, previewType: urlStyle)
                     PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: true)
                 }
                 .contentShape(Rectangle())

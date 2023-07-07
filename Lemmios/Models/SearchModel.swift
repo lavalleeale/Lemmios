@@ -8,10 +8,6 @@ class SearchModel: ObservableObject {
     @Published var time = LemmyHttp.TopTime.All
     @Published var pageStatus = CommentsPageStatus.ready
     
-    init() {
-        print(1)
-    }
-    
     func fetchCommunties(apiModel: ApiModel) {
         guard case .ready = pageStatus else {
             return

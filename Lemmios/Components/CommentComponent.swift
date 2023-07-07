@@ -82,7 +82,7 @@ struct CommentComponent: View {
                     }
                 }
             }
-            if commentModel.comment.counts.child_count != 0 && commentModel.children.count == 0 && !preview {
+            if commentModel.comment.counts.child_count != 0 && commentModel.children.isEmpty && !preview {
                 Divider()
                     .padding(.leading, CGFloat(depth + 1) * 10)
                 HStack {
@@ -116,7 +116,7 @@ struct CommentComponent: View {
                 }
             }
             .allowsHitTesting(!collapsed)
-            .frame(maxHeight: commentModel.children.count == 0 || collapsed ? 0 : .infinity)
+            .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
             .clipped()
         }
         .sheet(isPresented: $showingReply) {
