@@ -1,0 +1,363 @@
+import Combine
+import Foundation
+import SwiftUI
+
+let VERSION = "v3"
+
+class LemmyHttp {
+    private var apiUrl: URL
+    private var cancellable: Set<AnyCancellable> = Set()
+    internal var jwt: String?
+    private var encoder = JSONEncoder()
+    private var decoder = JSONDecoder()
+    
+    public enum LemmyError: Swift.Error {
+        case invalidUrl
+    }
+
+    init(baseUrl: String) throws {
+        guard let apiUrl = URL(string: "\(baseUrl.replacing("/+$", with: ""))/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
+            throw LemmyError.invalidUrl
+        }
+        self.apiUrl = apiUrl
+        let formatter1 = DateFormatter()
+        formatter1.locale = Locale(identifier: "en_US_POSIX")
+        formatter1.timeZone = .gmt
+        formatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+
+        let formatter2 = DateFormatter()
+        formatter2.locale = Locale(identifier: "en_US_POSIX")
+        formatter2.timeZone = .gmt
+        formatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .custom { decoder -> Date in
+            let container = try decoder.singleValueContainer()
+            let dateStr = try container.decode(String.self)
+            var date: Date?
+            if dateStr.contains(".") {
+                date = formatter1.date(from: dateStr)
+            } else {
+                date = formatter2.date(from: dateStr)
+            }
+            guard let date_ = date else {
+                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date string \(dateStr)")
+            }
+            return date_
+        }
+    }
+    
+    func setJwt(jwt: String?) {
+        self.jwt = jwt
+    }
+    
+    func makeRequestWithBody<ResponseType: Decodable, BodyType: Encodable>(path: String, query: [URLQueryItem] = [], responseType: ResponseType.Type, body: BodyType, receiveValue: @escaping (ResponseType?, NetworkError?) -> Void) -> AnyCancellable where BodyType: WithMethod {
+        var url = apiUrl.appending(path: path).appending(queryItems: query)
+        if jwt != nil {
+            url = url.appending(queryItems: [URLQueryItem(name: "auth", value: jwt!)])
+        }
+        var request = URLRequest(url: url)
+        request.setValue("ios:com.axlav.lemmios:v1.0.0 (by @mrlavallee@lemmy.world)", forHTTPHeaderField: "User-Agent")
+        request.httpMethod = body.method
+        if !(body is NoBody) {
+            request.httpBody = try! encoder.encode(body)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        return URLSession.shared.dataTaskPublisher(for: request)
+            // #1 URLRequest fails, throw APIError.network
+            .mapError {
+                NetworkError.network(code: $0.code.rawValue, description: $0.localizedDescription)
+            }
+            .tryMap { v in
+                let code = (v.response as! HTTPURLResponse).statusCode
+                if code != 200 {
+                    throw NetworkError.network(code: code, description: "Lemmy Error")
+                }
+                return v
+            }
+            .retryWithDelay(retries: 10, delay: 5, scheduler: DispatchQueue.global())
+            .flatMap { v in
+                Just(v.data)
+                
+                    // #2 try to decode data as a `Response`
+                    .decode(type: ResponseType.self, decoder: self.decoder)
+                
+                    .mapError { NetworkError.decoding(message: String(data: v.data, encoding: .utf8) ?? "", error: $0) }
+            }
+            .mapError { $0 as! LemmyHttp.NetworkError }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+//                    print("completed")
+                    break
+                case .failure(let error):
+                    receiveValue(nil, error)
+                }
+            }, receiveValue: { value in
+                receiveValue(value, nil)
+            })
+    }
+    
+    private struct NoBody: Encodable, WithMethod {
+        let method = "GET"
+    }
+    
+    func makeRequest<ResponseType: Decodable>(path: String, query: [URLQueryItem] = [], responseType: ResponseType.Type, receiveValue: @escaping (ResponseType?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: path, query: query, responseType: responseType, body: NoBody(), receiveValue: receiveValue)
+    }
+    
+    func getUser(name: String, page: Int, sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, receiveValue: @escaping (LemmyHttp.PersonView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        var sortString: String = sort.rawValue
+        if sort == .Top {
+            sortString += time.rawValue
+        }
+        let query = [URLQueryItem(name: "sort", value: sortString), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "username", value: name)]
+        return makeRequest(path: "user", query: query, responseType: PersonView.self, receiveValue: receiveValue)
+    }
+    
+    func getPost(id: Int, receiveValue: @escaping (LemmyHttp.PostView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        let query = [URLQueryItem(name: "id", value: String(id))]
+        return makeRequest(path: "post", query: query, responseType: PostView.self, receiveValue: receiveValue)
+    }
+    
+    func getCommunity(name: String, receiveValue: @escaping (LemmyHttp.CommunityView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        let query = [URLQueryItem(name: "name", value: name)]
+        return makeRequest(path: "community", query: query, responseType: CommunityView.self, receiveValue: receiveValue)
+    }
+    
+    func getSiteInfo(receiveValue: @escaping (LemmyHttp.SiteInfo?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequest(path: "site", query: [], responseType: SiteInfo.self, receiveValue: receiveValue)
+    }
+
+    enum NetworkError: Swift.Error {
+        case network(code: Int, description: String)
+        case decoding(message: String, error: Error)
+    }
+    
+    struct CommentView: Codable {
+        let comment_view: ApiComment
+    }
+    
+    struct PersonView: Codable, Identifiable {
+        var id: Int {
+            person_view.person.id
+        }
+        
+        let person_view: ApiUser
+        let comments: [ApiComment]
+        let posts: [ApiPost]
+    }
+    
+    struct ApiUser: Codable, Identifiable {
+        var id: Int {
+            person.id
+        }
+        let person: ApiUserData
+        let counts: ApiUserCounts
+    }
+    
+    struct CommunityView: Codable {
+        let community_view: ApiCommunity
+    }
+    
+    struct PostView: Codable {
+        let post_view: ApiPost
+    }
+    
+    struct ApiComment: Codable, Identifiable, WithCounts {
+        var id: Int { comment.id }
+        
+        let comment: ApiCommentData
+        let creator: ApiUserData
+        let post: ApiPostData
+        let counts: ApiCommentCounts
+        let my_vote: Int?
+    }
+    
+    struct ApiCommentData: Codable {
+        let id: Int
+        let content: String
+        let path: String
+    }
+    
+    struct ApiPost: Codable, Identifiable, WithCounts {
+        var id: Int { post.id }
+        
+        let post: ApiPostData
+        let creator: ApiUserData
+        let community: ApiCommunityData
+        let counts: ApiPostCounts
+        let my_vote: Int?
+        let saved: Bool?
+    }
+    
+    struct ApiUserData: Codable, WithPublished, WithNameHost, Identifiable {
+        let name: String
+        let id: Int
+        let actor_id: URL
+        let published: Date
+        let avatar: URL?
+        
+        var icon: URL? {
+            self.avatar
+        }
+    }
+    
+    struct ApiCommunity: Codable, Identifiable {
+        var id: Int { community.id }
+        let community: ApiCommunityData
+    }
+    
+    struct ApiCommunityData: Codable, Identifiable, WithNameHost {
+        let id: Int
+        let name: String
+        let icon: URL?
+        let actor_id: URL
+    }
+    
+    struct ApiPostData: Codable {
+        let id: Int
+        let name: String
+        
+        let body: String?
+        let thumbnail_url: URL?
+        let url: URL?
+        let creator_id: Int
+    }
+    
+    struct ApiPostCounts: Codable, WithPublished {
+        let score: Int
+        let comments: Int
+        let published: Date
+    }
+    
+    struct ApiCommentCounts: Codable, WithPublished {
+        let score: Int
+        let child_count: Int
+        let published: Date
+    }
+    
+    struct ApiUserCounts: Codable {
+        let comment_score: Int
+        let post_score: Int
+        let comment_count: Int
+        let post_count: Int
+    }
+    
+    struct SiteInfo: Codable {
+        let my_user: MyUser
+    }
+    
+    struct MyUser: Codable {
+        let follows: [Follower]
+    }
+    
+    struct Follower: Codable {
+        let community: ApiCommunityData
+    }
+    
+    enum TopTime: String, CaseIterable, Codable {
+        case Hour, SixHour, TwelveHour, Day, Week, Month, Year, All
+    }
+    
+    enum Sort: String, CaseIterable, Codable {
+        case Hot, Active, New, Old, MostComments, NewComments, Top
+        
+        var image: String {
+            switch self {
+            case .Top: return "rosette"
+            case .Hot: return "flame"
+            case .New: return "clock.badge"
+            case .MostComments, .NewComments: return "bubble.left.and.bubble.right"
+            case .Active: return "chart.bar"
+            case .Old: return "clock"
+            }
+        }
+
+        var comments: Bool {
+            switch self {
+            case .MostComments, .NewComments, .Active: return false
+            default: return true
+            }
+        }
+        
+        var hasTime: Bool {
+            switch self {
+            case .Top: return true
+            default: return false
+            }
+        }
+    }
+}
+
+protocol WithPublished {
+    var published: Date { get }
+}
+
+protocol WithCounts: Identifiable {
+    associatedtype T: WithPublished
+    var counts: T { get }
+    var id: Int { get }
+}
+
+public extension Publisher {
+    /**
+     Creates a new publisher which will upon failure retry the upstream publisher a provided number of times, with the provided delay between retry attempts.
+     If the upstream publisher succeeds the first time this is bypassed and proceeds as normal.
+
+     - Parameters:
+        - retries: The number of times to retry the upstream publisher.
+        - delay: Delay in seconds between retry attempts.
+        - scheduler: The scheduler to dispatch the delayed events.
+
+     - Returns: A new publisher which will retry the upstream publisher with a delay upon failure.
+
+     let url = URL(string: "https://api.myService.com")!
+
+     URLSession.shared.dataTaskPublisher(for: url)
+         .retryWithDelay(retries: 4, delay: 5, scheduler: DispatchQueue.global())
+         .sink { completion in
+             switch completion {
+             case .finished:
+                 print("Success 😊")
+             case .failure(let error):
+                 print("The last and final failure after retry attempts: \(error)")
+             }
+         } receiveValue: { output in
+             print("Received value: \(output)")
+         }
+         .store(in: &cancellables)
+     */
+    func retryWithDelay<S>(
+        retries: Int,
+        delay: S.SchedulerTimeType.Stride,
+        scheduler: S
+    ) -> AnyPublisher<Output, Failure> where S: Scheduler {
+        delayIfFailure(for: delay, scheduler: scheduler)
+            .retry(retries)
+            .eraseToAnyPublisher()
+    }
+
+    private func delayIfFailure<S>(
+        for delay: S.SchedulerTimeType.Stride,
+        scheduler: S
+    ) -> AnyPublisher<Output, Failure> where S: Scheduler {
+        self.catch { error in
+            Future { completion in
+                scheduler.schedule(after: scheduler.now.advanced(by: delay)) {
+                    completion(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
+protocol WithMethod {
+    var method: String { get }
+}
+
+protocol WithNameHost {
+    var actor_id: URL { get }
+    var name: String { get }
+    var icon: URL? { get }
+}

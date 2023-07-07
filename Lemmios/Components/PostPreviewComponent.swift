@@ -1,0 +1,74 @@
+import SwiftUI
+import SwiftUIKit
+
+struct PostPreviewComponent: View {
+    @EnvironmentObject var apiModel: ApiModel
+    @EnvironmentObject var navModel: NavModel
+    @ObservedObject var postModel: PostModel
+    @State private var offset: CGFloat = 0
+    @State var showingReply = false
+
+    let showCommunity: Bool
+    let showUser: Bool
+
+    init(post: LemmyHttp.ApiPost, showCommunity: Bool, showUser: Bool) {
+        self.postModel = PostModel(post: post)
+        self.showCommunity = showCommunity
+        self.showUser = showUser
+    }
+
+    var body: some View {
+        VStack {
+            Button {
+                navModel.path.append(postModel)
+            } label: {
+                VStack {
+                    HStack {
+                        Text(postModel.post.name)
+                            .font(.title3)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    PostContentComponent(post: postModel.post, preview: true)
+                    PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: true)
+                }
+                .contentShape(Rectangle())
+                .addSwipe(leadingOptions: [
+                    SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
+                    SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
+                ], trailingOptions: [
+                    SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue),
+                    SwipeOption(id: "save", image: postModel.saved ? "bookmark.slash" : "bookmark", color: .green)
+                ]) { swiped in
+                    if apiModel.selectedAccount == "" {
+                        apiModel.getAuth()
+                    } else {
+                        switch swiped {
+                        case "upvote":
+                            postModel.vote(direction: true, apiModel: apiModel)
+                            return
+                        case "downvote":
+                            postModel.vote(direction: false, apiModel: apiModel)
+                            return
+                        case "reply":
+                            showingReply = true
+                            return
+                        case "save":
+                            postModel.save(apiModel: apiModel)
+                        default:
+                            break
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showingReply) {
+                CommentSheet { commentBody in
+                    postModel.comment(body: commentBody, apiModel: apiModel)
+                }
+                .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
+            }
+            .accessibility(identifier: "post id: \(postModel.post.id)")
+        }
+    }
+}
