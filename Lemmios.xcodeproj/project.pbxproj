@@ -16,6 +16,9 @@
 		FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */; };
 		FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */; };
 		FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */ = {isa = PBXBuildFile; productRef = FA44D6BA2A5394D70086AD56 /* SimpleHaptics */; };
+		FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596242A59C5A500368DBB /* ThemeManger.swift */; };
+		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
+		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
 		FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68B2A572151001AFA61 /* SearchView.swift */; };
@@ -83,6 +86,9 @@
 		FA2EE9122A547BE800546BFF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionsModifier.swift; sourceTree = "<group>"; };
 		FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FA4596242A59C5A500368DBB /* ThemeManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManger.swift; sourceTree = "<group>"; };
+		FA4596262A59C83700368DBB /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
+		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -165,6 +171,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		FA45961F2A59C3FE00368DBB /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				FA4596242A59C5A500368DBB /* ThemeManger.swift */,
+				FA4596262A59C83700368DBB /* ThemeModifiers.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		FAAAF8582A524D8700C9BFD8 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +200,7 @@
 				FABC28472A59338D00243C7F /* SettingViewComponent.swift */,
 				FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */,
 				FABC284B2A5933C100243C7F /* SettingCustomComponent.swift */,
+				FA4596282A59D1C800368DBB /* ColoredListComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -217,6 +233,7 @@
 		FADD20412A5204B3002CE443 /* Lemmios */ = {
 			isa = PBXGroup;
 			children = (
+				FA45961F2A59C3FE00368DBB /* Theme */,
 				FABC28322A5915F700243C7F /* Resources */,
 				FA68BDEA2A58C45700F2FE3D /* Info.plist */,
 				FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */,
@@ -391,6 +408,7 @@
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
+				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,
 				FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */,
 				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
 				FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */,
@@ -426,6 +444,7 @@
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
 				FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */,
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
+				FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */,
 				FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */,
 				FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */,
 				FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */,
@@ -435,6 +454,7 @@
 				FAB93E5D2A533FC900DE15BB /* CommentComponent.swift in Sources */,
 				FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */,
 				FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */,
+				FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
 				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,
@@ -560,7 +580,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -581,7 +601,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -602,7 +622,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -623,7 +643,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

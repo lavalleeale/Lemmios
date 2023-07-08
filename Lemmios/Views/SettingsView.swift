@@ -6,13 +6,17 @@ struct SettingsView: View {
     @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyHttp.Sort.Hot
     @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyHttp.TopTime.All
     @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        List {
+        ColoredListComponent {
+            Section("Appearance") {
+                SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
+            }
             Section("Posts") {
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
             }

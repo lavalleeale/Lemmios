@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var searchModel: SearchModel
     @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var query = ""
@@ -10,7 +11,7 @@ struct SearchView: View {
     var body: some View {
         let typing = query != ""
         VStack {
-            List {
+            ColoredListComponent {
                 Section {
                     ForEach(SearchedModel.SearchType.allCases, id: \.self) { type in
                         NavigationLink(value: SearchedModel(query: query, searchType: type)) {
@@ -36,18 +37,26 @@ struct SearchView: View {
             }
             .frame(maxHeight: typing ? .infinity : 0)
             .clipped()
-            List {
-                CommmunityListComponent(communities: searchModel.communities, rising: true)
+            ColoredListComponent {
+                    if searchModel.communities.count == 0 {
+                        HStack {
+                            Text("Loading Rising...")
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
+                    CommmunityListComponent(communities: searchModel.communities, rising: true)
             }
             .frame(maxHeight: typing ? 0 : .infinity)
             .clipped()
         }
+        .background(selectedTheme.backgroundColor)
         .navigationBarTitle("Search", displayMode: .inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 TextField("Search", text: $query) {
                     if query != "" {
-                        navModel.path.append(SearchedModel(query: query, searchType: .Posts))                        
+                        navModel.path.append(SearchedModel(query: query, searchType: .Posts))
                     }
                 }
                 .disableAutocorrection(true)
@@ -76,15 +85,15 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
             let apiHost = URL(string: apiModel.url)!.host()!
             NavigationLink(
             ) {} label: {
-                if (rising) {
-                            HStack {
-                                Image(systemName: "chart.line.uptrend.xyaxis")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 24)
-                                Spacer()
-                                ShowFromComponent(item: community.community)
-                            }
+                if rising {
+                    HStack {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 24)
+                        Spacer()
+                        ShowFromComponent(item: community.community)
+                    }
                 } else {
                     ShowFromComponent(item: community.community)
                 }

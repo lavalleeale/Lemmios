@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @EnvironmentObject var apiModel: ApiModel
     @State var homeShowing = true
     
@@ -8,7 +9,7 @@ struct HomeView: View {
         ZStack {
             if apiModel.serverSelected {
                 let apiHost = URL(string: apiModel.url)!.host()!
-                List {
+                ColoredListComponent {
                     NavigationLink("All", value: PostsModel(path: "All"))
                     if let subscribed = apiModel.subscribed {
                         NavigationLink("Home", value: PostsModel(path: "Subscribed"))

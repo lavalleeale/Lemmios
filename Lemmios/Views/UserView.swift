@@ -8,7 +8,7 @@ struct UserView: View {
         let apiHost = URL(string: apiModel.url)!.host()!
         let split = userModel.name.split(separator: "@")
         if let name = split.first, let from = split.last {
-            List {
+            ColoredListComponent {
                 UserHeaderComponent(person_view: userModel.userData)
                     .frame(maxWidth: .infinity)
                     .listRowSeparator(.hidden)

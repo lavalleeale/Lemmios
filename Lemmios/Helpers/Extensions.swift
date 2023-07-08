@@ -78,12 +78,15 @@ public extension View {
 }
 
 private struct WithNavigationModifier: ViewModifier {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var navModel: NavModel
     @State var url: URL?
 
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
             content
+                .toolbarBackground(selectedTheme.backgroundColor, for: .navigationBar)
+                .toolbar(.visible, for: .tabBar)
                 .navigationDestination(for: PostsModel.self) { postsModel in
                     PostsView(postsModel: postsModel)
                 }

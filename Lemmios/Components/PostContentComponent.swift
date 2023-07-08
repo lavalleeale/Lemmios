@@ -70,7 +70,7 @@ struct PostContentComponent: View {
             } else if preview, let body = post.post.body {
                 HStack {
                     Markdown(processMarkdown(input: body, comment: false), baseURL: URL(string: apiModel.url)!)
-                        .markdownTheme(Theme()
+                        .markdownTheme(MarkdownUI.Theme()
                             .text {
                                 ForegroundColor(.secondary)
                             }

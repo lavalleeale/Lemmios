@@ -17,7 +17,7 @@ struct PostsView: View {
         let isSpecialPath = specialPostPathList.contains(postsModel.path)
         ZStack {
             if apiModel.serverSelected {
-                List {
+                ColoredListComponent {
                     ForEach(postsModel.posts) { post in
                         VStack {
                             PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
@@ -26,7 +26,6 @@ struct PostsView: View {
                                         postsModel.fetchPosts(apiModel: apiModel)
                                     }
                                 }
-                                .padding(.horizontal, 10)
                             Rectangle()
                                 .fill(.secondary.opacity(0.1))
                                 .frame(height: 10)
@@ -92,18 +91,20 @@ struct PostsView: View {
         .navigationBarTitle((postsModel.path != "") ? postsModel.path : "All", displayMode: .inline)
         .overlay(alignment: .top) {
             if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
-                List(communities) { community in
-                    let communityHost = community.community.actor_id.host()!
-                    let apiHost = URL(string: apiModel.url)!.host()!
-                    NavigationLink(
-                    ) {} label: {
-                        ShowFromComponent(item: community.community)
+                ColoredListComponent {
+                    ForEach(communities) { community in
+                        let communityHost = community.community.actor_id.host()!
+                        let apiHost = URL(string: apiModel.url)!.host()!
+                        NavigationLink(
+                        ) {} label: {
+                            ShowFromComponent(item: community.community)
+                        }
+                        .onTapGesture {
+                            navModel.path.append(PostsModel(
+                                path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .onTapGesture {
-                        navModel.path.append(PostsModel(
-                            path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))
-                    }
-                    .buttonStyle(.plain)
                 }
                 .onTapGesture {
                     withAnimation(.linear(duration: 0.1)) {

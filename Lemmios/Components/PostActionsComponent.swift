@@ -45,10 +45,14 @@ struct PostActionsComponent: View {
                         HStack {
                             ScoreComponent(votableModel: postModel)
                             HStack {
-                                Image(systemName: "bubble.left.and.bubble.right")
-                                Text(formatNum(num: postModel.counts!.comments))
-                                Image(systemName: "clock")
-                                Text(postModel.counts!.published.relativeDateAsString())
+                                HStack(spacing: 3) {
+                                    Image(systemName: "bubble.left.and.bubble.right")
+                                    Text(formatNum(num: postModel.counts!.comments))
+                                }
+                                HStack(spacing: 3) {
+                                    Image(systemName: "clock")
+                                    Text(postModel.counts!.published.relativeDateAsString())
+                                }
                             }
                             .foregroundStyle(.secondary)
                         }
@@ -56,17 +60,18 @@ struct PostActionsComponent: View {
                     Spacer()
                 }
                 if collapsedButtons {
-                    Menu {
-                        CollapsedButtons
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                            .padding(.all, 10)
+                    HStack() {
+                        Menu {
+                            CollapsedButtons
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20)
+                        }
+                        .foregroundStyle(.secondary)
+                        ArrowsComponent(votableModel: postModel)
                     }
-                    .foregroundStyle(.secondary)
-                    ArrowsComponent(votableModel: postModel)
                 }
             }
             if !collapsedButtons {

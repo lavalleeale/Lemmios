@@ -14,7 +14,8 @@ struct AuthenticationView: View {
             } else if apiModel.accounts.isEmpty {
                 AuthFormComponent(authModel: authModel)
             } else {
-                List(apiModel.accounts) { account in
+                ColoredListComponent {
+                ForEach(apiModel.accounts) { account in
                     Button {
                         apiModel.selectAuth(username: account.username)
                     } label: {
@@ -36,6 +37,7 @@ struct AuthenticationView: View {
                     }
                     .buttonStyle(.plain)
                 }
+            }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button("Close") {

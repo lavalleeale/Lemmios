@@ -32,8 +32,10 @@ struct ApolloImportView: View {
             case .Import(let subs):
                 ImportSubsView(requestedSubs: subs)
             case .Main(let users):
-                List(users.sorted { $0.key > $1.key }, id: \.key) { key, value in
-                    NavigationLink(key, value: ApolloImportDestination.Import(subs: value.subscribed_subreddits))
+                ColoredListComponent {
+                    ForEach(users.sorted { $0.key > $1.key }, id: \.key) { key, value in
+                        NavigationLink(key, value: ApolloImportDestination.Import(subs: value.subscribed_subreddits))
+                    }
                 }
             }
         }

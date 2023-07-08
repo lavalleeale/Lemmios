@@ -9,9 +9,9 @@ struct ArrowsComponent<T: VotableModel>: View {
     var body: some View {
         Image(systemName: "arrow.up")
             .resizable()
-            .frame(width: 20, height: 20)
+            .frame(width: 15, height: 20)
             .foregroundStyle(votableModel.likes == 1 ? .white : .secondary)
-            .padding(.all, 10)
+            .padding(.all, 7)
             .background(votableModel.likes == 1 ? .orange : .clear)
             .cornerRadius(5)
             .highPriorityGesture(TapGesture().onEnded {
@@ -20,9 +20,9 @@ struct ArrowsComponent<T: VotableModel>: View {
             })
         Image(systemName: "arrow.down")
             .resizable()
-            .frame(width: 20, height: 20)
+            .frame(width: 15, height: 20)
             .foregroundStyle(votableModel.likes == -1 ? .white : .secondary)
-            .padding(.all, 10)
+            .padding(.all, 7)
             .background(votableModel.likes == -1 ? .purple : .clear)
             .cornerRadius(5)
             .highPriorityGesture(TapGesture().onEnded {

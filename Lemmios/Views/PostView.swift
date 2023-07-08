@@ -10,34 +10,34 @@ struct PostView: View {
     @State var parentContent: String? = nil
 
     var body: some View {
-        ScrollView(.vertical) {
-            VStack {
-                Text(postModel.post.name)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.title3)
-                    .lineLimit(collapsed ? 1 : .max)
-                    .multilineTextAlignment(.leading)
-                if !collapsed {
-                    Spacer()
-                        .frame(height: 30)
-                    PostContentComponent(post: postModel, preview: false)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        ColoredListComponent {
+            Group {
+                VStack {
+                    Text(postModel.post.name)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.title3)
+                        .lineLimit(collapsed ? 1 : .max)
+                        .multilineTextAlignment(.leading)
+                    if !collapsed {
+                        Spacer()
+                            .frame(height: 30)
+                        PostContentComponent(post: postModel, preview: false)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
-            }
-            .onAppear {
-                postModel.getPostDetails(apiModel: apiModel)
-                if !apiModel.seen.contains(postModel.post.id) {
-                    apiModel.seen.append(postModel.post.id)
+                .onAppear {
+                    postModel.getPostDetails(apiModel: apiModel)
+                    if !apiModel.seen.contains(postModel.post.id) {
+                        apiModel.seen.append(postModel.post.id)
+                    }
                 }
-            }
-            .padding(.all, 10)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                withAnimation {
-                    collapsed.toggle()
+                .padding(.all, 10)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation {
+                        collapsed.toggle()
+                    }
                 }
-            }
-            LazyVStack(spacing: 0) {
                 if postModel.creator != nil {
                     PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false)
                         .onAppear {
@@ -49,30 +49,34 @@ struct PostView: View {
                 let topLevels = postModel.comments.filter { $0.id == postModel.commentId || isCommentParent(parentId: 0, possibleChild: $0) }
                 ForEach(topLevels) { comment in
                     CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil)
-                    Divider()
+                        .listRowSeparator(.automatic)
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
-            }
-            .environmentObject(postModel)
-            if case .failed = postModel.pageStatus {
-                HStack {
-                    Text("Lemmy Request Failed, ")
-                    Button("refresh?") {
-                        postModel.refresh(apiModel: apiModel)
+                .environmentObject(postModel)
+                if case .failed = postModel.pageStatus {
+                    HStack {
+                        Text("Lemmy Request Failed, ")
+                        Button("refresh?") {
+                            postModel.refresh(apiModel: apiModel)
+                        }
                     }
+                } else if case .done = postModel.pageStatus {
+                    HStack {
+                        Text("Last Comment Found ):")
+                    }
+                } else if case .loading = postModel.pageStatus {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
                 }
-            } else if case .done = postModel.pageStatus {
-                HStack {
-                    Text("Last Comment Found ):")
-                }
-            } else if case .loading = postModel.pageStatus {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                }
-                .listRowSeparator(.hidden)
             }
+            .listRowSeparator(.hidden)
+            .listRowInsets(.none)
         }
+        .listStyle(.plain)
         .refreshable {
             postModel.refresh(apiModel: apiModel)
         }

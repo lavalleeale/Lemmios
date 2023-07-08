@@ -2,6 +2,7 @@ import SafariServices
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
@@ -11,18 +12,18 @@ struct ContentView: View {
     @ObservedObject var userModel = UserModel(path: "")
     @State var showingAuth = false
     @State var selected = "Posts"
-    
+
     init() {
         if apiModel.serverSelected {
             self.userModel = UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)")
         }
     }
-    
+
     var body: some View {
         ZStack {
             Color.yellow.opacity(0.1).onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        }
+            }
             TabView(selection: Binding(get: { self.selected }, set: {
                 if $0 == selected {
                     switch selected {
@@ -42,46 +43,50 @@ struct ContentView: View {
                 }
                 self.selected = $0
             })) {
-                HomeView()
-                    .handleNavigations(navModel: homeNavModel)
+                Group {
+                    HomeView()
+                        .handleNavigations(navModel: homeNavModel)
+                        .tabItem {
+                            Label("Posts", systemImage: "doc.text.image")
+                        }
+                        .tag("Posts")
+                    ZStack {
+                        if !apiModel.serverSelected {
+                            ServerSelectorView()
+                        } else if apiModel.selectedAccount == "" {
+                            AuthenticationView()
+                        } else {
+                            UserView(userModel: userModel)
+                                .navigationTitle("Accounts")
+                                .navigationBarTitleDisplayMode(.inline)
+                                .handleNavigations(navModel: userNavModel)
+                        }
+                    }
                     .tabItem {
-                        Label("Posts", systemImage: "doc.text.image")
+                        Label("Accounts", systemImage: "person.crop.circle")
                     }
-                    .tag("Posts")
-                ZStack {
-                    if !apiModel.serverSelected {
-                        ServerSelectorView()
-                    } else if apiModel.selectedAccount == "" {
-                        AuthenticationView()
-                    } else {
-                        UserView(userModel: userModel)
-                            .navigationTitle("Accounts")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .handleNavigations(navModel: userNavModel)
+                    .tag("Auth")
+                    ZStack {
+                        if !apiModel.serverSelected {
+                            ServerSelectorView()
+                        } else {
+                            SearchView(searchModel: searchModel)
+                        }
                     }
-                }
-                .tabItem {
-                    Label("Accounts", systemImage: "person.crop.circle")
-                }
-                .tag("Auth")
-                ZStack {
-                    if !apiModel.serverSelected {
-                        ServerSelectorView()
-                    } else {
-                        SearchView(searchModel: searchModel)
-                    }
-                }
-                .handleNavigations(navModel: searchNavModel)
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
-                }
-                .tag("Search")
-                SettingsView()
-                    .handleNavigations(navModel: settingsNavModel)
+                    .handleNavigations(navModel: searchNavModel)
                     .tabItem {
-                        Label("Settings", systemImage: "gear")
+                        Label("Search", systemImage: "magnifyingglass")
                     }
-                    .tag("Settings")
+                    .tag("Search")
+                    SettingsView()
+                        .handleNavigations(navModel: settingsNavModel)
+                        .tabItem {
+                            Label("Settings", systemImage: "gear")
+                        }
+                        .tag("Settings")
+                }
+                .toolbarBackground(selectedTheme.backgroundColor, for: .tabBar)
+                .toolbar(.visible, for: .tabBar)
             }
             .onChange(of: apiModel.selectedAccount) { newValue in
                 userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
@@ -94,12 +99,12 @@ struct ContentView: View {
                 }
             } message: {
                 Text("The official subreddit for this app! Subscribe to the community for news on the app, feature requests, and more!")
-                //                .multilineTextAlignment(.center)
             }
             .popupNavigationView(isPresented: $apiModel.showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
                 AuthenticationView()
             }
             .environmentObject(apiModel)
+            .navigationBarModifier(backgroundColor: UIColor(selectedTheme.backgroundColor))
         }
     }
 }

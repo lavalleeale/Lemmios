@@ -17,7 +17,7 @@ struct AboutView: View {
                 }
                 .font(.title3)
             }
-            List {
+            ColoredListComponent {
                 if let url = URL(string: apiModel.url), let host = url.host() {
                     let path = host == "lemmy.world" ? "lemmiosapp" : "lemmiosapp@lemmy.world"
                     let userPath = host == "lemmy.world" ? "mrlavallee" : "mrlavallee@lemmy.world"
