@@ -19,7 +19,7 @@ class SearchedModel: ObservableObject, Hashable {
     @Published var time = LemmyHttp.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     
-    let query: String
+    @Published var query: String
     
     let searchType: SearchType
     
@@ -36,14 +36,33 @@ class SearchedModel: ObservableObject, Hashable {
         }
     }
     
-    func fetchCommunties(apiModel: ApiModel) {
+    func reset(removeResults: Bool) {
+        if removeResults {
+            switch searchType {
+            case .Posts:
+                posts?.removeAll()
+            case .Communities:
+                communities?.removeAll()
+            case .Users:
+                users?.removeAll()
+            }
+        }
+        self.pageStatus = .ready(nextPage: 1)
+        self.cancellable.removeAll()
+    }
+    
+    func fetchCommunties(apiModel: ApiModel, reset: Bool = false) {
         guard case let .ready(page) = pageStatus else {
             return
         }
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp!.searchCommunities(query: query, page: page, sort: sort, time: time) { communities, error in
-            if error == nil {
-                self.communities!.append(contentsOf: communities!.communities)
+            if let communities = communities?.communities {
+                if reset {
+                    self.communities = communities
+                } else {
+                    self.communities!.append(contentsOf: communities)
+                }
                 self.pageStatus = .ready(nextPage: page+1)
             } else {
                 self.pageStatus = .failed

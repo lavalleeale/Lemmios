@@ -1,15 +1,17 @@
 import AlertToast
 import SwiftUI
+import UIKit
 
 let specialPostPathList = ["All", "Subscribed"]
 
 struct PostsView: View {
-    @EnvironmentObject var apiModel: ApiModel
     @ObservedObject var postsModel: PostsModel
+    @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var newPath: String = ""
     @State var showingCreate = false
     @State private var id = UUID().uuidString
     @EnvironmentObject var navModel: NavModel
+    @EnvironmentObject var apiModel: ApiModel
 
     var body: some View {
         let isSpecialPath = specialPostPathList.contains(postsModel.path)
@@ -71,6 +73,13 @@ struct PostsView: View {
         .onChange(of: apiModel.selectedAccount) { _ in
             postsModel.refresh(apiModel: apiModel)
         }
+        .onChange(of: newPath) { newValue in
+            self.searchedModel.reset(removeResults: false)
+            if newValue != "" {
+                self.searchedModel.query = newValue
+                self.searchedModel.fetchCommunties(apiModel: apiModel, reset: true)
+            }
+        }
         .onAppear {
             newPath = ""
         }
@@ -81,6 +90,31 @@ struct PostsView: View {
         }
         .id(id)
         .navigationBarTitle((postsModel.path != "") ? postsModel.path : "All", displayMode: .inline)
+        .overlay(alignment: .top) {
+            if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
+                List(communities) { community in
+                    let communityHost = community.community.actor_id.host()!
+                    let apiHost = URL(string: apiModel.url)!.host()!
+                    NavigationLink(
+                    ) {} label: {
+                        ShowFromComponent(item: community.community)
+                    }
+                    .onTapGesture {
+                        navModel.path.append(PostsModel(
+                            path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))
+                    }
+                    .buttonStyle(.plain)
+                }
+                .onTapGesture {
+                    withAnimation(.linear(duration: 0.1)) {
+                        newPath = ""
+                    }
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+                .scrollContentBackground(.hidden)
+                .backgroundStyle(.clear)
+            }
+        }
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
                 TextField((postsModel.path == "") ? "All" : postsModel.path, text: $newPath, onCommit: {
@@ -89,7 +123,7 @@ struct PostsView: View {
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .multilineTextAlignment(.center)
-                .frame(minWidth: 100, maxWidth: 100)
+                .frame(width: 100)
                 .textFieldStyle(PlainTextFieldStyle())
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -109,7 +143,7 @@ struct PostsView: View {
                             if apiModel.selectedAccount == "" {
                                 apiModel.getAuth()
                             } else {
-                                postsModel.follow(apiModel: apiModel)                                
+                                postsModel.follow(apiModel: apiModel)
                             }
                         } label: {
                             Label(postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "Unfollow" : "Follow", systemImage: postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "heart.slash" : "heart")

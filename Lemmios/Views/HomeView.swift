@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var apiModel: ApiModel
     @State var homeShowing = true
+    
     var body: some View {
         ZStack {
             if apiModel.serverSelected {

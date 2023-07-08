@@ -5,7 +5,7 @@ import SwiftUI
 let VERSION = "v3"
 
 class LemmyHttp {
-    private var apiUrl: URL
+    var apiUrl: URL
     private var cancellable: Set<AnyCancellable> = Set()
     internal var jwt: String?
     private var encoder = JSONEncoder()
@@ -16,6 +16,10 @@ class LemmyHttp {
     }
 
     init(baseUrl: String) throws {
+        var baseUrl = baseUrl
+        if !baseUrl.contains(/https?:\/\//) {
+            baseUrl = "https://" + baseUrl
+        }
         guard let apiUrl = URL(string: "\(baseUrl.replacing("/+$", with: ""))/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
             throw LemmyError.invalidUrl
         }

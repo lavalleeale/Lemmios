@@ -33,7 +33,8 @@ class ApiModel: ObservableObject {
         self.accounts = []
         do {
             self.lemmyHttp = try LemmyHttp(baseUrl: url)
-            self.url = url
+            // /api/v3
+            self.url = String(self.lemmyHttp!.apiUrl.absoluteString.dropLast(7))
             self.serverSelected = true
             if try! self.simpleKeychain.hasItem(forKey: "accounts for \(url)") {
                 let data = try! self.simpleKeychain.data(forKey: "accounts for \(url)")

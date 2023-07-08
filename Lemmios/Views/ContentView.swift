@@ -11,91 +11,96 @@ struct ContentView: View {
     @ObservedObject var userModel = UserModel(path: "")
     @State var showingAuth = false
     @State var selected = "Posts"
-
+    
     init() {
         if apiModel.serverSelected {
             self.userModel = UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)")
         }
     }
-
+    
     var body: some View {
-        TabView(selection: Binding(get: { self.selected }, set: {
-            if $0 == selected {
-                switch selected {
-                case "Posts":
-                    homeNavModel.clear()
-                case "Auth":
-                    if apiModel.selectedAccount != "" {
-                        withAnimation(.linear(duration: 0.1)) {
-                            apiModel.showingAuth.toggle()
+        ZStack {
+            Color.yellow.opacity(0.1).onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
+            TabView(selection: Binding(get: { self.selected }, set: {
+                if $0 == selected {
+                    switch selected {
+                    case "Posts":
+                        homeNavModel.clear()
+                    case "Auth":
+                        if apiModel.selectedAccount != "" {
+                            withAnimation(.linear(duration: 0.1)) {
+                                apiModel.showingAuth.toggle()
+                            }
+                        }
+                    case "Search":
+                        searchNavModel.clear()
+                    default:
+                        settingsNavModel.clear()
                     }
-                case "Search":
-                    searchNavModel.clear()
-                default:
-                    settingsNavModel.clear()
                 }
-            }
-            self.selected = $0
-        })) {
-            HomeView()
-                .handleNavigations(navModel: homeNavModel)
+                self.selected = $0
+            })) {
+                HomeView()
+                    .handleNavigations(navModel: homeNavModel)
+                    .tabItem {
+                        Label("Posts", systemImage: "doc.text.image")
+                    }
+                    .tag("Posts")
+                ZStack {
+                    if !apiModel.serverSelected {
+                        ServerSelectorView()
+                    } else if apiModel.selectedAccount == "" {
+                        AuthenticationView()
+                    } else {
+                        UserView(userModel: userModel)
+                            .navigationTitle("Accounts")
+                            .navigationBarTitleDisplayMode(.inline)
+                            .handleNavigations(navModel: userNavModel)
+                    }
+                }
                 .tabItem {
-                    Label("Posts", systemImage: "doc.text.image")
+                    Label("Accounts", systemImage: "person.crop.circle")
                 }
-                .tag("Posts")
-            ZStack {
-                if !apiModel.serverSelected {
-                    ServerSelectorView()
-                } else if apiModel.selectedAccount == "" {
-                    AuthenticationView()
-                } else {
-                    UserView(userModel: userModel)
-                        .navigationTitle("Accounts")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .handleNavigations(navModel: userNavModel)
+                .tag("Auth")
+                ZStack {
+                    if !apiModel.serverSelected {
+                        ServerSelectorView()
+                    } else {
+                        SearchView(searchModel: searchModel)
+                    }
                 }
-            }
-            .tabItem {
-                Label("Accounts", systemImage: "person.crop.circle")
-            }
-            .tag("Auth")
-            ZStack {
-                if !apiModel.serverSelected {
-                    ServerSelectorView()
-                } else {
-                    SearchView(searchModel: searchModel)
-                }
-            }
-            .handleNavigations(navModel: searchNavModel)
-            .tabItem {
-                Label("Search", systemImage: "magnifyingglass")
-            }
-            .tag("Search")
-            SettingsView()
-                .handleNavigations(navModel: settingsNavModel)
+                .handleNavigations(navModel: searchNavModel)
                 .tabItem {
-                    Label("Settings", systemImage: "gear")
+                    Label("Search", systemImage: "magnifyingglass")
                 }
-                .tag("Settings")
-        }
-        .onChange(of: apiModel.selectedAccount) { newValue in
-            userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
-            userModel.reset()
-        }
-        .alert("Subscribe to c/lemmiosapp?", isPresented: $apiModel.showingSubscribe) {
-            Button("No") {}
-            Button("Yes") {
-                apiModel.followSelf()
+                .tag("Search")
+                SettingsView()
+                    .handleNavigations(navModel: settingsNavModel)
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
+                    .tag("Settings")
             }
-        } message: {
-            Text("The official subreddit for this app! Subscribe to the community for news on the app, feature requests, and more!")
-//                .multilineTextAlignment(.center)
+            .onChange(of: apiModel.selectedAccount) { newValue in
+                userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
+                userModel.reset()
+            }
+            .alert("Subscribe to c/lemmiosapp?", isPresented: $apiModel.showingSubscribe) {
+                Button("No") {}
+                Button("Yes") {
+                    apiModel.followSelf()
+                }
+            } message: {
+                Text("The official subreddit for this app! Subscribe to the community for news on the app, feature requests, and more!")
+                //                .multilineTextAlignment(.center)
+            }
+            .popupNavigationView(isPresented: $apiModel.showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
+                AuthenticationView()
+            }
+            .environmentObject(apiModel)
         }
-        .popupNavigationView(isPresented: $apiModel.showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
-            AuthenticationView()
-        }
-        .environmentObject(apiModel)
     }
 }
 
