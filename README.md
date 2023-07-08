@@ -7,20 +7,20 @@ A modern [Lemmy](https://join-lemmy.org/) client for iOS attempting to emulate t
 ## See Lemmy
 
 ### Subscribed and home list
-<img src="images/home_dark.png" width="45%">
-<img src="images/home_light.png" width="45%">
+<img src="images/home_dark.png" width="40%">
+<img src="images/home_light.png" width="40%">
 
 ### Gorgeous post previews
-<img src="images/posts_dark.png" width="45%">
-<img src="images/posts_light.png" width="45%">
+<img src="images/posts_dark.png" width="40%">
+<img src="images/posts_light.png" width="40%">
 
 ### Join the discussion
-<img src="images/comment_dark.png" width="45%">
-<img src="images/comment_light.png" width="45%">
+<img src="images/comment_dark.png" width="40%">
+<img src="images/comment_light.png" width="40%">
 
 ### Find your niche
-<img src="images/search_dark.png" width="45%">
-<img src="images/search_light.png" width="45%">
+<img src="images/search_dark.png" width="40%">
+<img src="images/search_light.png" width="40%">
 
 # Whats next?
 Lemmios is currently in beta so expect many new features coming soon.
