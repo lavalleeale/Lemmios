@@ -7,17 +7,18 @@ struct ContentView: View {
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
     @ObservedObject var searchModel = SearchModel()
-    @ObservedObject var userModel = UserModel(path: "")
     @State var showingAuth = false
     @State var selected = "Posts"
-    
+
     init() {
-        self.userModel.name = self.apiModel.selectedAccount
+        if apiModel.serverSelected {
+            userNavModel.path.append(UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)"))
+        }
     }
 
     var body: some View {
         TabView(selection: Binding(get: { self.selected }, set: {
-            if $0 == "Auth", selected == "Auth" {
+            if $0 == "Auth", selected == "Auth", apiModel.selectedAccount != "" {
                 withAnimation(.linear(duration: 0.1)) {
                     showingAuth.toggle()
                 }
@@ -36,20 +37,30 @@ struct ContentView: View {
                 } else if apiModel.selectedAccount == "" {
                     AuthenticationView()
                 } else {
-                    UserView(userModel: userModel)
-                        .handleNavigations(navModel: userNavModel)
+                    List(apiModel.accounts) { account in
+                        NavigationLink(account.username, value: UserModel(path: "\(account.username)@\(URL(string: apiModel.url)!.host()!)"))
+                    }
+                    .navigationTitle("Accounts")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .handleNavigations(navModel: userNavModel)
                 }
             }
             .tabItem {
                 Label("Accounts", systemImage: "person.crop.circle")
             }
             .tag("Auth")
-            SearchView(searchModel: searchModel)
-                .handleNavigations(navModel: searchNavModel)
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
+            ZStack {
+                if !apiModel.serverSelected {
+                    ServerSelectorView()
+                } else {
+                    SearchView(searchModel: searchModel)
                 }
-                .tag("Search")
+            }
+            .handleNavigations(navModel: searchNavModel)
+            .tabItem {
+                Label("Search", systemImage: "magnifyingglass")
+            }
+            .tag("Search")
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
@@ -64,9 +75,10 @@ struct ContentView: View {
             }
         }
         .onChange(of: apiModel.selectedAccount) { newValue in
-            self.userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
+            userNavModel.path.removeLast(userNavModel.path.count)
+            userNavModel.path.append(UserModel(path: "\(newValue)@\(URL(string: apiModel.url)!.host()!)"))
         }
-        .popupNavigationView(isPresented: $showingAuth) {
+        .popupNavigationView(isPresented: $showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
             AuthenticationView()
         }
         .environmentObject(apiModel)

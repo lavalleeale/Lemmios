@@ -14,14 +14,14 @@ struct PostView: View {
             VStack {
                 Text(postModel.post.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.title2)
+                    .font(.title3)
                     .lineLimit(collapsed ? 1 : .max)
                     .multilineTextAlignment(.leading)
                 if !collapsed {
                     Spacer()
                         .frame(height: 30)
-                    PostContentComponent(post: postModel.post, preview: false)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    PostContentComponent(post: postModel, preview: false)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             .onAppear {

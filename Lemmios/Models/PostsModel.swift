@@ -87,6 +87,12 @@ class PostsModel: ObservableObject, Hashable {
             }
         }.store(in: &cancellable)
     }
+    
+    func follow(apiModel: ApiModel) {
+        apiModel.lemmyHttp!.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, error in
+            self.communityView = communityView
+        }.store(in: &cancellable)
+    }
 }
 
 enum PostsPageStatus {

@@ -89,22 +89,39 @@ struct PostsView: View {
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .multilineTextAlignment(.center)
-                .frame(minWidth: 100, maxWidth: 100, minHeight: 500)
+                .frame(minWidth: 100, maxWidth: 100)
                 .textFieldStyle(PlainTextFieldStyle())
-            }
-            if !isSpecialPath {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showingCreate.toggle()
-                    } label: {
-                        Label("Create Post", systemImage: "plus")
-                            .labelStyle(.iconOnly)
-                    }
-                }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 SortSelectorComponent(sortType: .Posts, currentSort: $postsModel.sort, currentTime: $postsModel.time) { sort, time in
                     postsModel.changeSortAndTime(sort: sort, time: time, apiModel: apiModel)
+                }
+            }
+            if !isSpecialPath {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button {
+                            showingCreate.toggle()
+                        } label: {
+                            Label("Submit Post", systemImage: "plus")
+                        }
+                        Button {
+                            if apiModel.selectedAccount == "" {
+                                apiModel.getAuth()
+                            } else {
+                                postsModel.follow(apiModel: apiModel)                                
+                            }
+                        } label: {
+                            Label(postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "Unfollow" : "Follow", systemImage: postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "heart.slash" : "heart")
+                        }
+                    } label: {
+                        VStack {
+                            Spacer()
+                            Label("More Options", systemImage: "ellipsis")
+                                .labelStyle(.iconOnly)
+                            Spacer()
+                        }
+                    }
                 }
             }
         })

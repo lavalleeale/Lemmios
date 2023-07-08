@@ -48,8 +48,8 @@ struct SearchView: View {
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .multilineTextAlignment(.center)
-                .frame(minWidth: 100, maxWidth: 100)
-                .textFieldStyle(PlainTextFieldStyle())
+                .frame(maxWidth: UIScreen.main.bounds.width / 1.5, minHeight: 30)
+                .background(RoundedRectangle(cornerRadius: 10.0).fill(.secondary.opacity(0.5)))
                 .onChange(of: query) { newValue in
                     withAnimation {
                         typing = newValue != ""

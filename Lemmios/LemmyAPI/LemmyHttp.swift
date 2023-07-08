@@ -69,7 +69,7 @@ class LemmyHttp {
             .tryMap { v in
                 let code = (v.response as! HTTPURLResponse).statusCode
                 if code != 200 {
-                    throw NetworkError.network(code: code, description: "Lemmy Error")
+                    throw NetworkError.network(code: code, description: String(data: v.data, encoding: .utf8) ?? "")
                 }
                 return v
             }
@@ -89,7 +89,7 @@ class LemmyHttp {
                 case .finished:
 //                    print("completed")
                     break
-                case .failure(let error):
+                case let .failure(error):
                     receiveValue(nil, error)
                 }
             }, receiveValue: { value in
@@ -129,6 +129,65 @@ class LemmyHttp {
     
     func getSiteInfo(receiveValue: @escaping (LemmyHttp.SiteInfo?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
         return makeRequest(path: "site", query: [], responseType: SiteInfo.self, receiveValue: receiveValue)
+    }
+    
+    func follow(communityId: Int, follow: Bool, receiveValue: @escaping (CommunityView?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "community/follow", responseType: CommunityView.self, body: FollowPaylod(auth: jwt!, community_id: communityId, follow: follow), receiveValue: receiveValue)
+    }
+    
+    func register(info: RegisterPayload, receiveValue: @escaping (AuthResponse?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "user/register", responseType: AuthResponse.self, body: info, receiveValue: receiveValue)
+    }
+    
+    func login(info: LoginPayload, receiveValue: @escaping (AuthResponse?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "user/login", responseType: AuthResponse.self, body: info, receiveValue: receiveValue)
+    }
+    
+    func getCaptcha(receiveValue: @escaping (CaptchaResponse?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequest(path: "user/get_captcha", responseType: CaptchaResponse.self, receiveValue: receiveValue)
+    }
+    
+    struct LoginPayload: Codable, WithMethod {
+        let method = "POST"
+        let username_or_email: String
+        let password: String
+    }
+    
+    struct CaptchaResponse: Codable {
+        let ok: CaptchaInfo
+    }
+    
+    struct CaptchaInfo: Codable {
+        let png: String
+        let uuid: String
+    }
+    
+    struct RegisterPayload: Codable, WithMethod {
+        let method = "POST"
+        let username: String
+        let password: String
+        let password_verify: String
+        let email: String
+        let captcha_answer: String
+        let captcha_uuid: String
+        let show_nsfw = true
+    }
+    
+    struct AuthResponse: Codable {
+        let jwt: String?
+        let registration_created: Bool?
+        let verify_email_sent: Bool?
+    }
+    
+    struct ErrorResponse: Codable {
+        let error: String
+    }
+    
+    struct FollowPaylod: Codable, WithMethod {
+        let method = "POST"
+        let auth: String
+        let community_id: Int
+        let follow: Bool
     }
 
     enum NetworkError: Swift.Error {
@@ -210,6 +269,7 @@ class LemmyHttp {
     struct ApiCommunity: Codable, Identifiable {
         var id: Int { community.id }
         let community: ApiCommunityData
+        let subscribed: String
     }
     
     struct ApiCommunityData: Codable, Identifiable, WithNameHost {
@@ -227,6 +287,7 @@ class LemmyHttp {
         let thumbnail_url: URL?
         let url: URL?
         let creator_id: Int
+        let nsfw: Bool
     }
     
     struct ApiPostCounts: Codable, WithPublished {
@@ -338,23 +399,64 @@ public extension Publisher {
         delay: S.SchedulerTimeType.Stride,
         scheduler: S
     ) -> AnyPublisher<Output, Failure> where S: Scheduler {
-        delayIfFailure(for: delay, scheduler: scheduler)
-            .retry(retries)
-            .eraseToAnyPublisher()
+        delayIfFailure(for: delay, scheduler: scheduler) { error in
+            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code == 400 {
+                return false
+            } else {
+                return true
+            }
+        }
+        .retry(times: retries) { error in
+            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code == 400 {
+                return false
+            } else {
+                return true
+            }
+        }
+        .eraseToAnyPublisher()
     }
 
     private func delayIfFailure<S>(
         for delay: S.SchedulerTimeType.Stride,
-        scheduler: S
+        scheduler: S,
+        condition: @escaping (Error) -> Bool
     ) -> AnyPublisher<Output, Failure> where S: Scheduler {
-        self.catch { error in
+        return self.catch { error in
             Future { completion in
-                scheduler.schedule(after: scheduler.now.advanced(by: delay)) {
+                scheduler.schedule(after: scheduler.now.advanced(by: condition(error) ? delay : 0)) {
                     completion(.failure(error))
                 }
             }
         }
         .eraseToAnyPublisher()
+    }
+    
+    internal func retry(times: Int, if condition: @escaping (Failure) -> Bool) -> Publishers.RetryIf<Self> {
+        Publishers.RetryIf(publisher: self, times: times, condition: condition)
+    }
+}
+
+extension Publishers {
+    struct RetryIf<P: Publisher>: Publisher {
+        typealias Output = P.Output
+        typealias Failure = P.Failure
+        
+        let publisher: P
+        let times: Int
+        let condition: (P.Failure) -> Bool
+                
+        func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
+            guard times > 0 else { return publisher.receive(subscriber: subscriber) }
+            
+            publisher.catch { (error: P.Failure) -> AnyPublisher<Output, Failure> in
+                if condition(error) {
+                    return RetryIf(publisher: publisher, times: times - 1, condition: condition).eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .receive(subscriber: subscriber)
+        }
     }
 }
 

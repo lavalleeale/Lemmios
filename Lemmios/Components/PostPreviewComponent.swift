@@ -31,9 +31,12 @@ struct PostPreviewComponent: View {
                             .font(.title3)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
+                        if postModel.post.nsfw {
+                            NSFWBadgeComponent()
+                        }
                         Spacer()
                     }
-                    PostContentComponent(post: postModel.post, preview: true, previewType: urlStyle)
+                    PostContentComponent(post: postModel, preview: true, previewType: urlStyle)
                     PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: true)
                 }
                 .contentShape(Rectangle())

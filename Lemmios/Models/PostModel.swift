@@ -42,9 +42,11 @@ class PostModel: VotableModel, Hashable {
         }
     }
     
-    init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment) {
-        self.commentId = comment.id
-        self.comments = [comment]
+    init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
+        if let comment = comment {
+            self.commentId = comment.id
+            self.comments = [comment]            
+        }
         self.detailsStatus = .ready
         self.post = post
         self.score = 0

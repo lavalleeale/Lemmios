@@ -37,8 +37,8 @@ public extension View {
         return modifier(SwiperContainer(leadingOptions: leadingOptions, trailingOptions: trailingOptions, action: action))
     }
 
-    func popupNavigationView<Label: View>(isPresented: Binding<Bool>, @ViewBuilder label: () -> Label) -> some View {
-        modifier(PopupNavigationView(show: isPresented, label: label))
+    func popupNavigationView<Label: View>(isPresented: Binding<Bool>, heightRatio: CGFloat = 2.0, widthRatio: CGFloat = 1.25, @ViewBuilder label: () -> Label) -> some View {
+        modifier(PopupNavigationView(show: isPresented, heightRatio: heightRatio, widthRatio: widthRatio, label: label))
     }
 
     func commentDepthIndicator(depth: Int) -> some View {
@@ -129,6 +129,10 @@ struct TransparentBackground: UIViewRepresentable {
 
 private struct PopupNavigationView<Label>: ViewModifier where Label: View {
     @Binding var show: Bool
+
+    let heightRatio: CGFloat
+    let widthRatio: CGFloat
+
     @ViewBuilder var label: Label
 
     func body(content: Content) -> some View {
@@ -139,7 +143,7 @@ private struct PopupNavigationView<Label>: ViewModifier where Label: View {
                     label
                 }
                 .background(.gray)
-                .frame(width: size.width - 100, height: size.height / 2, alignment: .center)
+                .frame(width: size.width / widthRatio, height: size.height / heightRatio, alignment: .center)
                 .clipShape(RoundedRectangle(cornerSize: CGSize(width: 10, height: 10)))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .background(TransparentBackground().onTapGesture {
@@ -233,4 +237,8 @@ extension UIView {
     func getAllSubviews<T: UIView>() -> [T] {
         return UIView.getAllSubviews(from: self) as [T]
     }
+}
+
+extension URLCache {
+    static let imageCache = URLCache(memoryCapacity: 512_000_000, diskCapacity: 10_000_000_000)
 }

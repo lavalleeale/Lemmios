@@ -1,4 +1,5 @@
 import CachedAsyncImage
+import ImageViewerRemote
 import LinkPresentation
 import LinkPreview
 import MarkdownUI
@@ -8,23 +9,25 @@ import SwiftUI
 let imageExtensions = ["png", "jpeg", "jpg", "heic", "bmp", "webp"]
 
 struct PostContentComponent: View {
-    @State var post: LemmyHttp.ApiPostData
+    @ObservedObject var post: PostModel
     @State var preview: Bool
+    @State var showingNSFW = false
+    @State var showingImage = false
     @Environment(\.openURL) private var openURL
     @EnvironmentObject var apiModel: ApiModel
-    
+
     var previewType: LinkPreviewType = .auto
 
     var body: some View {
         VStack {
-            if let url = post.url, imageExtensions.contains(url.pathExtension) {
-                CachedAsyncImage(url: preview ? post.thumbnail_url ?? url : url, content: { image in
+            if let url = post.post.url, imageExtensions.contains(url.pathExtension) {
+                CachedAsyncImage(url: preview ? post.post.thumbnail_url ?? url : url, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
                         .scaledToFit()
                 }, placeholder: {
-                    if !preview, let thumbnail_url = post.thumbnail_url {
-                        CachedAsyncImage(url: thumbnail_url, content: { image in
+                    if !preview, let thumbnail_url = post.post.thumbnail_url {
+                        CachedAsyncImage(url: thumbnail_url, urlCache: .imageCache, content: { image in
                             image
                                 .resizable()
                                 .scaledToFit()
@@ -35,11 +38,35 @@ struct PostContentComponent: View {
                         ProgressView()
                     }
                 })
-            } else if let url = post.url {
+                .blur(radius: showingNSFW || !post.post.nsfw ? 0 : 20)
+                .padding(showingNSFW || !post.post.nsfw ? 0 : 20)
+                .highPriorityGesture(TapGesture().onEnded {
+                    if showingNSFW || !post.post.nsfw {
+                        showingImage = true
+                    }
+                    withAnimation(.linear(duration: 0.1)) {
+                        showingNSFW = true
+                    }
+                })
+                .fullScreenCover(isPresented: $showingImage) {
+                    ImageViewerRemote(imageURL: .constant(url.absoluteString), viewerShown: $showingImage, closeButtonTopRight: true) {
+                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false)
+                    }
+                }
+            } else if let url = post.post.url {
                 LinkPreview(url: url)
                     .type(previewType)
                     .frame(minHeight: 50)
-            } else if preview, let body = post.body {
+                    .blur(radius: showingNSFW || !post.post.nsfw ? 0 : 20)
+                    .highPriorityGesture(TapGesture().onEnded {
+                        if showingNSFW || !post.post.nsfw {
+                            openURL(url)
+                        }
+                        withAnimation {
+                            showingNSFW = true
+                        }
+                    })
+            } else if preview, let body = post.post.body {
                 HStack {
                     Markdown(processMarkdown(input: body, comment: false), baseURL: URL(string: apiModel.url)!)
                         .markdownTheme(Theme()
@@ -55,7 +82,7 @@ struct PostContentComponent: View {
                     Spacer()
                 }
             }
-            if !preview, let body = post.body {
+            if !preview, let body = post.post.body {
                 Markdown(processMarkdown(input: body, comment: false), baseURL: URL(string: apiModel.url)!)
             }
         }

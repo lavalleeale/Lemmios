@@ -10,7 +10,7 @@ struct ShowFromComponent<T: WithNameHost>: View {
         let apiHost = URL(string: apiModel.url)!.host()!
         HStack {
             if let icon = item.icon {
-                CachedAsyncImage(url: icon, content: { image in
+                CachedAsyncImage(url: icon, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
                         .clipShape(.circle)

@@ -14,14 +14,19 @@ struct MixedListComponent: View {
 
     var body: some View {
         ForEach(withCounts.sorted { $0.counts.published > $1.counts.published }, id: \.id) { item in
-            VStack {
+            VStack(spacing: 0) {
                 if let post = item as? LemmyHttp.ApiPost {
                     PostPreviewComponent(post: post, showCommunity: true, showUser: false)
                 }
                 if let comment = item as? LemmyHttp.ApiComment {
                     CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: 0, collapseParent: nil)
                 }
+                Rectangle()
+                    .fill(.secondary.opacity(0.1))
+                    .frame(maxWidth: .infinity, maxHeight: 10)
             }
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowSeparator(.hidden)
             .onAppear {
                 if item.id == withCounts.last!.id {
                     fetchMore()

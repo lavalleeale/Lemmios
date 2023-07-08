@@ -42,10 +42,10 @@ class ApiModel: ObservableObject {
             if try! self.simpleKeychain.hasItem(forKey: "accounts for \(url)") {
                 let data = try! self.simpleKeychain.data(forKey: "accounts for \(url)")
                 self.accounts = try! JSONDecoder().decode([StoredAccount].self, from: data)
-                if !self.accounts.contains(where: { $0.username == selectedAccount }), !self.accounts.isEmpty {
-                    self.selectedAccount = self.accounts[0].username
-                } else {
+                if self.accounts.isEmpty {
                     self.selectedAccount = ""
+                } else if !self.accounts.contains(where: { $0.username == selectedAccount }) {
+                    self.selectedAccount = self.accounts[0].username
                 }
             } else {
                 self.selectedAccount = ""
@@ -60,15 +60,17 @@ class ApiModel: ObservableObject {
     }
     
     func addAuth(username: String, jwt: String) {
-        self.accounts.append(StoredAccount(username: username, jwt: jwt))
-        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
-        self.lemmyHttp?.setJwt(jwt: jwt)
-        self.selectedAccount = username
+        if !self.accounts.contains(where: { $0.username == username }) {
+            self.accounts.append(StoredAccount(username: username, jwt: jwt))
+            try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
+            self.lemmyHttp?.setJwt(jwt: jwt)
+            self.selectedAccount = username
+        }
     }
     
     func deleteAuth(username: String) {
         self.accounts.removeAll { $0.username == username }
-        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts")
+        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
         if self.selectedAccount == username {
             self.selectedAccount = ""
             self.lemmyHttp?.setJwt(jwt: nil)
