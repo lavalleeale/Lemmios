@@ -55,7 +55,7 @@ struct AuthFormComponent: View {
                 }
             }
         }
-        .onChange(of: apiModel.accounts) { _ in
+        .onChange(of: apiModel.accounts) { [accounts = apiModel.accounts] newValue in
             dismiss()
         }
         .onChange(of: authModel.verifySent) { newValue in

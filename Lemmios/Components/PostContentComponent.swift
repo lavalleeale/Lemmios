@@ -56,6 +56,7 @@ struct PostContentComponent: View {
             } else if let url = post.post.url {
                 LinkPreview(url: url)
                     .type(previewType)
+                    .disabled(true)
                     .frame(minHeight: 50)
                     .blur(radius: showingNSFW || !post.post.nsfw ? 0 : 20)
                     .highPriorityGesture(TapGesture().onEnded {

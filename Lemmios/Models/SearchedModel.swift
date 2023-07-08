@@ -15,7 +15,7 @@ class SearchedModel: ObservableObject, Hashable {
     @Published var communities: [LemmyHttp.ApiCommunity]?
     @Published var posts: [LemmyHttp.ApiPost]?
     @Published var users: [LemmyHttp.ApiUser]?
-    @Published var sort = LemmyHttp.Sort.Active
+    @Published var sort = LemmyHttp.Sort.Top
     @Published var time = LemmyHttp.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     

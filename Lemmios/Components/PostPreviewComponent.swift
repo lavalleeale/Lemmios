@@ -40,13 +40,14 @@ struct PostPreviewComponent: View {
                     PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: true)
                 }
                 .contentShape(Rectangle())
+                .padding()
                 .addSwipe(leadingOptions: [
                     SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
                     SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
                 ], trailingOptions: [
                     SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue),
                     SwipeOption(id: "save", image: postModel.saved ? "bookmark.slash" : "bookmark", color: .green)
-                ]) { swiped in
+                ], compressable: postModel.post.url == nil) { swiped in
                     if apiModel.selectedAccount == "" {
                         apiModel.getAuth()
                     } else {

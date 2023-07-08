@@ -45,6 +45,15 @@
 		FAB93E5F2A533FE800DE15BB /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E5E2A533FE800DE15BB /* CommentModel.swift */; };
 		FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E602A5345CA00DE15BB /* VotableModel.swift */; };
 		FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E622A5346E400DE15BB /* ScoreComponent.swift */; };
+		FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28352A5916A900243C7F /* ApolloImportView.swift */; };
+		FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28372A59175C00243C7F /* ApolloImportModel.swift */; };
+		FABC28402A592D8900243C7F /* github_white.png in Resources */ = {isa = PBXBuildFile; fileRef = FABC283F2A592D8900243C7F /* github_white.png */; };
+		FABC28422A592D8E00243C7F /* github_black.png in Resources */ = {isa = PBXBuildFile; fileRef = FABC28412A592D8E00243C7F /* github_black.png */; };
+		FABC28462A5932E700243C7F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28452A5932E700243C7F /* AboutView.swift */; };
+		FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28472A59338D00243C7F /* SettingViewComponent.swift */; };
+		FABC284A2A5933AC00243C7F /* SettingSuboptionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */; };
+		FABC284C2A5933C100243C7F /* SettingCustomComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284B2A5933C100243C7F /* SettingCustomComponent.swift */; };
+		FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284D2A593D8100243C7F /* ImportSubsView.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
@@ -98,6 +107,15 @@
 		FAB93E5E2A533FE800DE15BB /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		FAB93E602A5345CA00DE15BB /* VotableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotableModel.swift; sourceTree = "<group>"; };
 		FAB93E622A5346E400DE15BB /* ScoreComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreComponent.swift; sourceTree = "<group>"; };
+		FABC28352A5916A900243C7F /* ApolloImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportView.swift; sourceTree = "<group>"; };
+		FABC28372A59175C00243C7F /* ApolloImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportModel.swift; sourceTree = "<group>"; };
+		FABC283F2A592D8900243C7F /* github_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = github_white.png; sourceTree = "<group>"; };
+		FABC28412A592D8E00243C7F /* github_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = github_black.png; sourceTree = "<group>"; };
+		FABC28452A5932E700243C7F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		FABC28472A59338D00243C7F /* SettingViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewComponent.swift; sourceTree = "<group>"; };
+		FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSuboptionComponent.swift; sourceTree = "<group>"; };
+		FABC284B2A5933C100243C7F /* SettingCustomComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCustomComponent.swift; sourceTree = "<group>"; };
+		FABC284D2A593D8100243C7F /* ImportSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSubsView.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,8 +182,20 @@
 				FAA145072A581F23009DDA23 /* MixedListComponent.swift */,
 				FAA145092A5895D5009DDA23 /* NSFWBadgeComponent.swift */,
 				FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */,
+				FABC28472A59338D00243C7F /* SettingViewComponent.swift */,
+				FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */,
+				FABC284B2A5933C100243C7F /* SettingCustomComponent.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		FABC28322A5915F700243C7F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FABC28412A592D8E00243C7F /* github_black.png */,
+				FABC283F2A592D8900243C7F /* github_white.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		FADD20362A5204B3002CE443 = {
@@ -187,6 +217,7 @@
 		FADD20412A5204B3002CE443 /* Lemmios */ = {
 			isa = PBXGroup;
 			children = (
+				FABC28322A5915F700243C7F /* Resources */,
 				FA68BDEA2A58C45700F2FE3D /* Info.plist */,
 				FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */,
 				FA2EE90B2A5472DA00546BFF /* Helpers */,
@@ -237,6 +268,9 @@
 				FA2EE90E2A5478EA00546BFF /* UserView.swift */,
 				FA72A68B2A572151001AFA61 /* SearchView.swift */,
 				FA72A68F2A57299C001AFA61 /* SearchedView.swift */,
+				FABC28352A5916A900243C7F /* ApolloImportView.swift */,
+				FABC28452A5932E700243C7F /* AboutView.swift */,
+				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -254,6 +288,7 @@
 				FA72A68D2A57228A001AFA61 /* SearchModel.swift */,
 				FA72A6912A5729AE001AFA61 /* SearchedModel.swift */,
 				FAA145132A58B89A009DDA23 /* AuthModel.swift */,
+				FABC28372A59175C00243C7F /* ApolloImportModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -337,6 +372,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FABC28402A592D8900243C7F /* github_white.png in Resources */,
+				FABC28422A592D8E00243C7F /* github_black.png in Resources */,
 				FADD204B2A5204B4002CE443 /* Preview Assets.xcassets in Resources */,
 				FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */,
 			);
@@ -351,6 +388,7 @@
 			files = (
 				FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */,
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
+				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
 				FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */,
@@ -364,8 +402,10 @@
 				FABEC3062A54064E00620E9A /* NavModel.swift in Sources */,
 				FAF000B52A56889000F07E04 /* Save.swift in Sources */,
 				FAF5D5422A53EC2800FDA8D9 /* PostActionsComponent.swift in Sources */,
+				FABC28462A5932E700243C7F /* AboutView.swift in Sources */,
 				FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */,
 				FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */,
+				FABC284A2A5933AC00243C7F /* SettingSuboptionComponent.swift in Sources */,
 				FADD20562A5209E7002CE443 /* PostsView.swift in Sources */,
 				FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */,
 				FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */,
@@ -384,13 +424,17 @@
 				FAAAF8632A5260E300C9BFD8 /* PostContentComponent.swift in Sources */,
 				FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */,
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
+				FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */,
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
 				FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */,
 				FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */,
+				FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */,
 				FAAAF86E2A528D0100C9BFD8 /* AuthenticationView.swift in Sources */,
+				FABC284C2A5933C100243C7F /* SettingCustomComponent.swift in Sources */,
 				FAF5D5442A53FAEF00FDA8D9 /* HomeView.swift in Sources */,
 				FAB93E5D2A533FC900DE15BB /* CommentComponent.swift in Sources */,
 				FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */,
+				FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
 				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,
@@ -516,7 +560,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -558,7 +602,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;

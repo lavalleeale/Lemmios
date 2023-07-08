@@ -15,7 +15,6 @@ class AuthModel: ObservableObject {
                 if let jwt = response.jwt {
                     apiModel.addAuth(username: info.username, jwt: jwt)
                 } else if response.verify_email_sent == true {
-                    print(1)
                     self.verifySent = true
                 }
             } else if case let .network(code, description) = error {

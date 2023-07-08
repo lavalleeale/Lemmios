@@ -6,6 +6,7 @@ struct ContentView: View {
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
+    @ObservedObject var settingsNavModel = NavModel(startNavigated: false)
     @ObservedObject var searchModel = SearchModel()
     @State var showingAuth = false
     @State var selected = "Posts"
@@ -62,6 +63,7 @@ struct ContentView: View {
             }
             .tag("Search")
             SettingsView()
+                .handleNavigations(navModel: settingsNavModel)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }

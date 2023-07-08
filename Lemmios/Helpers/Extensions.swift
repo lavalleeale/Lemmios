@@ -33,12 +33,20 @@ public extension View {
         modifier(FirstAppear(action: action))
     }
 
-    internal func addSwipe(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], action: @escaping (String) -> ()) -> some View {
-        return modifier(SwiperContainer(leadingOptions: leadingOptions, trailingOptions: trailingOptions, action: action))
+    internal func addSwipe(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], compressable: Bool = true, action: @escaping (String) -> ()) -> some View {
+        return modifier(SwiperContainer(leadingOptions: leadingOptions, trailingOptions: trailingOptions, compressable: compressable, action: action))
     }
 
     func popupNavigationView<Label: View>(isPresented: Binding<Bool>, heightRatio: CGFloat = 2.0, widthRatio: CGFloat = 1.25, @ViewBuilder label: () -> Label) -> some View {
         modifier(PopupNavigationView(show: isPresented, heightRatio: heightRatio, widthRatio: widthRatio, label: label))
+    }
+
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
     }
 
     func commentDepthIndicator(depth: Int) -> some View {
@@ -241,4 +249,14 @@ extension UIView {
 
 extension URLCache {
     static let imageCache = URLCache(memoryCapacity: 512_000_000, diskCapacity: 10_000_000_000)
+}
+
+extension Bundle {
+    var releaseVersionNumber: String? {
+        return infoDictionary?["CFBundleShortVersionString"] as? String
+    }
+
+    var buildVersionNumber: String? {
+        return infoDictionary?["CFBundleVersion"] as? String
+    }
 }
