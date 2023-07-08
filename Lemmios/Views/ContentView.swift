@@ -8,20 +8,32 @@ struct ContentView: View {
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
     @ObservedObject var settingsNavModel = NavModel(startNavigated: false)
     @ObservedObject var searchModel = SearchModel()
+    @ObservedObject var userModel = UserModel(path: "")
     @State var showingAuth = false
     @State var selected = "Posts"
 
     init() {
         if apiModel.serverSelected {
-            userNavModel.path.append(UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)"))
+            self.userModel = UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)")
         }
     }
 
     var body: some View {
         TabView(selection: Binding(get: { self.selected }, set: {
-            if $0 == "Auth", selected == "Auth", apiModel.selectedAccount != "" {
-                withAnimation(.linear(duration: 0.1)) {
-                    showingAuth.toggle()
+            if $0 == selected {
+                switch selected {
+                case "Posts":
+                    homeNavModel.clear()
+                case "Auth":
+                    if apiModel.selectedAccount != "" {
+                        withAnimation(.linear(duration: 0.1)) {
+                            apiModel.showingAuth.toggle()
+                        }
+                    }
+                case "Search":
+                    searchNavModel.clear()
+                default:
+                    settingsNavModel.clear()
                 }
             }
             self.selected = $0
@@ -38,12 +50,10 @@ struct ContentView: View {
                 } else if apiModel.selectedAccount == "" {
                     AuthenticationView()
                 } else {
-                    List(apiModel.accounts) { account in
-                        NavigationLink(account.username, value: UserModel(path: "\(account.username)@\(URL(string: apiModel.url)!.host()!)"))
-                    }
-                    .navigationTitle("Accounts")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .handleNavigations(navModel: userNavModel)
+                    UserView(userModel: userModel)
+                        .navigationTitle("Accounts")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .handleNavigations(navModel: userNavModel)
                 }
             }
             .tabItem {
@@ -69,18 +79,20 @@ struct ContentView: View {
                 }
                 .tag("Settings")
         }
-        .onFirstAppear {
-            apiModel.setShowAuth {
-                withAnimation(.linear(duration: 0.1)) {
-                    showingAuth.toggle()
-                }
-            }
-        }
         .onChange(of: apiModel.selectedAccount) { newValue in
-            userNavModel.path.removeLast(userNavModel.path.count)
-            userNavModel.path.append(UserModel(path: "\(newValue)@\(URL(string: apiModel.url)!.host()!)"))
+            userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
+            userModel.reset()
         }
-        .popupNavigationView(isPresented: $showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
+        .alert("Subscribe to c/lemmiosapp?", isPresented: $apiModel.showingSubscribe) {
+            Button("No") {}
+            Button("Yes") {
+                apiModel.followSelf()
+            }
+        } message: {
+            Text("The official subreddit for this app! Subscribe to the community for news on the app, feature requests, and more!")
+//                .multilineTextAlignment(.center)
+        }
+        .popupNavigationView(isPresented: $apiModel.showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
             AuthenticationView()
         }
         .environmentObject(apiModel)

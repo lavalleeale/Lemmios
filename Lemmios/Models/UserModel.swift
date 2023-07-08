@@ -34,6 +34,15 @@ class UserModel: ObservableObject, Hashable {
         self.name = path
     }
     
+    func reset() {
+        self.pageStatus = .ready(nextPage: 1)
+        self.comments = .init()
+        self.posts = .init()
+        self.saved = .init()
+        self.cancellable.removeAll()
+        self.savedPageStatus = .ready(nextPage: 1)
+    }
+    
     func fetchData(apiModel: ApiModel, saved: Bool = false) {
         guard case let .ready(page) = saved ? savedPageStatus : pageStatus else {
             return

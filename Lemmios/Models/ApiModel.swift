@@ -12,8 +12,8 @@ class ApiModel: ObservableObject {
     @Published var serverSelected = false
     @Published var accounts = [StoredAccount]()
     @Published var subscribed: [String: [LemmyHttp.ApiCommunityData]]?
-    
-    var showAuth: (() -> Void)?
+    @Published var showingAuth = false
+    @Published var showingSubscribe = false
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
@@ -25,12 +25,8 @@ class ApiModel: ObservableObject {
         }
     }
     
-    func setShowAuth(function: @escaping () -> Void) {
-        self.showAuth = function
-    }
-    
     func getAuth() {
-        self.showAuth?()
+        showingAuth = true
     }
     
     func selectServer(url: String) -> String {
@@ -64,7 +60,7 @@ class ApiModel: ObservableObject {
             self.accounts.append(StoredAccount(username: username, jwt: jwt))
             try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
             self.lemmyHttp?.setJwt(jwt: jwt)
-            self.selectedAccount = username
+            self.selectAuth(username: username, showSubscribe: true)
         }
     }
     
@@ -77,11 +73,14 @@ class ApiModel: ObservableObject {
         }
     }
     
-    func selectAuth(username: String) {
+    func selectAuth(username: String, showSubscribe: Bool = false) {
         self.selectedAccount = username
         self.lemmyHttp!.setJwt(jwt: self.accounts.first { $0.username == username }!.jwt)
         self.lemmyHttp!.getSiteInfo { siteInfo, _ in
             if let siteInfo = siteInfo {
+                if (showSubscribe && !siteInfo.my_user.follows.contains { value in value.community.name.contains("lemmiosapp")}) {
+                    self.showingSubscribe = true
+                }
                 self.subscribed = [:]
                 siteInfo.my_user.follows.map { $0.community }.forEach { community in
                     let nameString = community.name
@@ -97,6 +96,10 @@ class ApiModel: ObservableObject {
                 }
             }
         }.store(in: &self.cancellable)
+    }
+    
+    func followSelf() {
+        lemmyHttp?.follow(communityId: 78015, follow: true) {_,_ in }.store(in: &cancellable)
     }
     
     private func updateAuth() {

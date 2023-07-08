@@ -6,7 +6,7 @@ struct AuthFormComponent: View {
     @EnvironmentObject var apiModel: ApiModel
     @Environment(\.dismiss) private var dismiss
     
-    @State var selectedTab = AuthType.Signup
+    @State var selectedTab = AuthType.Login
     @State var showingError = false
     
     @State var username = ""
