@@ -20,3 +20,5 @@ A modern [Lemmy](https://join-lemmy.org/) client for iOS attempting to emulate t
 
 # Whats next?
 Lemmios is currently in beta so expect many new features coming soon.
+
+<a href="https://www.buymeacoffee.com/lemmiosapp" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
