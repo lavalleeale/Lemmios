@@ -215,7 +215,7 @@ class LemmyHttp {
         let email: String
         let captcha_answer: String
         let captcha_uuid: String
-        let show_nsfw = true
+        let show_nsfw = false
     }
     
     struct AuthResponse: Codable {

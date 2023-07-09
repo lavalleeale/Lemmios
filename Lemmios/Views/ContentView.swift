@@ -5,8 +5,10 @@ struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
+
     @Environment(\.colorScheme) var systemColorScheme
-    
+    @EnvironmentObject var sceneDelegtate: SceneDelegate
+
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
@@ -18,7 +20,7 @@ struct ContentView: View {
     @ObservedObject var inboxModel = InboxModel()
     @State var showingAuth = false
     @State var selected = Tab.Posts
-    
+
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
@@ -112,7 +114,22 @@ struct ContentView: View {
             .toolbarBackground(selectedTheme.backgroundColor, for: .tabBar)
             .toolbar(.visible, for: .tabBar)
         }
+        .onAppear {
+            if let requestedTab = sceneDelegtate.requestedTab, let tab = Tab(rawValue: requestedTab) {
+                self.selected = tab
+                sceneDelegtate.requestedTab = nil
+            }
+        }
+        .onChange(of: sceneDelegtate.requestedTab) { newValue in
+            if let requestedTab = newValue, let tab = Tab(rawValue: requestedTab) {
+                self.selected = tab
+                sceneDelegtate.requestedTab = nil
+            }
+        }
         .onOpenURL { incomingUrl in
+            if let host = incomingUrl.host(), let tab = Tab(rawValue: host) {
+                selected = tab
+            }
             var selectedNavModel = selectedNavModel
             if selectedNavModel == nil {
                 selectedNavModel = homeNavModel
@@ -169,6 +186,6 @@ extension URL: Identifiable {
     public var id: URL { self }
 }
 
-enum Tab {
+enum Tab: String {
     case Posts, Inbox, Accounts, Search, Settings
 }

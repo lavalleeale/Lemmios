@@ -10,6 +10,8 @@ struct CommentComponent: View {
     @State var preview = false
     @State var showingReply = false
     @State var showingEdit = false
+    @State var showingReport = false
+    @State var reportReason = ""
     var replyInfo: LemmyHttp.ReplyInfo?
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
@@ -39,6 +41,10 @@ struct CommentComponent: View {
                                 if commentModel.comment.creator.name == apiModel.selectedAccount {
                                     PostButton(label: "Edit", image: "pencil") {
                                         showingEdit = true
+                                    }
+                                } else {
+                                    PostButton(label: "Report", image: "flag") {
+                                        showingReport = true
                                     }
                                 }
                                 PostButton(label: "Share", image: "square.and.arrow.up") {
@@ -159,6 +165,14 @@ struct CommentComponent: View {
             .allowsHitTesting(!collapsed)
             .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
             .clipped()
+        }
+        .alert("Report", isPresented: $showingReport) {
+            TextField("Reason", text: $reportReason)
+            Button("OK") {
+                commentModel.report(reason: reportReason, apiModel: apiModel)
+                showingReport = false
+            }
+            Button("Cancel", role: .cancel) {}
         }
         .sheet(isPresented: $showingReply) {
             CommentSheet { commentBody in

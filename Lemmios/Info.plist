@@ -19,5 +19,24 @@
 	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict/>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>envelope.fill</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Inbox</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>Inbox</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>magnifyingglass</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Search</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>Search</string>
+		</dict>
+	</array>
 </dict>
 </plist>

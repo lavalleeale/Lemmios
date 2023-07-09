@@ -100,6 +100,9 @@ struct PostView: View {
                         postModel.changeSort(sort: sort, apiModel: apiModel)
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    PostButtons(postModel: postModel, showViewComments: false, menu: true)
+                }
                 ToolbarItem(placement: .bottomBar) {
                     if self.parentContent != nil {
                         Text("Single Comment Thread")

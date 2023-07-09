@@ -58,7 +58,7 @@ class CommentModel: VotableModel {
         }.store(in: &cancellable)
     }
     
-    func read(replyInfo: LemmyHttp.ReplyInfo, apiModel: ApiModel, completion: @escaping ()->Void) {
+    func read(replyInfo: LemmyHttp.ReplyInfo, apiModel: ApiModel, completion: @escaping () -> Void) {
         apiModel.lemmyHttp!.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
             if commentView != nil {
                 completion()
@@ -67,9 +67,17 @@ class CommentModel: VotableModel {
     }
     
     func edit(body: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.editComment(content: body, commentId: self.comment.id) { response, _ in
+        apiModel.lemmyHttp!.editComment(content: body, commentId: comment.id) { response, _ in
             if let response = response {
                 self.comment = response.comment_view
+            }
+        }.store(in: &cancellable)
+    }
+    
+    func report(reason: String, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.reportComment(commentId: comment.id, reason: reason) { response, _ in
+            if let response = response {
+                self.comment = response.comment_report_view
             }
         }.store(in: &cancellable)
     }

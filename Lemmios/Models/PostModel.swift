@@ -22,7 +22,7 @@ class PostModel: VotableModel, Hashable {
     @Published var comments = [LemmyHttp.ApiComment]()
     
     private var cancellable: Set<AnyCancellable> = Set()
-    let post: LemmyHttp.ApiPostData
+    @Published var post: LemmyHttp.ApiPostData
     @Published var creator: LemmyHttp.ApiUserData?
     @Published var community: LemmyHttp.ApiCommunityData?
     @Published var counts: LemmyHttp.ApiPostCounts?
@@ -152,6 +152,14 @@ class PostModel: VotableModel, Hashable {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
+            }
+        }.store(in: &cancellable)
+    }
+    
+    func report(reason: String, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.reportPost(postId: post.id, reason: reason) { response, _ in
+            if let response = response?.post_report_view {
+                self.score = response.counts.score
             }
         }.store(in: &cancellable)
     }

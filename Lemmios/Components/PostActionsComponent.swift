@@ -3,12 +3,9 @@ import SwiftUI
 import SwiftUIKit
 
 struct PostActionsComponent: View {
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @ObservedObject var postModel: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
-    @Environment(\.dismiss) private var dismiss
-    @State var showingReply = false
     
     let showCommunity: Bool
     let showUser: Bool
@@ -60,16 +57,9 @@ struct PostActionsComponent: View {
                     Spacer()
                 }
                 if collapsedButtons {
-                    HStack() {
-                        Menu {
-                            CollapsedButtons
-                        } label: {
-                            Image(systemName: "ellipsis")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)
-                        }
-                        .foregroundStyle(.secondary)
+                    HStack {
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true)
+                            .foregroundStyle(.secondary)
                         ArrowsComponent(votableModel: postModel)
                     }
                 }
@@ -79,27 +69,40 @@ struct PostActionsComponent: View {
                 HStack {
                     Group {
                         ArrowsComponent(votableModel: postModel)
-                        CollapsedButtons.labelStyle(.iconOnly)
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Divider()
             }
         }
-        .sheet(isPresented: $showingReply) {
-            CommentSheet { commentBody in
-                postModel.comment(body: commentBody, apiModel: apiModel)
-            }
-            .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
-        }
     }
+}
+
+struct PostButtons: View {
+    @ObservedObject var postModel: PostModel
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var navModel: NavModel
+    @EnvironmentObject var haptics: SimpleHapticGenerator
+    @EnvironmentObject var apiModel: ApiModel
+    @State var showingReply = false
+    @State var showingReport = false
+    @State var reportReason = ""
     
-    var CollapsedButtons: some View {
+    var showViewComments: Bool
+    var menu: Bool
+    
+    var buttons: some View {
         Group {
-            if !showInfo {
+            if showViewComments {
                 PostButton(label: "Comments", image: "bubble.left.and.bubble.right") {
                     dismiss()
                     navModel.path.append(postModel)
+                }
+            }
+            if menu {
+                PostButton(label: "Report", image: "flag") {
+                    showingReport = true
                 }
             }
             PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.slash" : "bookmark") {
@@ -112,6 +115,38 @@ struct PostActionsComponent: View {
             PostButton(label: "Share", image: "square.and.arrow.up") {
                 showShareSheet(url: postModel.post.ap_id)
             }
+        }
+    }
+    
+    var body: some View {
+        Group {
+            if menu {
+                Menu {
+                    buttons
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                }
+            } else {
+                buttons
+                    .labelStyle(.iconOnly)
+            }
+        }
+        .sheet(isPresented: $showingReply) {
+            CommentSheet { commentBody in
+                postModel.comment(body: commentBody, apiModel: apiModel)
+            }
+            .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
+        }
+        .alert("Report", isPresented: $showingReport) {
+            TextField("Reason", text: $reportReason)
+            Button("OK") {
+                postModel.report(reason: reportReason, apiModel: apiModel)
+                showingReport = false
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }

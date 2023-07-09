@@ -21,6 +21,7 @@
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
+		FA6EBFBF2A5B344F0043D62E /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6EBFBE2A5B344F0043D62E /* Report.swift */; };
 		FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68B2A572151001AFA61 /* SearchView.swift */; };
 		FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68D2A57228A001AFA61 /* SearchModel.swift */; };
 		FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68F2A57299C001AFA61 /* SearchedView.swift */; };
@@ -94,6 +95,7 @@
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
+		FA6EBFBE2A5B344F0043D62E /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		FA72A68D2A57228A001AFA61 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		FA72A68F2A57299C001AFA61 /* SearchedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				FAF000B22A5685D100F07E04 /* Create.swift */,
 				FAF000B42A56889000F07E04 /* Save.swift */,
 				FA72A6932A572A3A001AFA61 /* Search.swift */,
+				FA6EBFBE2A5B344F0043D62E /* Report.swift */,
 			);
 			path = LemmyAPI;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
+				FA6EBFBF2A5B344F0043D62E /* Report.swift in Sources */,
 				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,
 				FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */,
 				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
