@@ -14,7 +14,7 @@ struct SettingSuboptionComponent<T>: View where T: Equatable, T: HasCustom, T: R
                 ForEach(selection.customOptions, id: \.rawValue) { option in
                     HStack {
                         Button(option.rawValue) {
-                            suboption = option
+                                suboption = option
                         }
                     }
                 }

@@ -1,17 +1,19 @@
 import SwiftUI
 
 struct AboutView: View {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var apiModel: ApiModel
     var body: some View {
         VStack {
+            Spacer()
             HStack(spacing: 20) {
                 Image(uiImage: UIImage(named: "Icon.png")!)
                     .resizable()
                     .frame(width: 80, height: 80)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 VStack(alignment: .leading) {
-                    Text("Lemmios \(Bundle.main.releaseVersionNumber!) (\(Bundle.main.buildVersionNumber!))")
+                    Text("Lemmios \(Bundle.main.releaseVersionNumber!).\(Bundle.main.buildVersionNumber!)")
                     Text("by Alexander Lavallee")
                         .foregroundStyle(.secondary)
                 }
@@ -54,7 +56,9 @@ struct AboutView: View {
                     }
                 }
             }
+            .scrollDisabled(true)
             Spacer()
         }
+        .background(selectedTheme.secondaryColor)
     }
 }

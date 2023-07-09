@@ -21,19 +21,13 @@ extension List {
 }
 
 struct NavigationBarCustomModifier: ViewModifier {
-    init(backgroundColor: UIColor, tintColor: UIColor? = nil, hideseperator: Bool = false) {
+    init(theme: Theme) {
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithDefaultBackground()
-        coloredAppearance.backgroundColor = backgroundColor
-        if hideseperator {
-            UINavigationBar.appearance().tintColor = .clear
-        }
+        coloredAppearance.backgroundColor = UIColor(theme.backgroundColor)
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().compactAppearance = coloredAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-        if let tintColor = tintColor {
-            UINavigationBar.appearance().tintColor = tintColor
-        }
     }
 
     func body(content: Content) -> some View {
@@ -42,7 +36,7 @@ struct NavigationBarCustomModifier: ViewModifier {
 }
 
 extension View {
-    func navigationBarModifier(backgroundColor: UIColor, tintColor: UIColor? = nil, hideseperator: Bool = false) -> some View {
-        self.modifier(NavigationBarCustomModifier(backgroundColor: backgroundColor, tintColor: tintColor, hideseperator: hideseperator))
+    func navigationBarModifier(theme: Theme) -> some View {
+        self.modifier(NavigationBarCustomModifier(theme: theme))
     }
 }

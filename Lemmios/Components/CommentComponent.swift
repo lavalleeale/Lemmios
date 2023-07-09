@@ -47,10 +47,10 @@ struct CommentComponent: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 20, height: 20)
-                                        .foregroundStyle(.secondary)
                                 }
                                 .labelStyle(.iconOnly)
                             }
+                            .foregroundStyle(.secondary)
                             .highPriorityGesture(TapGesture())
                             Text(commentModel.comment.counts.published.relativeDateAsString())
                                 .foregroundStyle(.secondary)

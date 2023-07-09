@@ -3,6 +3,10 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
+    @AppStorage("colorScheme") var colorScheme = ColorScheme.System
+    @AppStorage("pureBlack") var pureBlack = false
+    @Environment(\.colorScheme) var systemColorScheme
+    
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
@@ -145,7 +149,9 @@ struct ContentView: View {
             AuthenticationView()
         }
         .environmentObject(apiModel)
-        .navigationBarModifier(backgroundColor: UIColor(selectedTheme.backgroundColor))
+        // Hack to cause update
+        .navigationBarModifier(theme: pureBlack ? selectedTheme : selectedTheme)
+        .environment(\.colorScheme, colorScheme == .System ? systemColorScheme : colorScheme == .Dark ? .dark : .light)
     }
 }
 

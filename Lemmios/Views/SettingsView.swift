@@ -7,15 +7,18 @@ struct SettingsView: View {
     @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyHttp.TopTime.All
     @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
+    @AppStorage("colorScheme") var colorScheme = ColorScheme.System
+    @AppStorage("pureBlack") var pureBlack = false
     @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         ColoredListComponent {
             Section("Appearance") {
                 SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
+                SettingViewComponent(selection: $colorScheme, desciption: "Color Scheme", options: ColorScheme.allCases)
+                Toggle("Pure Black Dark Mode", isOn: $pureBlack)
             }
             Section("Posts") {
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
@@ -25,7 +28,7 @@ struct SettingsView: View {
             }
             Section("Other") {
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
-                Toggle("Dynamic text size on swipe", isOn: $shouldCompressPostOnSwipe)
+                Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 Button("Change Instance") {
                     self.showingChangeInstance = true
                 }
@@ -98,4 +101,8 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
     }
 
     case All, Subscribed, Community(name: String)
+}
+
+enum ColorScheme: String, CaseIterable {
+    case System, Light, Dark
 }
