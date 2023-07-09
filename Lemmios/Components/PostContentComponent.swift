@@ -10,6 +10,7 @@ let imageExtensions = ["png", "jpeg", "jpg", "heic", "bmp", "webp"]
 
 struct PostContentComponent: View {
     @ObservedObject var post: PostModel
+    @AppStorage("blurNSFW") var blurNsfw = true
     @State var preview: Bool
     @State var showingNSFW = false
     @State var showingImage = false
@@ -38,10 +39,10 @@ struct PostContentComponent: View {
                         ProgressView()
                     }
                 })
-                .blur(radius: showingNSFW || !post.post.nsfw ? 0 : 20)
-                .padding(showingNSFW || !post.post.nsfw ? 0 : 20)
+                .blur(radius: !blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
+                .padding(!blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
                 .highPriorityGesture(TapGesture().onEnded {
-                    if showingNSFW || !post.post.nsfw {
+                    if !blurNsfw || showingNSFW || !post.post.nsfw {
                         showingImage = true
                     }
                     withAnimation(.linear(duration: 0.1)) {
@@ -58,9 +59,10 @@ struct PostContentComponent: View {
                     .type(previewType)
                     .disabled(true)
                     .frame(minHeight: 50)
-                    .blur(radius: showingNSFW || !post.post.nsfw ? 0 : 20)
+                    .blur(radius: !blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
+                    .padding(!blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
                     .highPriorityGesture(TapGesture().onEnded {
-                        if showingNSFW || !post.post.nsfw {
+                        if !blurNsfw || showingNSFW || !post.post.nsfw {
                             openURL(url)
                         }
                         withAnimation {

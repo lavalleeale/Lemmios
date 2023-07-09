@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
+    @AppStorage("blurNSFW") var blurNsfw = true
     @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
@@ -27,6 +28,7 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
             }
             Section("Other") {
+                Toggle("Blur NSFW", isOn: $blurNsfw)
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 Button("Change Instance") {
@@ -80,6 +82,8 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
             self = .All
         case "Subscribed":
             self = .Subscribed
+        case "Local":
+            self = .Local
         case let str where str.contains("c/"):
             self = .Community(name: String(rawValue.dropFirst(2)))
         default:
@@ -87,7 +91,7 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
         }
     }
 
-    static var allCases: [DefaultStart] = [.All, .Subscribed, .Community(name: "")]
+    static var allCases: [DefaultStart] = [.All, .Subscribed, .Local, .Community(name: "")]
 
     var rawValue: String {
         switch self {
@@ -95,12 +99,14 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
             return "All"
         case .Subscribed:
             return "Subscribed"
+        case .Local:
+            return "Local"
         case .Community(name: let name):
             return "c/\(name)"
         }
     }
 
-    case All, Subscribed, Community(name: String)
+    case All, Subscribed, Local, Community(name: String)
 }
 
 enum ColorScheme: String, CaseIterable {

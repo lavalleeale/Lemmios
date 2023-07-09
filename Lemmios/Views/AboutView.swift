@@ -23,7 +23,7 @@ struct AboutView: View {
                 if let url = URL(string: apiModel.url), let host = url.host() {
                     let path = host == "lemmy.world" ? "lemmiosapp" : "lemmiosapp@lemmy.world"
                     let userPath = host == "lemmy.world" ? "mrlavallee" : "mrlavallee@lemmy.world"
-                    NavigationLink(value: PostsModel(path: path)) {
+                    NavigationLink(value: UserModel(path: userPath)) {
                         Label {
                             Text("u/\(userPath)")
                         } icon: {

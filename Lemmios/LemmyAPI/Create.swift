@@ -18,6 +18,10 @@ extension LemmyHttp {
         return makeRequestWithBody(path: "comment", responseType: CommentView.self, body: SentComment(auth: jwt!, content: content, parent_id: parentId, post_id: postId), receiveValue: receiveValue)
     }
     
+    func editComment(content: String, commentId: Int, receiveValue: @escaping (CommentView?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "comment", responseType: CommentView.self, body: EditedComment(auth: jwt!, content: content, comment_id: commentId), receiveValue: receiveValue)
+    }
+    
     struct SentPost: Codable, WithMethod {
         let method = "POST"
         let auth: String
@@ -33,5 +37,12 @@ extension LemmyHttp {
         let content: String
         let parent_id: Int?
         let post_id: Int
+    }
+    
+    struct EditedComment: Codable, WithMethod {
+        let method = "PUT"
+        let auth: String
+        let content: String
+        let comment_id: Int
     }
 }

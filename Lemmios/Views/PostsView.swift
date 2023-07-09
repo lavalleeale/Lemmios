@@ -2,7 +2,7 @@ import AlertToast
 import SwiftUI
 import UIKit
 
-let specialPostPathList = ["All", "Subscribed"]
+let specialPostPathList = ["All", "Subscribed", "Local"]
 
 struct PostsView: View {
     @ObservedObject var postsModel: PostsModel
@@ -33,7 +33,9 @@ struct PostsView: View {
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         .listRowSeparator(.hidden)
                     }
-                    if case .failed = postsModel.pageStatus {
+                    if postsModel.notFound {
+                        Text("Community not found.")
+                    } else if case .failed = postsModel.pageStatus {
                         HStack {
                             Text("Lemmy Request Failed, ")
                             Button("refresh?") {

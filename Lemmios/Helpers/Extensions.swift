@@ -8,6 +8,7 @@ extension Date {
         let df = RelativeDateTimeFormatter()
         var dateString: String = df.localizedString(for: self, relativeTo: Date())
         dateString = dateString.replacingOccurrences(of: "months", with: "M")
+            .replacingOccurrences(of: "years", with: "y")
             .replacingOccurrences(of: "month", with: "M")
             .replacingOccurrences(of: "weeks", with: "w")
             .replacingOccurrences(of: "week", with: "w")
@@ -84,7 +85,7 @@ private struct WithNavigationModifier: ViewModifier {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var navModel: NavModel
     @State var url: URL?
-    
+
     let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
@@ -188,6 +189,7 @@ struct CommentSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State var commentSize: PresentationDetent = .large
     @State var commentBody = ""
+    @State var editing = false
 
     let action: (String) -> ()
 
@@ -195,7 +197,7 @@ struct CommentSheet: View {
         NavigationView {
             TextEditor(text: $commentBody)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .navigationTitle("Add Comment")
+                .navigationTitle(editing ? "Edit Comment" : "Add Comment")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {

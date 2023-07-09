@@ -20,6 +20,7 @@ class PostsModel: ObservableObject, Hashable {
     @Published var communityView: LemmyHttp.CommunityView?
     @Published var postCreated = false
     @Published var createdPost: LemmyHttp.ApiPost?
+    @Published var notFound = false
     var path: String
     
     init(path: String) {
@@ -53,6 +54,11 @@ class PostsModel: ObservableObject, Hashable {
                     self.pageStatus = .ready(nextPage: page + 1)
                 }
             } else {
+                if case let .network(code, _) = error! {
+                    if code == 404 {
+                        self.notFound = true
+                    }
+                }
                 self.pageStatus = .failed
             }
         }.store(in: &cancellable)

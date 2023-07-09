@@ -44,8 +44,12 @@ class PostModel: VotableModel, Hashable {
     
     init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
         if let comment = comment {
-            self.commentId = comment.id
-            self.comments = [comment]            
+            let commentId = Int(comment.comment.path.split(separator: ".").dropLast().last!, radix: 10)
+            if commentId != 0 {
+                self.commentId = commentId
+                self.pageStatus = .done
+            }
+            self.comments = [comment]
         }
         self.detailsStatus = .ready
         self.post = post

@@ -11,6 +11,7 @@ struct HomeView: View {
                 let apiHost = URL(string: apiModel.url)!.host()!
                 ColoredListComponent {
                     NavigationLink("All", value: PostsModel(path: "All"))
+                    NavigationLink("Local", value: PostsModel(path: "Local"))
                     if let subscribed = apiModel.subscribed {
                         NavigationLink("Home", value: PostsModel(path: "Subscribed"))
                         ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in

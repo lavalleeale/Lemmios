@@ -8,7 +8,7 @@ class CommentModel: VotableModel {
     
     private var cancellable: Set<AnyCancellable> = Set()
 
-    let comment: LemmyHttp.ApiComment
+    @Published var comment: LemmyHttp.ApiComment
     @Published var children: [LemmyHttp.ApiComment]
     
     init(comment: LemmyHttp.ApiComment, children: [LemmyHttp.ApiComment]) {
@@ -62,6 +62,14 @@ class CommentModel: VotableModel {
         apiModel.lemmyHttp!.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
             if commentView != nil {
                 completion()
+            }
+        }.store(in: &cancellable)
+    }
+    
+    func edit(body: String, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.editComment(content: body, commentId: self.comment.id) { response, _ in
+            if let response = response {
+                self.comment = response.comment_view
             }
         }.store(in: &cancellable)
     }

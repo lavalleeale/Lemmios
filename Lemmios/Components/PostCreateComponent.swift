@@ -11,6 +11,8 @@ struct PostCreateComponent: View {
     @State var postData = ""
     @State var showToast = false
     @ObservedObject var postsModel: PostsModel
+    var editingId: Int?
+    
     var body: some View {
         NavigationView {
             Form(content: {
@@ -54,9 +56,11 @@ struct PostCreateComponent: View {
                         if postType == .Link && (url == nil || !UIApplication.shared.canOpenURL(url!)) {
                             showToast = true
                         } else {
-                            try? haptics.fire()
-                            postsModel.createPost(type: postType, title: title, content: postData, apiModel: apiModel)
-                            dismiss()
+                            if editingId == nil {
+                                try? haptics.fire()
+                                postsModel.createPost(type: postType, title: title, content: postData, apiModel: apiModel)
+                                dismiss()
+                            }
                         }
                     }
                 }

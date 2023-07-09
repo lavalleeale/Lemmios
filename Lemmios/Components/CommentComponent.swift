@@ -9,6 +9,7 @@ struct CommentComponent: View {
     @State var collapsed = false
     @State var preview = false
     @State var showingReply = false
+    @State var showingEdit = false
     var replyInfo: LemmyHttp.ReplyInfo?
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
@@ -16,7 +17,7 @@ struct CommentComponent: View {
     @EnvironmentObject var postModel: PostModel
 
     let depth: Int
-    
+
     var read: (() -> Void)?
 
     let collapseParent: (() -> Void)?
@@ -27,15 +28,19 @@ struct CommentComponent: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            Button(commentModel.comment.creator.name) {}
-                                .highPriorityGesture(TapGesture().onEnded {
-                                    navModel.path.append(UserModel(user: commentModel.comment.creator))
-                                })
-                                .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
-                                .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
+                            Button(commentModel.comment.creator.name) {
+                                navModel.path.append(UserModel(user: commentModel.comment.creator))
+                            }
+                            .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
+                            .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
                             Menu {
+                                if commentModel.comment.creator.name == apiModel.selectedAccount {
+                                    PostButton(label: "Edit", image: "pencil") {
+                                        showingEdit = true
+                                    }
+                                }
                                 PostButton(label: "Share", image: "square.and.arrow.up") {
                                     showShareSheet(url: commentModel.comment.comment.ap_id)
                                 }
@@ -158,6 +163,12 @@ struct CommentComponent: View {
         .sheet(isPresented: $showingReply) {
             CommentSheet { commentBody in
                 commentModel.comment(body: commentBody, apiModel: apiModel)
+            }
+            .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
+        }
+        .sheet(isPresented: $showingEdit) {
+            CommentSheet(commentBody: commentModel.comment.comment.content, editing: true) { commentBody in
+                commentModel.edit(body: commentBody, apiModel: apiModel)
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }

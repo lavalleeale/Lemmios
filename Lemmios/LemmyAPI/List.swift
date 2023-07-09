@@ -12,7 +12,9 @@ extension LemmyHttp {
             if self.jwt != nil {
                 query.append(URLQueryItem(name: "type_", value: "Subscribed"))
             }
-        } else if path != "All" && path != "" {
+        } else if path == "All" {
+            query.append(URLQueryItem(name: "type_", value: "All"))
+        } else if path != "Local" && path != "" {
             query.append(URLQueryItem(name: "community_name", value: path))
         }
         return makeRequest(path: "post/list", query: query, responseType: ApiPosts.self, receiveValue: receiveValue)

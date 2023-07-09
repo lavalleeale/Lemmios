@@ -9,7 +9,7 @@ struct PostView: View {
     @EnvironmentObject var navModel: NavModel
     @State var collapsed: Bool = false
     @State var parentContent: String? = nil
-    
+
     var body: some View {
         ZStack {
             Rectangle()
@@ -50,7 +50,8 @@ struct PostView: View {
                                 }
                             }
                     }
-                    let topLevels = postModel.comments.filter { $0.id == postModel.commentId || isCommentParent(parentId: 0, possibleChild: $0) }
+                    let minDepth = postModel.comments.min { $0.comment.path.split(separator: ".").count < $1.comment.path.split(separator: ".").count }?.comment.path.split(separator: ".").count
+                    let topLevels = postModel.comments.filter { $0.comment.path.split(separator: ".").count == minDepth }
                     LazyVStack(spacing: 0) {
                         ForEach(topLevels) { comment in
                             CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil)
