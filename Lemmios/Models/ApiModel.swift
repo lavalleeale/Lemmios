@@ -14,10 +14,13 @@ class ApiModel: ObservableObject {
     @Published var subscribed: [String: [LemmyHttp.ApiCommunityData]]?
     @Published var showingAuth = false
     @Published var showingSubscribe = false
+    @Published var unreadCount = 0
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
     private var cancellable = Set<AnyCancellable>()
+    
+    private var timer: Timer?
     
     init() {
         if self.url != "" {
@@ -71,12 +74,27 @@ class ApiModel: ObservableObject {
         if self.selectedAccount == username {
             self.selectedAccount = ""
             self.lemmyHttp?.setJwt(jwt: nil)
+            self.unreadCount = 0
+            self.timer?.invalidate()
         }
     }
     
     func selectAuth(username: String, showSubscribe: Bool = false) {
         self.selectedAccount = username
+        self.unreadCount = 0
         self.lemmyHttp!.setJwt(jwt: self.accounts.first { $0.username == username }!.jwt)
+        if let timer = timer {
+            timer.fire()
+        } else {
+            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+                self.lemmyHttp!.getUnreadCount { unreadCount, _ in
+                    if let unreadCount = unreadCount {
+                        self.unreadCount = unreadCount.replies
+                    }
+                }.store(in: &self.cancellable)
+            }
+            timer!.fire()
+        }
         self.lemmyHttp!.getSiteInfo { siteInfo, _ in
             if let siteInfo = siteInfo {
                 if (showSubscribe && !siteInfo.my_user.follows.contains { value in value.community.name.contains("lemmiosapp")}) {

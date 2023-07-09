@@ -5,6 +5,7 @@ class AuthModel: ObservableObject {
     @Published var captcha: LemmyHttp.CaptchaInfo?
     @Published var error = ""
     @Published var verifySent = false
+    @Published var needs2fa = false
 
     private var cancellable = Set<AnyCancellable>()
     private let decoder = JSONDecoder()
@@ -33,6 +34,9 @@ class AuthModel: ObservableObject {
             } else if case let .network(code, description) = error {
                 if code == 400, let decoded = try? self.decoder.decode(LemmyHttp.ErrorResponse.self, from: Data(description.utf8)) {
                     self.error = decoded.error
+                    if decoded.error == "missing_totp_token" {
+                        self.needs2fa = true
+                    }
                 }
             }
         }.store(in: &cancellable)

@@ -9,12 +9,15 @@ struct CommentComponent: View {
     @State var collapsed = false
     @State var preview = false
     @State var showingReply = false
+    var replyInfo: LemmyHttp.ReplyInfo?
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var postModel: PostModel
 
     let depth: Int
+    
+    var read: (() -> Void)?
 
     let collapseParent: (() -> Void)?
 
@@ -34,6 +37,11 @@ struct CommentComponent: View {
                             Spacer()
                             Text(commentModel.comment.counts.published.relativeDateAsString())
                                 .foregroundStyle(.secondary)
+                            if replyInfo != nil {
+                                Image(systemName: replyInfo!.read ? "envelope.open" : "envelope.badge")
+                                    .symbolRenderingMode(.multicolor)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         if !collapsed {
@@ -56,7 +64,15 @@ struct CommentComponent: View {
                     }
                 }
             }
-            .addSwipe(leadingOptions: [SwipeOption(id: "upvote", image: "arrow.up", color: .orange), SwipeOption(id: "downvote", image: "arrow.down", color: .purple)], trailingOptions: [SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!), SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)]) { swiped in
+            .padding(.horizontal)
+            .addSwipe(leadingOptions: [
+                SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
+                SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
+            ],
+            trailingOptions: [
+                replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
+                SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
+            ]) { swiped in
                 if apiModel.selectedAccount == "" {
                     apiModel.getAuth()
                 } else {
@@ -67,7 +83,10 @@ struct CommentComponent: View {
                         commentModel.vote(direction: false, apiModel: apiModel)
                     case "reply":
                         showingReply = true
-                        return
+                    case "read":
+                        commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
+                            read!()
+                        }
                     case "collapse":
                         withAnimation {
                             if collapseParent != nil {

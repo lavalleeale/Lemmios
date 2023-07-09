@@ -102,6 +102,9 @@ struct PostActionsComponent: View {
                     navModel.path.append(postModel)
                 }
             }
+            PostButton(label: "Share", image: "square.and.arrow.up") {
+                showShareSheet(url: postModel.post.ap_id)
+            }
             PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.slash" : "bookmark") {
                 try? haptics.fire()
                 postModel.save(apiModel: apiModel)

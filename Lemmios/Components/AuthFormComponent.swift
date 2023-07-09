@@ -14,6 +14,7 @@ struct AuthFormComponent: View {
     @State var password = ""
     @State var confirmPassword = ""
     @State var captchaResponse = ""
+    @State var totpResponse = ""
     
     var body: some View {
         Form {
@@ -36,6 +37,12 @@ struct AuthFormComponent: View {
                     CustomSecureField(text: $confirmPassword, label: "Confirm Password", errorMessage: password == confirmPassword ? nil : "Passwords do not match.")
                 }
             }
+            if authModel.needs2fa {
+                Section {
+                    TextField("2fa Code", text: $totpResponse)
+                        .textContentType(.oneTimeCode)
+                }
+            }
             if case .Signup = selectedTab, let captcha = authModel.captcha {
                 Section {
                     Image(uiImage: UIImage(data: Data(base64Encoded: captcha.png)!)!)
@@ -49,13 +56,22 @@ struct AuthFormComponent: View {
             }
             Button("Login") {
                 if selectedTab == .Login {
-                    authModel.login(apiModel: apiModel, info: .init(username_or_email: username, password: password))
+                    authModel.login(apiModel: apiModel, info: .init(username_or_email: username, password: password, totp_2fa_token: totpResponse.isEmpty ? nil : totpResponse))
                 } else {
                     authModel.register(apiModel: apiModel, info: .init(username: username, password: password, password_verify: confirmPassword, email: email, captcha_answer: captchaResponse, captcha_uuid: authModel.captcha?.uuid ?? UUID().uuidString))
                 }
             }
         }
-        .onChange(of: apiModel.accounts) { [accounts = apiModel.accounts] newValue in
+        .onAppear {
+            authModel.needs2fa = false
+            self.username = ""
+            self.email = ""
+            self.password = ""
+            self.confirmPassword = ""
+            self.captchaResponse = ""
+            self.totpResponse = ""
+        }
+        .onChange(of: apiModel.accounts) { newValue in
             dismiss()
         }
         .onChange(of: authModel.verifySent) { newValue in

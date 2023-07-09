@@ -25,9 +25,6 @@ extension Date {
     }
 }
 
-let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
-let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-
 public extension View {
     func onFirstAppear(_ action: @escaping () -> ()) -> some View {
         modifier(FirstAppear(action: action))
@@ -106,18 +103,11 @@ private struct WithNavigationModifier: ViewModifier {
         }
         .environmentObject(navModel)
         .environment(\.openURL, OpenURLAction { url in
-            if let match = url.absoluteString.firstMatch(of: communityRegex) {
-                if let instance = match.3 {
-                    navModel.path.append(PostsModel(path: "\(match.2)\(instance)"))
-                } else {
-                    navModel.path.append(PostsModel(path: "\(match.2)@\(match.1)"))
-                }
-            } else if let match = url.absoluteString.firstMatch(of: userRegex) {
-                if let instance = match.3 {
-                    navModel.path.append(UserModel(path: "\(match.2)\(instance)"))
-                } else {
-                    navModel.path.append(UserModel(path: "\(match.2)@\(match.1)"))
-                }
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: true), components.scheme == "lemmiosapp" {
+                UIApplication
+                    .shared
+                    .open(url)
+                return .handled
             } else {
                 self.url = url
             }
@@ -261,5 +251,20 @@ extension Bundle {
 
     var buildVersionNumber: String? {
         return infoDictionary?["CFBundleVersion"] as? String
+    }
+}
+
+public extension UIApplication {
+    func currentUIWindow() -> UIWindow? {
+        let connectedScenes = UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+        
+        let window = connectedScenes.first?
+            .windows
+            .first { $0.isKeyWindow }
+
+        return window
+        
     }
 }

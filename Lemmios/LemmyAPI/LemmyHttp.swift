@@ -135,6 +135,10 @@ class LemmyHttp {
         return makeRequest(path: "site", query: [], responseType: SiteInfo.self, receiveValue: receiveValue)
     }
     
+    func getUnreadCount(receiveValue: @escaping (LemmyHttp.UnreadCount?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequest(path: "user/unread_count", query: [], responseType: UnreadCount.self, receiveValue: receiveValue)
+    }
+    
     func follow(communityId: Int, follow: Bool, receiveValue: @escaping (CommunityView?, NetworkError?) -> Void) -> AnyCancellable {
         return makeRequestWithBody(path: "community/follow", responseType: CommunityView.self, body: FollowPaylod(auth: jwt!, community_id: communityId, follow: follow), receiveValue: receiveValue)
     }
@@ -151,10 +155,47 @@ class LemmyHttp {
         return makeRequest(path: "user/get_captcha", responseType: CaptchaResponse.self, receiveValue: receiveValue)
     }
     
+    func readReply(replyId: Int, read: Bool, receiveValue: @escaping (AuthResponse?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "comment/mark_as_read", responseType: AuthResponse.self, body: ReadPayload(auth: jwt!, comment_reply_id: replyId, read: read), receiveValue: receiveValue)
+    }
+    
+    struct CommentReplyView: Codable {
+        let comment_reply_view: Reply
+    }
+    
+    struct ReadPayload: Codable, WithMethod {
+        let method = "POST"
+        let auth: String
+        let comment_reply_id: Int
+        let read: Bool
+    }
+    
+    struct Replies: Codable {
+        let replies: [Reply]
+    }
+    
+    struct ReplyOnlyData: Codable {
+        var comment_reply: ReplyInfo
+    }
+    
+    typealias Reply = Compose<ApiComment, ReplyOnlyData>
+    
+    struct ReplyInfo: Codable {
+        var read: Bool
+        let id: Int
+    }
+    
+    struct UnreadCount: Codable {
+        let replies: Int
+        let mentions: Int
+        let private_messages: Int
+    }
+    
     struct LoginPayload: Codable, WithMethod {
         let method = "POST"
         let username_or_email: String
         let password: String
+        let totp_2fa_token: String?
     }
     
     struct CaptchaResponse: Codable {
@@ -292,6 +333,7 @@ class LemmyHttp {
         let url: URL?
         let creator_id: Int
         let nsfw: Bool
+        let ap_id: URL
     }
     
     struct ApiPostCounts: Codable, WithPublished {
@@ -404,14 +446,14 @@ public extension Publisher {
         scheduler: S
     ) -> AnyPublisher<Output, Failure> where S: Scheduler {
         delayIfFailure(for: delay, scheduler: scheduler) { error in
-            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code == 400 {
+            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code >= 400, code < 500 {
                 return false
             } else {
                 return true
             }
         }
         .retry(times: retries) { error in
-            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code == 400 {
+            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code >= 400, code < 500 {
                 return false
             } else {
                 return true
@@ -472,4 +514,41 @@ protocol WithNameHost {
     var actor_id: URL { get }
     var name: String { get }
     var icon: URL? { get }
+}
+
+@dynamicMemberLookup
+struct Compose<Element1, Element2> {
+    var element1: Element1
+    var element2: Element2
+    subscript<T>(dynamicMember keyPath: WritableKeyPath<Element1, T>) -> T {
+        get { element1[keyPath: keyPath] }
+        set { element1[keyPath: keyPath] = newValue }
+    }
+    subscript<T>(dynamicMember keyPath: WritableKeyPath<Element2, T>) -> T {
+        get { element2[keyPath: keyPath] }
+        set { element2[keyPath: keyPath] = newValue }
+    }
+    init(_ element1: Element1, _ element2: Element2) {
+        self.element1 = element1
+        self.element2 = element2
+    }
+}
+
+extension Compose: Encodable where Element1: Encodable, Element2: Encodable {
+    func encode(to encoder: Encoder) throws {
+        try element1.encode(to: encoder)
+        try element2.encode(to: encoder)
+    }
+}
+extension Compose: Decodable where Element1: Decodable, Element2: Decodable {
+    init(from decoder: Decoder) throws {
+        self.element1 = try Element1(from: decoder)
+        self.element2 = try Element2(from: decoder)
+    }
+}
+
+extension Compose: Identifiable where Element1: Identifiable {
+    var id: Element1.ID {
+        self.element1.id
+    }
 }

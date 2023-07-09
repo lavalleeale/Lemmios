@@ -59,6 +59,7 @@
 		FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284D2A593D8100243C7F /* ImportSubsView.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
+		FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD411F02A5A8EFF0012DE37 /* Share.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
 		FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD20462A5204B4002CE443 /* Assets.xcassets */; };
@@ -68,6 +69,8 @@
 		FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20582A520A4A002CE443 /* ApiModel.swift */; };
 		FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */; };
 		FADFF8652A560933006F216A /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADFF8642A560933006F216A /* Markdown.swift */; };
+		FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D12A5A06A100B54142 /* InboxView.swift */; };
+		FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D32A5A06CB00B54142 /* InboxModel.swift */; };
 		FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = FAF000AC2A5676D700F07E04 /* AlertToast */; };
 		FAF000AF2A56851400F07E04 /* Vote.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000AE2A56851400F07E04 /* Vote.swift */; };
 		FAF000B12A56856200F07E04 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000B02A56856200F07E04 /* List.swift */; };
@@ -124,6 +127,7 @@
 		FABC284D2A593D8100243C7F /* ImportSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSubsView.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FAD411F02A5A8EFF0012DE37 /* Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADD20422A5204B3002CE443 /* ArtemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisApp.swift; sourceTree = "<group>"; };
 		FADD20442A5204B3002CE443 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 		FADD20582A520A4A002CE443 /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
 		FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectorView.swift; sourceTree = "<group>"; };
 		FADFF8642A560933006F216A /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
+		FAEE08D12A5A06A100B54142 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
+		FAEE08D32A5A06CB00B54142 /* InboxModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxModel.swift; sourceTree = "<group>"; };
 		FAF000AE2A56851400F07E04 /* Vote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vote.swift; sourceTree = "<group>"; };
 		FAF000B02A56856200F07E04 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		FAF000B22A5685D100F07E04 /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
@@ -167,6 +173,7 @@
 			children = (
 				FA72A6972A573DAD001AFA61 /* Extensions.swift */,
 				FADFF8642A560933006F216A /* Markdown.swift */,
+				FAD411F02A5A8EFF0012DE37 /* Share.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -288,6 +295,7 @@
 				FABC28352A5916A900243C7F /* ApolloImportView.swift */,
 				FABC28452A5932E700243C7F /* AboutView.swift */,
 				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
+				FAEE08D12A5A06A100B54142 /* InboxView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,6 +314,7 @@
 				FA72A6912A5729AE001AFA61 /* SearchedModel.swift */,
 				FAA145132A58B89A009DDA23 /* AuthModel.swift */,
 				FABC28372A59175C00243C7F /* ApolloImportModel.swift */,
+				FAEE08D32A5A06CB00B54142 /* InboxModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -442,12 +451,14 @@
 				FAAAF8632A5260E300C9BFD8 /* PostContentComponent.swift in Sources */,
 				FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */,
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
+				FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */,
 				FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */,
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
 				FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */,
 				FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */,
 				FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */,
 				FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */,
+				FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */,
 				FAAAF86E2A528D0100C9BFD8 /* AuthenticationView.swift in Sources */,
 				FABC284C2A5933C100243C7F /* SettingCustomComponent.swift in Sources */,
 				FAF5D5442A53FAEF00FDA8D9 /* HomeView.swift in Sources */,
@@ -457,6 +468,7 @@
 				FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
+				FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */,
 				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -580,7 +592,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -601,7 +613,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -622,7 +634,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -643,7 +655,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

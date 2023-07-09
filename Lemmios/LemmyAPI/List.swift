@@ -26,6 +26,11 @@ extension LemmyHttp {
         return makeRequest(path: "comment/list", query: query, responseType: ApiComments.self, receiveValue: receiveValue)
     }
     
+    func getReplies(page: Int, sort: Sort, unread: Bool, receiveValue: @escaping (LemmyHttp.Replies?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        var query = [URLQueryItem(name: "sort", value: sort.rawValue), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "unread_only", value: String(unread))]
+        return makeRequest(path: "user/replies", query: query, responseType: Replies.self, receiveValue: receiveValue)
+    }
+    
     func getCommunities(page: Int, sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, limit: Int = 10, receiveValue: @escaping (LemmyHttp.ApiCommunities?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
         var sortString: String = sort.rawValue
         if sort == .Top {
