@@ -35,6 +35,23 @@ struct CommentComponent: View {
                                 .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
+                            Menu {
+                                PostButton(label: "Share", image: "square.and.arrow.up") {
+                                    showShareSheet(url: commentModel.comment.comment.ap_id)
+                                }
+                            } label: {
+                                Label {
+                                    Text("Comment Options")
+                                } icon: {
+                                    Image(systemName: "ellipsis")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 20, height: 20)
+                                        .foregroundStyle(.secondary)
+                                }
+                                .labelStyle(.iconOnly)
+                            }
+                            .highPriorityGesture(TapGesture())
                             Text(commentModel.comment.counts.published.relativeDateAsString())
                                 .foregroundStyle(.secondary)
                             if replyInfo != nil {

@@ -1,9 +1,6 @@
 import SafariServices
 import SwiftUI
 
-let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
-let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var apiModel = ApiModel()
@@ -17,6 +14,9 @@ struct ContentView: View {
     @ObservedObject var inboxModel = InboxModel()
     @State var showingAuth = false
     @State var selected = Tab.Posts
+    
+    let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
+    let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
     init() {
         if apiModel.serverSelected {

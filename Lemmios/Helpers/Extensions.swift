@@ -47,12 +47,18 @@ public extension View {
     }
 
     func commentDepthIndicator(depth: Int) -> some View {
-        padding(.leading, 10)
-            .overlay(Rectangle()
-                .frame(width: CGFloat(depth.signum()), height: nil, alignment: .leading)
-                .foregroundColor(colors[depth % colors.count]), alignment: .leading)
-            .padding(.leading, 10 * CGFloat(depth))
-            .frame(idealWidth: UIScreen.main.bounds.width - CGFloat(10 * depth), alignment: .leading)
+        ZStack {
+            if depth > 0 {
+                padding(.leading, 10)
+                    .overlay(Rectangle()
+                        .frame(width: CGFloat(depth.signum()), height: nil, alignment: .leading)
+                        .foregroundColor(colors[depth % colors.count]), alignment: .leading)
+                    .padding(.leading, 10 * CGFloat(depth - 1))
+                    .frame(idealWidth: UIScreen.main.bounds.width - CGFloat(10 * depth - 1), alignment: .leading)
+            } else {
+                self
+            }
+        }
     }
 
     internal func handleNavigations(navModel: NavModel) -> some View {
@@ -78,6 +84,9 @@ private struct WithNavigationModifier: ViewModifier {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var navModel: NavModel
     @State var url: URL?
+    
+    let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
+    let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
@@ -103,11 +112,18 @@ private struct WithNavigationModifier: ViewModifier {
         }
         .environmentObject(navModel)
         .environment(\.openURL, OpenURLAction { url in
-            if let components = URLComponents(url: url, resolvingAgainstBaseURL: true), components.scheme == "lemmiosapp" {
-                UIApplication
-                    .shared
-                    .open(url)
-                return .handled
+            if let match = url.absoluteString.firstMatch(of: communityRegex) {
+                if let instance = match.3 {
+                    navModel.path.append(PostsModel(path: "\(match.2)\(instance)"))
+                } else {
+                    navModel.path.append(PostsModel(path: "\(match.2)@\(match.1)"))
+                }
+            } else if let match = url.absoluteString.firstMatch(of: userRegex) {
+                if let instance = match.3 {
+                    navModel.path.append(UserModel(path: "\(match.2)\(instance)"))
+                } else {
+                    navModel.path.append(UserModel(path: "\(match.2)@\(match.1)"))
+                }
             } else {
                 self.url = url
             }

@@ -286,6 +286,7 @@ class LemmyHttp {
         let id: Int
         let content: String
         let path: String
+        let ap_id: URL
     }
     
     struct ApiPost: Codable, Identifiable, WithCounts {
