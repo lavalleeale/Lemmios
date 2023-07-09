@@ -47,13 +47,12 @@ struct AboutView: View {
                         Label {
                             Text("Github")
                         } icon: {
-                            Image(uiImage:
-                                UIImage(named: colorScheme == .dark ? "github_white.png" : "github_white.png")!
-                            )
+                            Image(colorScheme == .dark ? "github_white" : "github_white")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                         }
                     }
+                    .foregroundStyle(.primary)
                 }
             }
             .scrollDisabled(true)

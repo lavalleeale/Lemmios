@@ -27,6 +27,14 @@ extension Date {
 }
 
 public extension View {
+    internal func splashStyle(_ selectedTheme: Theme) -> some View {
+        padding()
+        .buttonStyle(.bordered)
+        .navigationBarBackButtonHidden(true)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(selectedTheme.backgroundColor)
+    }
+    
     func onFirstAppear(_ action: @escaping () -> ()) -> some View {
         modifier(FirstAppear(action: action))
     }
@@ -284,5 +292,16 @@ public extension UIApplication {
 
         return window
         
+    }
+}
+
+extension UINavigationController: UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return viewControllers.count > 1
     }
 }

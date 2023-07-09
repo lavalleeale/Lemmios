@@ -10,6 +10,7 @@
 		FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */; };
 		FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */; };
 		FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */; };
+		FA2214932A5B57D80023C696 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2214922A5B57D80023C696 /* SplashView.swift */; };
 		FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */; };
 		FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE90E2A5478EA00546BFF /* UserView.swift */; };
 		FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE9122A547BE800546BFF /* UserModel.swift */; };
@@ -51,8 +52,6 @@
 		FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E622A5346E400DE15BB /* ScoreComponent.swift */; };
 		FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28352A5916A900243C7F /* ApolloImportView.swift */; };
 		FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28372A59175C00243C7F /* ApolloImportModel.swift */; };
-		FABC28402A592D8900243C7F /* github_white.png in Resources */ = {isa = PBXBuildFile; fileRef = FABC283F2A592D8900243C7F /* github_white.png */; };
-		FABC28422A592D8E00243C7F /* github_black.png in Resources */ = {isa = PBXBuildFile; fileRef = FABC28412A592D8E00243C7F /* github_black.png */; };
 		FABC28462A5932E700243C7F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28452A5932E700243C7F /* AboutView.swift */; };
 		FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28472A59338D00243C7F /* SettingViewComponent.swift */; };
 		FABC284A2A5933AC00243C7F /* SettingSuboptionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */; };
@@ -85,6 +84,7 @@
 		FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberComponent.swift; sourceTree = "<group>"; };
 		FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowsComponent.swift; sourceTree = "<group>"; };
 		FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
+		FA2214922A5B57D80023C696 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreateComponent.swift; sourceTree = "<group>"; };
 		FA2EE90E2A5478EA00546BFF /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		FA2EE9122A547BE800546BFF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -120,8 +120,6 @@
 		FAB93E622A5346E400DE15BB /* ScoreComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreComponent.swift; sourceTree = "<group>"; };
 		FABC28352A5916A900243C7F /* ApolloImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportView.swift; sourceTree = "<group>"; };
 		FABC28372A59175C00243C7F /* ApolloImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportModel.swift; sourceTree = "<group>"; };
-		FABC283F2A592D8900243C7F /* github_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = github_white.png; sourceTree = "<group>"; };
-		FABC28412A592D8E00243C7F /* github_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = github_black.png; sourceTree = "<group>"; };
 		FABC28452A5932E700243C7F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		FABC28472A59338D00243C7F /* SettingViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewComponent.swift; sourceTree = "<group>"; };
 		FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSuboptionComponent.swift; sourceTree = "<group>"; };
@@ -214,15 +212,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		FABC28322A5915F700243C7F /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				FABC28412A592D8E00243C7F /* github_black.png */,
-				FABC283F2A592D8900243C7F /* github_white.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		FADD20362A5204B3002CE443 = {
 			isa = PBXGroup;
 			children = (
@@ -243,7 +232,6 @@
 			isa = PBXGroup;
 			children = (
 				FA45961F2A59C3FE00368DBB /* Theme */,
-				FABC28322A5915F700243C7F /* Resources */,
 				FA68BDEA2A58C45700F2FE3D /* Info.plist */,
 				FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */,
 				FA2EE90B2A5472DA00546BFF /* Helpers */,
@@ -299,6 +287,7 @@
 				FABC28452A5932E700243C7F /* AboutView.swift */,
 				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
 				FAEE08D12A5A06A100B54142 /* InboxView.swift */,
+				FA2214922A5B57D80023C696 /* SplashView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -401,8 +390,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FABC28402A592D8900243C7F /* github_white.png in Resources */,
-				FABC28422A592D8E00243C7F /* github_black.png in Resources */,
 				FADD204B2A5204B4002CE443 /* Preview Assets.xcassets in Resources */,
 				FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */,
 			);
@@ -432,6 +419,7 @@
 				FAF000AF2A56851400F07E04 /* Vote.swift in Sources */,
 				FABEC3062A54064E00620E9A /* NavModel.swift in Sources */,
 				FAF000B52A56889000F07E04 /* Save.swift in Sources */,
+				FA2214932A5B57D80023C696 /* SplashView.swift in Sources */,
 				FAF5D5422A53EC2800FDA8D9 /* PostActionsComponent.swift in Sources */,
 				FABC28462A5932E700243C7F /* AboutView.swift in Sources */,
 				FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */,
