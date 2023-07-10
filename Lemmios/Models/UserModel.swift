@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import OSLog
 
 class UserModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -35,12 +36,12 @@ class UserModel: ObservableObject, Hashable {
     }
     
     func reset() {
-        self.pageStatus = .ready(nextPage: 1)
-        self.comments = .init()
-        self.posts = .init()
-        self.saved = .init()
-        self.cancellable.removeAll()
-        self.savedPageStatus = .ready(nextPage: 1)
+        pageStatus = .ready(nextPage: 1)
+        comments = .init()
+        posts = .init()
+        saved = .init()
+        cancellable.removeAll()
+        savedPageStatus = .ready(nextPage: 1)
     }
     
     func fetchData(apiModel: ApiModel, saved: Bool = false) {
@@ -53,28 +54,30 @@ class UserModel: ObservableObject, Hashable {
             pageStatus = .loading(page: page)
         }
         apiModel.lemmyHttp!.getUser(name: name, page: page, sort: sort, time: time, saved: saved) { user, error in
-            if error == nil {
-                self.userData = user!.person_view
-                if saved {
-                    if user!.comments.isEmpty && user!.posts.isEmpty {
-                        self.savedPageStatus = .done
+            DispatchQueue.main.async {
+                if error == nil {
+                    self.userData = user!.person_view
+                    if saved {
+                        if user!.comments.isEmpty && user!.posts.isEmpty {
+                            self.savedPageStatus = .done
+                        } else {
+                            self.saved.append(contentsOf: user!.comments)
+                            self.saved.append(contentsOf: user!.posts)
+                            self.savedPageStatus = .ready(nextPage: page + 1)
+                        }
                     } else {
-                        self.saved.append(contentsOf: user!.comments)
-                        self.saved.append(contentsOf: user!.posts)
-                        self.savedPageStatus = .ready(nextPage: page + 1)
+                        if user!.comments.isEmpty && user!.posts.isEmpty {
+                            self.pageStatus = .done
+                        } else {
+                            self.comments.append(contentsOf: user!.comments)
+                            self.posts.append(contentsOf: user!.posts)
+                            self.pageStatus = .ready(nextPage: page + 1)
+                        }
                     }
                 } else {
-                    if user!.comments.isEmpty && user!.posts.isEmpty {
-                        self.pageStatus = .done
-                    } else {
-                        self.comments.append(contentsOf: user!.comments)
-                        self.posts.append(contentsOf: user!.posts)
-                        self.pageStatus = .ready(nextPage: page + 1)
-                    }
+                    Logger().log("\(error)")
+                    self.pageStatus = .failed
                 }
-            } else {
-                print(error)
-                self.pageStatus = .failed
             }
         }.store(in: &cancellable)
     }

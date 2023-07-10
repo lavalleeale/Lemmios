@@ -1,5 +1,6 @@
 import SimpleHaptics
 import SwiftUI
+import OSLog
 
 class StartingTab: ObservableObject {
     @Published var requestedTab: String?
@@ -53,7 +54,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
             let task = URLSession.shared.dataTask(with: request) { data, _, _ in
                 guard let data = data else { return }
-                print(String(data: data, encoding: .utf8)!)
+                os_log("\(String(data: data, encoding: .utf8)!)")
             }
 
             task.resume()

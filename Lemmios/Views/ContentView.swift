@@ -1,6 +1,6 @@
+import AlertToast
 import SafariServices
 import SwiftUI
-import AlertToast
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -82,15 +82,21 @@ struct ContentView: View {
                             Label("Posts", systemImage: "doc.text.image")
                         }
                         .tag(Tab.Posts)
-                        InboxView(inboxModel: inboxModel)
-                            .navigationTitle("Inbox")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .handleNavigations(navModel: inboxNavModel)
-                            .tabItem {
-                                Label("Inbox", systemImage: "envelope")
+                        ZStack {
+                            if !apiModel.serverSelected {
+                                ServerSelectorView()
+                            } else {
+                                InboxView(inboxModel: inboxModel)
+                                    .navigationTitle("Inbox")
+                                    .navigationBarTitleDisplayMode(.inline)
+                                    .handleNavigations(navModel: inboxNavModel)
                             }
-                            .badge(apiModel.unreadCount)
-                            .tag(Tab.Inbox)
+                        }
+                        .tabItem {
+                            Label("Inbox", systemImage: "envelope")
+                        }
+                        .badge(apiModel.unreadCount)
+                        .tag(Tab.Inbox)
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()

@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import OSLog
 
 class SearchedModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -95,7 +96,7 @@ class SearchedModel: ObservableObject, Hashable {
                 self.users!.append(contentsOf: users!.users)
                 self.pageStatus = .ready(nextPage: page+1)
             } else {
-                print(error)
+                os_log("\(error)")
                 self.pageStatus = .failed
             }
         }.store(in: &cancellable)

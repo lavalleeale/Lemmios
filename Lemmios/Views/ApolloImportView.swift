@@ -1,5 +1,6 @@
 import AlertToast
 import SwiftUI
+import OSLog
 
 struct ApolloImportView: View {
     @ObservedObject var apolloImportModel = ApolloImportModel()
@@ -21,7 +22,7 @@ struct ApolloImportView: View {
                     navModel.path.append(ApolloImportDestination.Main(users: users))
                 }
             case .failure(let error):
-                print(error.localizedDescription)
+                os_log("\(error)")
             }
         }
         .toast(isPresenting: $showingError) {

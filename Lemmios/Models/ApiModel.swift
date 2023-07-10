@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import SimpleKeychain
 import SwiftUI
+import OSLog
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl") public var url = ""
@@ -110,7 +111,7 @@ class ApiModel: ObservableObject {
             
             let task = URLSession.shared.dataTask(with: request) { data, _, _ in
                 guard let data = data else { return }
-                print(String(data: data, encoding: .utf8)!)
+                os_log("\(String(data: data, encoding: .utf8)!)")
             }
             
             task.resume()

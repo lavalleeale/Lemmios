@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import SwiftUI
+import OSLog
 
 class PostModel: VotableModel, Hashable {
     private var id = UUID()
@@ -76,7 +77,7 @@ class PostModel: VotableModel, Hashable {
                 self.saved = post.saved ?? false
                 self.likes = post.my_vote ?? 0
             } else {
-                print(error)
+                os_log("\(error)")
                 self.detailsStatus = .failed
             }
         }.store(in: &cancellable)

@@ -43,6 +43,30 @@ struct UserView: View {
                         userModel.fetchData(apiModel: apiModel, saved: true)
                     }
                 }
+                if case .failed = userModel.pageStatus {
+                    HStack {
+                        Text("Lemmy Request Failed, ")
+                        Button("refresh?") {
+                            userModel.reset()
+                            userModel.fetchData(apiModel: apiModel, saved: selectedTab == UserViewTab.Saved)
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                } else if case .done = userModel.pageStatus {
+                    Text("Last Item Found ):")
+                        .listRowSeparator(.hidden)
+                } else if case .loading = userModel.pageStatus {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                }
+            }
+            .refreshable {
+                userModel.reset()
+                userModel.fetchData(apiModel: apiModel, saved: selectedTab == UserViewTab.Saved)
             }
             .listStyle(.plain)
             .navigationTitle(from == apiHost ? String(name) : userModel.name)

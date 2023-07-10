@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import OSLog
 import SwiftUI
 
 let VERSION = "v3"
@@ -67,8 +68,10 @@ class LemmyHttp {
         }
         return URLSession.shared.dataTaskPublisher(for: request)
             // #1 URLRequest fails, throw APIError.network
-            .mapError {
-                NetworkError.network(code: $0.code.rawValue, description: $0.localizedDescription)
+            .mapError { error in
+                let networkError = NetworkError.network(code: error.code.rawValue, description: error.localizedDescription)
+                os_log("\(networkError)")
+                return networkError
             }
             .tryMap { v in
                 let code = (v.response as! HTTPURLResponse).statusCode
@@ -84,7 +87,14 @@ class LemmyHttp {
                     // #2 try to decode data as a `Response`
                     .decode(type: ResponseType.self, decoder: self.decoder)
                 
-                    .mapError { NetworkError.decoding(message: String(data: v.data, encoding: .utf8) ?? "", error: $0 as! DecodingError) }
+                    .mapError { error in
+                        let decodingError = NetworkError.decoding(
+                            message: String(data: v.data, encoding: .utf8) ?? "",
+                            error: error as! DecodingError
+                        )
+                        os_log("\(error)")
+                        return decodingError
+                    }
             }
             .mapError { $0 as! LemmyHttp.NetworkError }
             .receive(on: DispatchQueue.main)
@@ -531,10 +541,12 @@ struct Compose<Element1, Element2> {
         get { element1[keyPath: keyPath] }
         set { element1[keyPath: keyPath] = newValue }
     }
+
     subscript<T>(dynamicMember keyPath: WritableKeyPath<Element2, T>) -> T {
         get { element2[keyPath: keyPath] }
         set { element2[keyPath: keyPath] = newValue }
     }
+
     init(_ element1: Element1, _ element2: Element2) {
         self.element1 = element1
         self.element2 = element2
@@ -547,6 +559,7 @@ extension Compose: Encodable where Element1: Encodable, Element2: Encodable {
         try element2.encode(to: encoder)
     }
 }
+
 extension Compose: Decodable where Element1: Decodable, Element2: Decodable {
     init(from decoder: Decoder) throws {
         self.element1 = try Element1(from: decoder)

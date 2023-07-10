@@ -28,7 +28,7 @@ struct PostPreviewComponent: View {
                 VStack {
                     HStack {
                         Text(postModel.post.name)
-                            .font(.title3)
+                            .font(.headline)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
                         if postModel.post.nsfw {
