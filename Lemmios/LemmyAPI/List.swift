@@ -29,7 +29,7 @@ extension LemmyHttp {
     }
     
     func getReplies(page: Int, sort: Sort, unread: Bool, receiveValue: @escaping (LemmyHttp.Replies?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
-        var query = [URLQueryItem(name: "sort", value: sort.rawValue), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "unread_only", value: String(unread))]
+        let query = [URLQueryItem(name: "sort", value: sort.rawValue), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "unread_only", value: String(unread))]
         return makeRequest(path: "user/replies", query: query, responseType: Replies.self, receiveValue: receiveValue)
     }
     

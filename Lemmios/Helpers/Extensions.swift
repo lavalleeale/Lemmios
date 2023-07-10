@@ -207,21 +207,21 @@ struct CommentSheet: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .navigationTitle(editing ? "Edit Comment" : "Add Comment")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarLeading) {
                         Button("Close") {
                             commentSize = .large
                             dismiss()
                         }
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Done") {
                             commentSize = .large
                             dismiss()
                             action(commentBody)
                         }
                     }
-                }
+                })
         }
     }
 }

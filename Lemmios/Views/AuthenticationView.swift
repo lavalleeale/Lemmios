@@ -38,20 +38,20 @@ struct AuthenticationView: View {
                     .buttonStyle(.plain)
                 }
             }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarLeading) {
                         Button("Close") {
                             dismiss()
                         }
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink {
                             AuthFormComponent(authModel: authModel)
                         } label: {
                             Image(systemName: "plus")
                         }
                     }
-                }
+                })
             }
         }
     }

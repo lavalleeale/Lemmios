@@ -6,9 +6,9 @@ extension LemmyHttp {
         var body: SentPost {
             switch type {
             case .Link:
-                SentPost(auth: self.jwt!, community_id: communityId, name: title, url: content, body: nil)
+                return SentPost(auth: self.jwt!, community_id: communityId, name: title, url: content, body: nil)
             case .Text:
-                SentPost(auth: self.jwt!, community_id: communityId, name: title, url: nil, body: content)
+                return SentPost(auth: self.jwt!, community_id: communityId, name: title, url: nil, body: content)
             }
         }
         return makeRequestWithBody(path: "post", responseType: PostView.self, body: body, receiveValue: receiveValue)

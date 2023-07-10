@@ -1,5 +1,6 @@
 import SafariServices
 import SwiftUI
+import AlertToast
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -19,8 +20,10 @@ struct ContentView: View {
     @ObservedObject var searchModel = SearchModel()
     @ObservedObject var userModel = UserModel(path: "")
     @ObservedObject var inboxModel = InboxModel()
+    @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var showingAuth = false
     @State var selected = Tab.Posts
+    @State var showInvalidUser = false
 
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
@@ -66,12 +69,18 @@ struct ContentView: View {
                     self.selected = $0
                 })) {
                     Group {
-                        HomeView()
-                            .handleNavigations(navModel: homeNavModel)
-                            .tabItem {
-                                Label("Posts", systemImage: "doc.text.image")
+                        ZStack {
+                            if !apiModel.serverSelected {
+                                ServerSelectorView()
+                            } else {
+                                HomeView()
+                                    .handleNavigations(navModel: homeNavModel)
                             }
-                            .tag(Tab.Posts)
+                        }
+                        .tabItem {
+                            Label("Posts", systemImage: "doc.text.image")
+                        }
+                        .tag(Tab.Posts)
                         InboxView(inboxModel: inboxModel)
                             .navigationTitle("Inbox")
                             .navigationBarTitleDisplayMode(.inline)
@@ -101,7 +110,7 @@ struct ContentView: View {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
                             } else {
-                                SearchView(searchModel: searchModel)
+                                SearchView(searchModel: searchModel, searchedModel: searchedModel)
                             }
                         }
                         .handleNavigations(navModel: searchNavModel)
@@ -155,17 +164,20 @@ struct ContentView: View {
                     }
                 }
                 .onChange(of: apiModel.selectedAccount) { newValue in
+                    showingAuth = false
                     userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
                     userModel.reset()
                     inboxModel.reset()
                 }
-                .alert("Subscribe to c/lemmiosapp?", isPresented: $apiModel.showingSubscribe) {
-                    Button("No") {}
-                    Button("Yes") {
-                        apiModel.followSelf()
+                .toast(isPresenting: $showInvalidUser) {
+                    AlertToast(displayMode: .banner(.slide), type: .error(.red), title: "Invalid token for \(apiModel.invalidUser ?? "user"), please relogin.")
+                } completion: {
+                    apiModel.invalidUser = nil
+                }
+                .onChange(of: apiModel.invalidUser) { newValue in
+                    if newValue != nil {
+                        self.showInvalidUser = true
                     }
-                } message: {
-                    Text("The official subreddit for this app! Subscribe to the community for news on the app, feature requests, and more!")
                 }
                 .popupNavigationView(isPresented: $apiModel.showingAuth, heightRatio: 1.5, widthRatio: 1.1) {
                     AuthenticationView()

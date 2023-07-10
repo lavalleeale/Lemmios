@@ -4,35 +4,31 @@ struct HomeView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @EnvironmentObject var apiModel: ApiModel
     @State var homeShowing = true
-    
+
     var body: some View {
         ZStack {
-            if apiModel.serverSelected {
-                let apiHost = URL(string: apiModel.url)!.host()!
-                ColoredListComponent {
-                    NavigationLink("All", value: PostsModel(path: "All"))
-                    NavigationLink("Local", value: PostsModel(path: "Local"))
-                    if let subscribed = apiModel.subscribed {
-                        NavigationLink("Home", value: PostsModel(path: "Subscribed"))
-                        ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
-                            Section {
-                                ForEach(subscribed[firstLetter]!) { community in
-                                    let communityHost = community.actor_id.host()!
-                                    NavigationLink(value: PostsModel(path: communityHost == apiHost ? community.name : "\(community.name)@\(communityHost)")) {
-                                        ShowFromComponent(item: community)
-                                    }
+            let apiHost = URL(string: apiModel.url)!.host()!
+            ColoredListComponent {
+                NavigationLink("All", value: PostsModel(path: "All"))
+                NavigationLink("Local", value: PostsModel(path: "Local"))
+                if let subscribed = apiModel.subscribed {
+                    NavigationLink("Home", value: PostsModel(path: "Subscribed"))
+                    ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
+                        Section {
+                            ForEach(subscribed[firstLetter]!) { community in
+                                let communityHost = community.actor_id.host()!
+                                NavigationLink(value: PostsModel(path: communityHost == apiHost ? community.name : "\(community.name)@\(communityHost)")) {
+                                    ShowFromComponent(item: community)
                                 }
-                            } header: {
-                                Text(firstLetter)
                             }
+                        } header: {
+                            Text(firstLetter)
                         }
                     }
                 }
-                .navigationTitle("Home")
-                .navigationBarTitleDisplayMode(.inline)
-            } else {
-                ServerSelectorView()
             }
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 enum Theme: String, CaseIterable {
-    case Default, Solarized, Sepia
+    case Default, Solarized, Sunset, Sepia
     
     var primaryColor: Color {
         if self == .Default, UserDefaults.standard.bool(forKey: "pureBlack")  {

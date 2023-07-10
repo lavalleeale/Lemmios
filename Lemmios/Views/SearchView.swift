@@ -3,7 +3,7 @@ import SwiftUI
 struct SearchView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var searchModel: SearchModel
-    @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
+    @ObservedObject var searchedModel: SearchedModel
     @State var query = ""
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
@@ -95,9 +95,14 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
                         ShowFromComponent(item: community.community)
                     }
                 } else {
-                    ShowFromComponent(item: community.community)
+                    HStack {
+                        ShowFromComponent(item: community.community)
+                        Spacer()
+                        Text("\(community.counts.subscribers) Subscribers")
+                    }
                 }
             }
+            .contentShape(Rectangle())
             .onTapGesture {
                 navModel.path.append(PostsModel(
                     path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))

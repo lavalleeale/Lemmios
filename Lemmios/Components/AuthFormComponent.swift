@@ -2,6 +2,7 @@ import AlertToast
 import SwiftUI
 
 struct AuthFormComponent: View {
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var authModel: AuthModel
     @EnvironmentObject var apiModel: ApiModel
     @Environment(\.dismiss) private var dismiss
@@ -62,6 +63,7 @@ struct AuthFormComponent: View {
                 }
             }
         }
+        .listBackgroundModifier(backgroundColor: selectedTheme.backgroundColor)
         .onAppear {
             authModel.needs2fa = false
             self.username = ""

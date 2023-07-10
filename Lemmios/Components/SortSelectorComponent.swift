@@ -32,11 +32,11 @@ struct SortSelectorComponent: View {
             ForEach(LemmyHttp.Sort.allCases.filter { sortOption in
                 switch sortType {
                 case .Comments:
-                    sortOption.comments
+                    return sortOption.comments
                 case .Posts:
-                    true
+                    return true
                 case .Search:
-                    sortOption.search
+                    return sortOption.search
                 }
             }, id: \.rawValue) { sort in
                 Button {

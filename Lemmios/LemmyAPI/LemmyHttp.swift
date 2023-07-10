@@ -84,7 +84,7 @@ class LemmyHttp {
                     // #2 try to decode data as a `Response`
                     .decode(type: ResponseType.self, decoder: self.decoder)
                 
-                    .mapError { NetworkError.decoding(message: String(data: v.data, encoding: .utf8) ?? "", error: $0) }
+                    .mapError { NetworkError.decoding(message: String(data: v.data, encoding: .utf8) ?? "", error: $0 as! DecodingError) }
             }
             .mapError { $0 as! LemmyHttp.NetworkError }
             .receive(on: DispatchQueue.main)
@@ -237,7 +237,7 @@ class LemmyHttp {
 
     enum NetworkError: Swift.Error {
         case network(code: Int, description: String)
-        case decoding(message: String, error: Error)
+        case decoding(message: String, error: DecodingError)
     }
     
     struct CommentView: Codable {
@@ -316,6 +316,12 @@ class LemmyHttp {
         var id: Int { community.id }
         let community: ApiCommunityData
         let subscribed: String
+        let counts: ApiCommunityCounts
+    }
+    
+    struct ApiCommunityCounts: Codable {
+        let published: Date
+        let subscribers: Int
     }
     
     struct ApiCommunityData: Codable, Identifiable, WithNameHost {

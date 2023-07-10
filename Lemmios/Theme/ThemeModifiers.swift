@@ -12,14 +12,6 @@ struct ListBackgroundColorModifier: ViewModifier {
     }
 }
 
-extension List {
-    func listBackgroundModifier(backgroundColor: Color) -> some View {
-        self
-            .background(backgroundColor)
-            .scrollContentBackground(.hidden)
-    }
-}
-
 struct NavigationBarCustomModifier: ViewModifier {
     init(theme: Theme) {
         let coloredAppearance = UINavigationBarAppearance()
@@ -38,5 +30,11 @@ struct NavigationBarCustomModifier: ViewModifier {
 extension View {
     func navigationBarModifier(theme: Theme) -> some View {
         self.modifier(NavigationBarCustomModifier(theme: theme))
+    }
+    
+    func listBackgroundModifier(backgroundColor: Color) -> some View {
+        self
+            .background(backgroundColor)
+            .scrollContentBackground(.hidden)
     }
 }

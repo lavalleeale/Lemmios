@@ -7,21 +7,7 @@ struct SearchedView: View {
         ZStack {
             if let communities = searchedModel.communities {
                 ColoredListComponent {
-                    ForEach(communities) { community in
-                        let communityHost = community.community.actor_id.host()!
-                        let apiHost = URL(string: apiModel.url)!.host()!
-                        NavigationLink(value: PostsModel(
-                            path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)")
-                        ) {
-                            ShowFromComponent(item: community.community)
-                                .onAppear {
-                                    if community.id == communities.last!.id {
-                                        searchedModel.fetchCommunties(apiModel: apiModel)
-                                    }
-                                }
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    CommmunityListComponent(communities: communities)
                 }
                 .onFirstAppear {
                     searchedModel.fetchCommunties(apiModel: apiModel)

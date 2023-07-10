@@ -13,8 +13,8 @@ class ApiModel: ObservableObject {
     @Published var accounts = [StoredAccount]()
     @Published var subscribed: [String: [LemmyHttp.ApiCommunityData]]?
     @Published var showingAuth = false
-    @Published var showingSubscribe = false
     @Published var unreadCount = 0
+    @Published var invalidUser: String?
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
@@ -29,7 +29,7 @@ class ApiModel: ObservableObject {
     }
     
     func getAuth() {
-        showingAuth = true
+        self.showingAuth = true
     }
     
     func selectServer(url: String) -> String {
@@ -61,10 +61,31 @@ class ApiModel: ObservableObject {
     
     func addAuth(username: String, jwt: String) {
         if !self.accounts.contains(where: { $0.username == username }) {
-            self.accounts.append(StoredAccount(username: username, jwt: jwt))
+            self.accounts.append(StoredAccount(username: username, jwt: jwt, notificationsEnabled: true))
             try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
             self.lemmyHttp?.setJwt(jwt: jwt)
             self.selectAuth(username: username, showSubscribe: true)
+            self.enablePush(username: username)
+        }
+    }
+    
+    func enablePush(username: String) {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            
+            if error != nil {
+                return
+            }
+            
+            if granted {
+                let account = self.accounts.first { $0.username == username }!
+                UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
+                DispatchQueue.main.async {
+                    self.accounts[self.accounts.firstIndex { $0.username == username }!].notificationsEnabled = true
+                    try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
         }
     }
     
@@ -95,11 +116,8 @@ class ApiModel: ObservableObject {
             }
             timer!.fire()
         }
-        self.lemmyHttp!.getSiteInfo { siteInfo, _ in
+        self.lemmyHttp!.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {
-                if (showSubscribe && !siteInfo.my_user.follows.contains { value in value.community.name.contains("lemmiosapp")}) {
-                    self.showingSubscribe = true
-                }
                 self.subscribed = [:]
                 siteInfo.my_user.follows.map { $0.community }.forEach { community in
                     let nameString = community.name
@@ -113,12 +131,13 @@ class ApiModel: ObservableObject {
                         self.subscribed![firstCharacter] = [community]
                     }
                 }
+            } else if case let .decoding(_, error) = error {
+                if (error as CustomDebugStringConvertible).debugDescription.contains("my_user") {
+                    self.invalidUser = self.selectedAccount
+                    self.deleteAuth(username: self.selectedAccount)
+                }
             }
         }.store(in: &self.cancellable)
-    }
-    
-    func followSelf() {
-        lemmyHttp?.follow(communityId: 78015, follow: true) {_,_ in }.store(in: &cancellable)
     }
     
     private func updateAuth() {
@@ -134,6 +153,7 @@ class ApiModel: ObservableObject {
         var id: String { self.jwt }
         
         let username: String
-        let jwt: String
+        var jwt: String
+        var notificationsEnabled: Bool?
     }
 }

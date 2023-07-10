@@ -28,6 +28,11 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
             }
             Section("Other") {
+//                if apiModel.accounts.first(where: {$0.username == apiModel.selectedAccount})?.notificationsEnabled != true {
+                    Button("Enable push notifications for current account") {
+                        apiModel.enablePush(username: apiModel.selectedAccount)
+                    }                    
+//                }
                 Toggle("Blur NSFW", isOn: $blurNsfw)
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)

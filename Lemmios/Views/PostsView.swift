@@ -9,7 +9,6 @@ struct PostsView: View {
     @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var newPath: String = ""
     @State var showingCreate = false
-    @State private var id = UUID().uuidString
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var apiModel: ApiModel
 
@@ -55,9 +54,6 @@ struct PostsView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                .onChange(of: apiModel.selectedAccount) { _ in
-                    self.id = UUID().uuidString
-                }
                 .listStyle(.plain)
                 .refreshable {
                     withAnimation {
@@ -66,6 +62,19 @@ struct PostsView: View {
                 }
                 .onAppear {
                     postsModel.fetchPosts(apiModel: apiModel)
+                }
+                .overlay {
+                    if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
+                        ColoredListComponent(customBackground: .black.opacity(0.25)) {
+                            CommmunityListComponent(communities: communities)
+                        }
+                        .onTapGesture {
+                            withAnimation(.linear(duration: 0.1)) {
+                                newPath = ""
+                            }
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        }
+                    }
                 }
             } else {
                 ServerSelectorView()
@@ -89,35 +98,7 @@ struct PostsView: View {
         } onTap: {
             navModel.path.append(PostModel(post: postsModel.createdPost!))
         }
-        .id(id)
         .navigationBarTitle((postsModel.path != "") ? postsModel.path : "All", displayMode: .inline)
-        .overlay(alignment: .top) {
-            if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
-                ColoredListComponent {
-                    ForEach(communities) { community in
-                        let communityHost = community.community.actor_id.host()!
-                        let apiHost = URL(string: apiModel.url)!.host()!
-                        NavigationLink(
-                        ) {} label: {
-                            ShowFromComponent(item: community.community)
-                        }
-                        .onTapGesture {
-                            navModel.path.append(PostsModel(
-                                path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .onTapGesture {
-                    withAnimation(.linear(duration: 0.1)) {
-                        newPath = ""
-                    }
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-                .scrollContentBackground(.hidden)
-                .backgroundStyle(.clear)
-            }
-        }
         .toolbar(content: {
             ToolbarItem(placement: .principal) {
                 TextField((postsModel.path == "") ? "All" : postsModel.path, text: $newPath, onCommit: {

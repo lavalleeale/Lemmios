@@ -6,7 +6,7 @@ struct NSFWBadgeComponent: View {
             .foregroundStyle(.white)
             .padding(.all, 3)
             .background(
-                Rectangle().fill(.red).clipShape(.capsule)
+                Rectangle().fill(.red).clipShape(Capsule())
             )
     }
 }

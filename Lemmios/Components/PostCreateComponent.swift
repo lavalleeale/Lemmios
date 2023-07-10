@@ -44,13 +44,13 @@ struct PostCreateComponent: View {
             }
             .navigationTitle("Create \(postType.rawValue) Post")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Post") {
                         let url = URL(string: postData)
                         if postType == .Link && (url == nil || !UIApplication.shared.canOpenURL(url!)) {
@@ -64,7 +64,7 @@ struct PostCreateComponent: View {
                         }
                     }
                 }
-            }
+            })
         }
     }
 }

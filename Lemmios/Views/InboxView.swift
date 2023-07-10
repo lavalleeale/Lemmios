@@ -21,6 +21,7 @@ struct InboxView: View {
                         } else {
                             apiModel.unreadCount -= 1
                         }
+                        UIApplication.shared.applicationIconBadgeNumber = apiModel.unreadCount
                         inboxModel.replies[index].comment_reply.read.toggle()
                     }, collapseParent: nil)
                         .onAppear {

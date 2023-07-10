@@ -13,7 +13,7 @@ struct ShowFromComponent<T: WithNameHost>: View {
                 CachedAsyncImage(url: icon, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
-                        .clipShape(.circle)
+                        .clipShape(Circle())
                         .frame(width: 24, height: 24)
                 }, placeholder: {
                     ProgressView()

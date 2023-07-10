@@ -12,6 +12,13 @@
 		FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */; };
 		FA2214932A5B57D80023C696 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2214922A5B57D80023C696 /* SplashView.swift */; };
 		FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */; };
+		FA2A466B2A5BA67400DBE134 /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46632A5BA67400DBE134 /* Report.swift */; };
+		FA2A466D2A5BA67400DBE134 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46652A5BA67400DBE134 /* List.swift */; };
+		FA2A466E2A5BA67400DBE134 /* Save.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46662A5BA67400DBE134 /* Save.swift */; };
+		FA2A466F2A5BA67400DBE134 /* Vote.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46672A5BA67400DBE134 /* Vote.swift */; };
+		FA2A46702A5BA67400DBE134 /* LemmyHttp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46682A5BA67400DBE134 /* LemmyHttp.swift */; };
+		FA2A46712A5BA67400DBE134 /* Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A46692A5BA67400DBE134 /* Create.swift */; };
+		FA2A46722A5BA67400DBE134 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A466A2A5BA67400DBE134 /* Search.swift */; };
 		FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE90E2A5478EA00546BFF /* UserView.swift */; };
 		FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE9122A547BE800546BFF /* UserModel.swift */; };
 		FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */; };
@@ -22,12 +29,10 @@
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
-		FA6EBFBF2A5B344F0043D62E /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6EBFBE2A5B344F0043D62E /* Report.swift */; };
 		FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68B2A572151001AFA61 /* SearchView.swift */; };
 		FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68D2A57228A001AFA61 /* SearchModel.swift */; };
 		FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68F2A57299C001AFA61 /* SearchedView.swift */; };
 		FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6912A5729AE001AFA61 /* SearchedModel.swift */; };
-		FA72A6942A572A3A001AFA61 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6932A572A3A001AFA61 /* Search.swift */; };
 		FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */; };
 		FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6972A573DAD001AFA61 /* Extensions.swift */; };
 		FA72A69B2A577D8A001AFA61 /* LinkPreview in Frameworks */ = {isa = PBXBuildFile; productRef = FA72A69A2A577D8A001AFA61 /* LinkPreview */; };
@@ -64,7 +69,6 @@
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
 		FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD20462A5204B4002CE443 /* Assets.xcassets */; };
 		FADD204B2A5204B4002CE443 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD204A2A5204B4002CE443 /* Preview Assets.xcassets */; };
-		FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20522A52074D002CE443 /* LemmyHttp.swift */; };
 		FADD20562A5209E7002CE443 /* PostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20552A5209E7002CE443 /* PostsView.swift */; };
 		FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20582A520A4A002CE443 /* ApiModel.swift */; };
 		FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */; };
@@ -72,13 +76,22 @@
 		FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D12A5A06A100B54142 /* InboxView.swift */; };
 		FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D32A5A06CB00B54142 /* InboxModel.swift */; };
 		FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = FAF000AC2A5676D700F07E04 /* AlertToast */; };
-		FAF000AF2A56851400F07E04 /* Vote.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000AE2A56851400F07E04 /* Vote.swift */; };
-		FAF000B12A56856200F07E04 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000B02A56856200F07E04 /* List.swift */; };
-		FAF000B32A5685D100F07E04 /* Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000B22A5685D100F07E04 /* Create.swift */; };
-		FAF000B52A56889000F07E04 /* Save.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF000B42A56889000F07E04 /* Save.swift */; };
 		FAF5D5422A53EC2800FDA8D9 /* PostActionsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF5D5412A53EC2800FDA8D9 /* PostActionsComponent.swift */; };
 		FAF5D5442A53FAEF00FDA8D9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF5D5432A53FAEF00FDA8D9 /* HomeView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FAFAB4592A5BD9CB00C545BE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberComponent.swift; sourceTree = "<group>"; };
@@ -86,6 +99,13 @@
 		FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		FA2214922A5B57D80023C696 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreateComponent.swift; sourceTree = "<group>"; };
+		FA2A46632A5BA67400DBE134 /* Report.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
+		FA2A46652A5BA67400DBE134 /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		FA2A46662A5BA67400DBE134 /* Save.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Save.swift; sourceTree = "<group>"; };
+		FA2A46672A5BA67400DBE134 /* Vote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vote.swift; sourceTree = "<group>"; };
+		FA2A46682A5BA67400DBE134 /* LemmyHttp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LemmyHttp.swift; sourceTree = "<group>"; };
+		FA2A46692A5BA67400DBE134 /* Create.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
+		FA2A466A2A5BA67400DBE134 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		FA2EE90E2A5478EA00546BFF /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		FA2EE9122A547BE800546BFF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionsModifier.swift; sourceTree = "<group>"; };
@@ -95,12 +115,10 @@
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
-		FA6EBFBE2A5B344F0043D62E /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		FA72A68D2A57228A001AFA61 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		FA72A68F2A57299C001AFA61 /* SearchedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedView.swift; sourceTree = "<group>"; };
 		FA72A6912A5729AE001AFA61 /* SearchedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedModel.swift; sourceTree = "<group>"; };
-		FA72A6932A572A3A001AFA61 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowFromComponent.swift; sourceTree = "<group>"; };
 		FA72A6972A573DAD001AFA61 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lemmios.entitlements; sourceTree = "<group>"; };
@@ -133,17 +151,12 @@
 		FADD20442A5204B3002CE443 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FADD20462A5204B4002CE443 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FADD204A2A5204B4002CE443 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FADD20522A52074D002CE443 /* LemmyHttp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LemmyHttp.swift; sourceTree = "<group>"; };
 		FADD20552A5209E7002CE443 /* PostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsView.swift; sourceTree = "<group>"; };
 		FADD20582A520A4A002CE443 /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
 		FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectorView.swift; sourceTree = "<group>"; };
 		FADFF8642A560933006F216A /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
 		FAEE08D12A5A06A100B54142 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		FAEE08D32A5A06CB00B54142 /* InboxModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxModel.swift; sourceTree = "<group>"; };
-		FAF000AE2A56851400F07E04 /* Vote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vote.swift; sourceTree = "<group>"; };
-		FAF000B02A56856200F07E04 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
-		FAF000B22A5685D100F07E04 /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
-		FAF000B42A56889000F07E04 /* Save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Save.swift; sourceTree = "<group>"; };
 		FAF5D5412A53EC2800FDA8D9 /* PostActionsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostActionsComponent.swift; sourceTree = "<group>"; };
 		FAF5D5432A53FAEF00FDA8D9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,6 +181,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA2A46622A5BA67400DBE134 /* LemmyAPI */ = {
+			isa = PBXGroup;
+			children = (
+				FA2A46632A5BA67400DBE134 /* Report.swift */,
+				FA2A46652A5BA67400DBE134 /* List.swift */,
+				FA2A46662A5BA67400DBE134 /* Save.swift */,
+				FA2A46672A5BA67400DBE134 /* Vote.swift */,
+				FA2A46682A5BA67400DBE134 /* LemmyHttp.swift */,
+				FA2A46692A5BA67400DBE134 /* Create.swift */,
+				FA2A466A2A5BA67400DBE134 /* Search.swift */,
+			);
+			path = LemmyAPI;
+			sourceTree = "<group>";
+		};
 		FA2EE90B2A5472DA00546BFF /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,8 +265,8 @@
 				FAAAF8582A524D8700C9BFD8 /* Components */,
 				FADD20572A520A39002CE443 /* Models */,
 				FADD20542A5209D5002CE443 /* Views */,
-				FADD20512A520737002CE443 /* LemmyAPI */,
 				FADD20422A5204B3002CE443 /* ArtemisApp.swift */,
+				FA2A46622A5BA67400DBE134 /* LemmyAPI */,
 				FADD20462A5204B4002CE443 /* Assets.xcassets */,
 				FADD20492A5204B4002CE443 /* Preview Content */,
 				FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */,
@@ -253,20 +280,6 @@
 				FADD204A2A5204B4002CE443 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		FADD20512A520737002CE443 /* LemmyAPI */ = {
-			isa = PBXGroup;
-			children = (
-				FADD20522A52074D002CE443 /* LemmyHttp.swift */,
-				FAF000AE2A56851400F07E04 /* Vote.swift */,
-				FAF000B02A56856200F07E04 /* List.swift */,
-				FAF000B22A5685D100F07E04 /* Create.swift */,
-				FAF000B42A56889000F07E04 /* Save.swift */,
-				FA72A6932A572A3A001AFA61 /* Search.swift */,
-				FA6EBFBE2A5B344F0043D62E /* Report.swift */,
-			);
-			path = LemmyAPI;
 			sourceTree = "<group>";
 		};
 		FADD20542A5209D5002CE443 /* Views */ = {
@@ -321,6 +334,7 @@
 				FADD203B2A5204B3002CE443 /* Sources */,
 				FADD203C2A5204B3002CE443 /* Frameworks */,
 				FADD203D2A5204B3002CE443 /* Resources */,
+				FAFAB4592A5BD9CB00C545BE /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -349,7 +363,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1410;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					FADD203E2A5204B3002CE443 = {
@@ -407,19 +421,17 @@
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
-				FA6EBFBF2A5B344F0043D62E /* Report.swift in Sources */,
 				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,
-				FADD20532A52074D002CE443 /* LemmyHttp.swift in Sources */,
 				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
 				FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */,
 				FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */,
+				FA2A466D2A5BA67400DBE134 /* List.swift in Sources */,
 				FADD20452A5204B3002CE443 /* ContentView.swift in Sources */,
 				FAAAF8612A5256EB00C9BFD8 /* SortSelectorComponent.swift in Sources */,
 				FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */,
-				FAF000AF2A56851400F07E04 /* Vote.swift in Sources */,
 				FABEC3062A54064E00620E9A /* NavModel.swift in Sources */,
-				FAF000B52A56889000F07E04 /* Save.swift in Sources */,
 				FA2214932A5B57D80023C696 /* SplashView.swift in Sources */,
+				FA2A466F2A5BA67400DBE134 /* Vote.swift in Sources */,
 				FAF5D5422A53EC2800FDA8D9 /* PostActionsComponent.swift in Sources */,
 				FABC28462A5932E700243C7F /* AboutView.swift in Sources */,
 				FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */,
@@ -429,20 +441,21 @@
 				FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */,
 				FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */,
 				FAB93E592A5337B400DE15BB /* PostModel.swift in Sources */,
+				FA2A466B2A5BA67400DBE134 /* Report.swift in Sources */,
 				FAA145142A58B89A009DDA23 /* AuthModel.swift in Sources */,
 				FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */,
+				FA2A46722A5BA67400DBE134 /* Search.swift in Sources */,
 				FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */,
-				FAF000B32A5685D100F07E04 /* Create.swift in Sources */,
 				FAB93E5F2A533FE800DE15BB /* CommentModel.swift in Sources */,
-				FA72A6942A572A3A001AFA61 /* Search.swift in Sources */,
 				FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */,
 				FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */,
-				FAF000B12A56856200F07E04 /* List.swift in Sources */,
 				FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */,
+				FA2A466E2A5BA67400DBE134 /* Save.swift in Sources */,
 				FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */,
 				FAAAF8632A5260E300C9BFD8 /* PostContentComponent.swift in Sources */,
 				FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */,
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
+				FA2A46712A5BA67400DBE134 /* Create.swift in Sources */,
 				FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */,
 				FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */,
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
@@ -455,6 +468,7 @@
 				FABC284C2A5933C100243C7F /* SettingCustomComponent.swift in Sources */,
 				FAF5D5442A53FAEF00FDA8D9 /* HomeView.swift in Sources */,
 				FAB93E5D2A533FC900DE15BB /* CommentComponent.swift in Sources */,
+				FA2A46702A5BA67400DBE134 /* LemmyHttp.swift in Sources */,
 				FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */,
 				FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */,
 				FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */,
@@ -580,11 +594,12 @@
 		FADD204F2A5204B4002CE443 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -622,11 +637,12 @@
 		FADD20502A5204B4002CE443 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;

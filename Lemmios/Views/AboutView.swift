@@ -29,7 +29,7 @@ struct AboutView: View {
                         } icon: {
                             Image("mrlavallee")
                                 .resizable()
-                                .clipShape(.circle)
+                                .clipShape(Circle())
                                 .frame(width: 24, height: 24)
                         }
                     }
@@ -39,7 +39,7 @@ struct AboutView: View {
                         } icon: {
                             Image("Icon")
                                 .resizable()
-                                .clipShape(.circle)
+                                .clipShape(Circle())
                                 .frame(width: 24, height: 24)
                         }
                     }

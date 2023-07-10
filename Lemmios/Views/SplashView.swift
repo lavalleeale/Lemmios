@@ -14,7 +14,7 @@ struct SplashView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .aspectRatio(contentMode: .fit)
                 .padding(.horizontal, 40)
-            Text("The fediverse is just like email, rather than connecting to a cental server Instagram, Twitter, or Facebook, you connect to a hub that will communicate to other hubs.")
+            Text("The fediverse is just like email: rather than connecting to a cental server like Instagram, Twitter, or Facebook, you connect to a hub that will communicate to other hubs.")
                 .font(.headline)
             Spacer()
             NavigationLink("Continue") {

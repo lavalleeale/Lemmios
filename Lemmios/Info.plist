@@ -17,8 +17,8 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSAppTransportSecurity</key>
-	<dict/>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Requires sending auth token (revoked on password change) to Lemmios servers</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
