@@ -85,6 +85,11 @@ struct CommentComponent: View {
             }
             .onTapGesture {
                 if preview {
+                    if let replyInfo = replyInfo {
+                        commentModel.read(replyInfo: replyInfo, apiModel: apiModel) {
+                            read!()
+                        }
+                    }
                     navModel.path.append(PostModel(post: commentModel.comment.post, comment: commentModel.comment))
                 } else {
                     withAnimation {
