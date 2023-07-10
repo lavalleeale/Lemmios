@@ -9,7 +9,7 @@ struct ContentView: View {
     @AppStorage("splashAccepted") var splashAccepted = false
 
     @Environment(\.colorScheme) var systemColorScheme
-    @EnvironmentObject var sceneDelegtate: SceneDelegate
+    @ObservedObject var selectedTab: StartingTab
 
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
@@ -28,7 +28,8 @@ struct ContentView: View {
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
-    init() {
+    init(selectedTab: StartingTab) {
+        self.selectedTab = selectedTab
         if apiModel.serverSelected {
             self.userModel = UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)")
         }
@@ -129,15 +130,15 @@ struct ContentView: View {
                     .toolbar(.visible, for: .tabBar)
                 }
                 .onAppear {
-                    if let requestedTab = sceneDelegtate.requestedTab, let tab = Tab(rawValue: requestedTab) {
+                    if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
-                        sceneDelegtate.requestedTab = nil
+                        selectedTab.requestedTab = nil
                     }
                 }
-                .onChange(of: sceneDelegtate.requestedTab) { newValue in
+                .onChange(of: selectedTab.requestedTab) { newValue in
                     if let requestedTab = newValue, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
-                        sceneDelegtate.requestedTab = nil
+                        selectedTab.requestedTab = nil
                     }
                 }
                 .onOpenURL { incomingUrl in

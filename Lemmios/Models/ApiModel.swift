@@ -61,7 +61,7 @@ class ApiModel: ObservableObject {
     
     func addAuth(username: String, jwt: String) {
         if !self.accounts.contains(where: { $0.username == username }) {
-            self.accounts.append(StoredAccount(username: username, jwt: jwt, notificationsEnabled: true))
+            self.accounts.append(StoredAccount(username: username, jwt: jwt))
             try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
             self.lemmyHttp?.setJwt(jwt: jwt)
             self.selectAuth(username: username, showSubscribe: true)
@@ -90,13 +90,30 @@ class ApiModel: ObservableObject {
     }
     
     func deleteAuth(username: String) {
-        self.accounts.removeAll { $0.username == username }
+        let index = self.accounts.firstIndex { $0.username == username }!
+        let account = self.accounts[index]
+        self.accounts.remove(at: index)
         try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
         if self.selectedAccount == username {
             self.selectedAccount = ""
             self.lemmyHttp?.setJwt(jwt: nil)
             self.unreadCount = 0
             self.timer?.invalidate()
+        }
+        if account.notificationsEnabled == true {
+            let registerUrl = URL(string: "https://lemmios.lavallee.one/remove")!
+            
+            var request = URLRequest(url: registerUrl)
+            request.httpMethod = "POST"
+            request.httpBody = try! self.encoder.encode(["jwt": account.jwt])
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, _, _ in
+                guard let data = data else { return }
+                print(String(data: data, encoding: .utf8)!)
+            }
+            
+            task.resume()
         }
     }
     

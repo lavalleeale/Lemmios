@@ -5,7 +5,7 @@ struct LemmiosApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(selectedTab: startingTab)
                 .environmentObject(delegate.haptics)
         }
     }

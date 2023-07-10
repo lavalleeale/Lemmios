@@ -1,8 +1,30 @@
 import SimpleHaptics
 import SwiftUI
 
-class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
+class StartingTab: ObservableObject {
+    @Published var requestedTab: String?
+}
+
+let startingTab = StartingTab()
+
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, ObservableObject {
     let haptics = SimpleHapticGenerator()
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        UNUserNotificationCenter.current().delegate = self
+
+        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
+            startingTab.requestedTab = "Inbox"
+        }
+        return true
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        startingTab.requestedTab = "Inbox"
+
+        completionHandler()
+    }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let sceneConfiguration = UISceneConfiguration(name: "Custom Configuration", sessionRole: connectingSceneSession.role)
@@ -35,21 +57,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
             }
 
             task.resume()
-        } else {
-            print(1)
         }
     }
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, ObservableObject {
-    @Published var requestedTab: String? = nil
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        requestedTab = connectionOptions.shortcutItem?.type
+        startingTab.requestedTab = connectionOptions.shortcutItem?.type
     }
 
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        requestedTab = shortcutItem.type
+        startingTab.requestedTab = shortcutItem.type
         completionHandler(true)
     }
 }
