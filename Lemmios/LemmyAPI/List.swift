@@ -33,6 +33,11 @@ extension LemmyHttp {
         return makeRequest(path: "user/replies", query: query, responseType: Replies.self, receiveValue: receiveValue)
     }
     
+    func getMessages(page: Int, sort: Sort, unread: Bool, receiveValue: @escaping (LemmyHttp.Messages?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        let query = [URLQueryItem(name: "sort", value: sort.rawValue), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "unread_only", value: String(unread))]
+        return makeRequest(path: "private_message/list", query: query, responseType: Messages.self, receiveValue: receiveValue)
+    }
+    
     func getCommunities(page: Int, sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, limit: Int = 10, receiveValue: @escaping (LemmyHttp.ApiCommunities?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
         var sortString: String = sort.rawValue
         if sort == .Top {
@@ -40,6 +45,10 @@ extension LemmyHttp {
         }
         let query = [URLQueryItem(name: "sort", value: sortString), URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "limit", value: String(limit))]
         return makeRequest(path: "community/list", query: query, responseType: ApiCommunities.self, receiveValue: receiveValue)
+    }
+    
+    struct PrivateMessageView: Codable {
+        let private_message_view: Message
     }
 
     struct ApiComments: Codable {
@@ -56,5 +65,24 @@ extension LemmyHttp {
     
     struct ApiUsers: Codable {
         let users: [ApiUser]
+    }
+    
+    struct Messages: Codable {
+        let private_messages: [Message]
+    }
+    
+    struct Message: Codable {
+        var id: Int {
+            private_message.id
+        }
+        let creator: ApiUserData
+        var private_message: MessageContent
+    }
+    
+    struct MessageContent: Codable, WithPublished {
+        let content: String
+        let published: Date
+        var read: Bool
+        let id: Int
     }
 }

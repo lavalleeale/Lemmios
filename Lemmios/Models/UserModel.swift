@@ -75,7 +75,7 @@ class UserModel: ObservableObject, Hashable {
                         }
                     }
                 } else {
-                    Logger().log("\(error)")
+                    os_log("\(error)")
                     self.pageStatus = .failed
                 }
             }

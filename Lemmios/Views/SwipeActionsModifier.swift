@@ -80,16 +80,21 @@ struct SwiperContainer: ViewModifier {
         .contentShape(Rectangle())
         .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
             .onChanged { value in
-                let totalSlide = value.translation.width
+                var totalSlide = value.translation.width
+                if totalSlide < 0 && trailingOptions.isEmpty {
+                    totalSlide = 0
+                } else if totalSlide > 0 && leadingOptions.isEmpty {
+                    totalSlide = 0
+                }
                 withAnimation {
                     offset = totalSlide
                 }
             }
             .onEnded { _ in
                 let index = Int(floor(offset / CGFloat(125)))
-                if offset > 50 {
+                if offset > 50 && !leadingOptions.isEmpty {
                     action(leadingOptions[min(index, leadingOptions.count - 1)].id)
-                } else if offset < -50 {
+                } else if offset < -50 && !trailingOptions.isEmpty {
                     action(trailingOptions[min(-index - 1, trailingOptions.count - 1)].id)
                 }
                 withAnimation {

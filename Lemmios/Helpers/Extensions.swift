@@ -197,7 +197,7 @@ struct CommentSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State var commentSize: PresentationDetent = .large
     @State var commentBody = ""
-    @State var editing = false
+    @State var title: String
 
     let action: (String) -> ()
 
@@ -205,7 +205,7 @@ struct CommentSheet: View {
         NavigationView {
             TextEditor(text: $commentBody)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .navigationTitle(editing ? "Edit Comment" : "Add Comment")
+                .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar(content: {
                     ToolbarItem(placement: .navigationBarLeading) {

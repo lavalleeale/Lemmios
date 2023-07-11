@@ -76,6 +76,8 @@ struct ContentView: View {
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
+                            } else if apiModel.selectedAccount == "" {
+                                AuthenticationView()
                             } else {
                                 HomeView()
                                     .handleNavigations(navModel: homeNavModel)

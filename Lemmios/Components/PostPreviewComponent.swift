@@ -69,7 +69,7 @@ struct PostPreviewComponent: View {
                 }
             }
             .sheet(isPresented: $showingReply) {
-                CommentSheet { commentBody in
+                CommentSheet(title: "Add Comment") { commentBody in
                     postModel.comment(body: commentBody, apiModel: apiModel)
                 }
                 .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))

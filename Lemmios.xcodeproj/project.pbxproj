@@ -64,6 +64,8 @@
 		FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284D2A593D8100243C7F /* ImportSubsView.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
+		FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */; };
+		FAD0930C2A5D0BF600CFEC3E /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */; };
 		FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD411F02A5A8EFF0012DE37 /* Share.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
@@ -145,6 +147,8 @@
 		FABC284D2A593D8100243C7F /* ImportSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSubsView.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
+		FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		FAD411F02A5A8EFF0012DE37 /* Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADD20422A5204B3002CE443 /* ArtemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisApp.swift; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 				FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */,
 				FABC284B2A5933C100243C7F /* SettingCustomComponent.swift */,
 				FA4596282A59D1C800368DBB /* ColoredListComponent.swift */,
+				FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -320,6 +325,7 @@
 				FAA145132A58B89A009DDA23 /* AuthModel.swift */,
 				FABC28372A59175C00243C7F /* ApolloImportModel.swift */,
 				FAEE08D32A5A06CB00B54142 /* InboxModel.swift */,
+				FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -454,6 +460,7 @@
 				FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */,
 				FAAAF8632A5260E300C9BFD8 /* PostContentComponent.swift in Sources */,
 				FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */,
+				FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */,
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
 				FA2A46712A5BA67400DBE134 /* Create.swift in Sources */,
 				FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */,
@@ -468,6 +475,7 @@
 				FABC284C2A5933C100243C7F /* SettingCustomComponent.swift in Sources */,
 				FAF5D5442A53FAEF00FDA8D9 /* HomeView.swift in Sources */,
 				FAB93E5D2A533FC900DE15BB /* CommentComponent.swift in Sources */,
+				FAD0930C2A5D0BF600CFEC3E /* MessageModel.swift in Sources */,
 				FA2A46702A5BA67400DBE134 /* LemmyHttp.swift in Sources */,
 				FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */,
 				FABC28482A59338D00243C7F /* SettingViewComponent.swift in Sources */,
@@ -599,7 +607,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -642,7 +650,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;

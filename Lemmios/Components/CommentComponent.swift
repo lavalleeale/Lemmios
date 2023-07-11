@@ -30,11 +30,12 @@ struct CommentComponent: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            Button(commentModel.comment.creator.name) {
-                                navModel.path.append(UserModel(user: commentModel.comment.creator))
-                            }
-                            .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
-                            .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
+                            Button(commentModel.comment.creator.name) {}
+                                .highPriorityGesture(TapGesture().onEnded {
+                                    navModel.path.append(UserModel(user: commentModel.comment.creator))
+                                })
+                                .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
+                                .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
                             Menu {
@@ -180,13 +181,13 @@ struct CommentComponent: View {
             Button("Cancel", role: .cancel) {}
         }
         .sheet(isPresented: $showingReply) {
-            CommentSheet { commentBody in
+            CommentSheet(title: "Add Comment") { commentBody in
                 commentModel.comment(body: commentBody, apiModel: apiModel)
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
         .sheet(isPresented: $showingEdit) {
-            CommentSheet(commentBody: commentModel.comment.comment.content, editing: true) { commentBody in
+            CommentSheet(commentBody: commentModel.comment.comment.content, title: "Edit Comment") { commentBody in
                 commentModel.edit(body: commentBody, apiModel: apiModel)
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))

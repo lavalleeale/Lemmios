@@ -56,6 +56,7 @@ class LemmyHttp {
     
     func makeRequestWithBody<ResponseType: Decodable, BodyType: Encodable>(path: String, query: [URLQueryItem] = [], responseType: ResponseType.Type, body: BodyType, receiveValue: @escaping (ResponseType?, NetworkError?) -> Void) -> AnyCancellable where BodyType: WithMethod {
         var url = apiUrl.appending(path: path).appending(queryItems: query)
+        os_log("\(url) with jwt: \(self.jwt?.count ?? 0)")
         if jwt != nil {
             url = url.appending(queryItems: [URLQueryItem(name: "auth", value: jwt!)])
         }
@@ -165,30 +166,40 @@ class LemmyHttp {
         return makeRequest(path: "user/get_captcha", responseType: CaptchaResponse.self, receiveValue: receiveValue)
     }
     
-    func readReply(replyId: Int, read: Bool, receiveValue: @escaping (AuthResponse?, NetworkError?) -> Void) -> AnyCancellable {
-        return makeRequestWithBody(path: "comment/mark_as_read", responseType: AuthResponse.self, body: ReadPayload(auth: jwt!, comment_reply_id: replyId, read: read), receiveValue: receiveValue)
+    func readReply(replyId: Int, read: Bool, receiveValue: @escaping (CommentReplyView?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "comment/mark_as_read", responseType: CommentReplyView.self, body: ReadPayload(auth: jwt!, comment_reply_id: replyId, private_message_id: nil, read: read), receiveValue: receiveValue)
+    }
+    
+    func readMessage(messageId: Int, read: Bool, receiveValue: @escaping (PrivateMessageView?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "private_message/mark_as_read", responseType: PrivateMessageView.self, body: ReadPayload(auth: jwt!, comment_reply_id: nil, private_message_id: messageId, read: read), receiveValue: receiveValue)
+    }
+    
+    func sendMessage(to: Int, content: String, receiveValue: @escaping (PrivateMessageView?, NetworkError?) -> Void) -> AnyCancellable {
+        return makeRequestWithBody(path: "private_message", responseType: PrivateMessageView.self, body: MessagePayload(auth: jwt!, content: content, recipient_id: to), receiveValue: receiveValue)
+    }
+    
+    struct MessagePayload: Codable, WithMethod {
+        let method = "POST"
+        let auth: String
+        let content: String
+        let recipient_id: Int
     }
     
     struct CommentReplyView: Codable {
-        let comment_reply_view: Reply
+        let comment_reply_view: ApiComment
     }
     
     struct ReadPayload: Codable, WithMethod {
         let method = "POST"
         let auth: String
-        let comment_reply_id: Int
+        let comment_reply_id: Int?
+        let private_message_id: Int?
         let read: Bool
     }
     
     struct Replies: Codable {
-        let replies: [Reply]
+        let replies: [ApiComment]
     }
-    
-    struct ReplyOnlyData: Codable {
-        var comment_reply: ReplyInfo
-    }
-    
-    typealias Reply = Compose<ApiComment, ReplyOnlyData>
     
     struct ReplyInfo: Codable {
         var read: Bool
@@ -290,6 +301,7 @@ class LemmyHttp {
         let counts: ApiCommentCounts
         let my_vote: Int?
         let saved: Bool?
+        var comment_reply: ReplyInfo?
     }
     
     struct ApiCommentData: Codable {
@@ -531,44 +543,4 @@ protocol WithNameHost {
     var actor_id: URL { get }
     var name: String { get }
     var icon: URL? { get }
-}
-
-@dynamicMemberLookup
-struct Compose<Element1, Element2> {
-    var element1: Element1
-    var element2: Element2
-    subscript<T>(dynamicMember keyPath: WritableKeyPath<Element1, T>) -> T {
-        get { element1[keyPath: keyPath] }
-        set { element1[keyPath: keyPath] = newValue }
-    }
-
-    subscript<T>(dynamicMember keyPath: WritableKeyPath<Element2, T>) -> T {
-        get { element2[keyPath: keyPath] }
-        set { element2[keyPath: keyPath] = newValue }
-    }
-
-    init(_ element1: Element1, _ element2: Element2) {
-        self.element1 = element1
-        self.element2 = element2
-    }
-}
-
-extension Compose: Encodable where Element1: Encodable, Element2: Encodable {
-    func encode(to encoder: Encoder) throws {
-        try element1.encode(to: encoder)
-        try element2.encode(to: encoder)
-    }
-}
-
-extension Compose: Decodable where Element1: Decodable, Element2: Decodable {
-    init(from decoder: Decoder) throws {
-        self.element1 = try Element1(from: decoder)
-        self.element2 = try Element2(from: decoder)
-    }
-}
-
-extension Compose: Identifiable where Element1: Identifiable {
-    var id: Element1.ID {
-        self.element1.id
-    }
 }

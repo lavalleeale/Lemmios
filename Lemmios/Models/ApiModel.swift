@@ -128,7 +128,7 @@ class ApiModel: ObservableObject {
             timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
                 self.lemmyHttp!.getUnreadCount { unreadCount, _ in
                     if let unreadCount = unreadCount {
-                        self.unreadCount = unreadCount.replies
+                        self.unreadCount = unreadCount.replies + unreadCount.private_messages
                     }
                 }.store(in: &self.cancellable)
             }
