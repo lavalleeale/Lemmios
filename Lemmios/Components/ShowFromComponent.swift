@@ -1,13 +1,11 @@
-import SwiftUI
 import CachedAsyncImage
+import SwiftUI
 
 struct ShowFromComponent<T: WithNameHost>: View {
     @EnvironmentObject var apiModel: ApiModel
     @State var item: T
 
     var body: some View {
-        let itemHost = item.actor_id.host()!
-        let apiHost = URL(string: apiModel.url)!.host()!
         HStack {
             if let icon = item.icon {
                 CachedAsyncImage(url: icon, urlCache: .imageCache, content: { image in
@@ -19,13 +17,14 @@ struct ShowFromComponent<T: WithNameHost>: View {
                     ProgressView()
                 })
             }
-            if itemHost != apiHost {
-                Text("\(item.name)\(Text("@\(itemHost)").foregroundColor(.secondary))")
-                    .lineLimit(1)
-            } else {
+            if item.local {
                 Text(item.name)
                     .lineLimit(1)
-            }            
+            } else {
+                let itemHost = item.actor_id.host()!
+                Text("\(item.name)\(Text("@\(itemHost)").foregroundColor(.secondary))")
+                    .lineLimit(1)
+            }
         }
     }
 }

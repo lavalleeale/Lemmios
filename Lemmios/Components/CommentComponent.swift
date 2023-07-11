@@ -31,7 +31,9 @@ struct CommentComponent: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            Button(commentModel.comment.creator.name) {}
+                            Button {} label: {
+                                ShowFromComponent(item: commentModel.comment.creator)
+                            }
                                 .highPriorityGesture(TapGesture().onEnded {
                                     navModel.path.append(UserModel(user: commentModel.comment.creator))
                                 })

@@ -1,8 +1,8 @@
 import Combine
 import Foundation
+import OSLog
 import SimpleKeychain
 import SwiftUI
-import OSLog
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl") public var url = ""
@@ -119,8 +119,9 @@ class ApiModel: ObservableObject {
     
     func selectAuth(username: String, showSubscribe: Bool = false) {
         self.selectedAccount = username
+        let account = self.accounts.first { $0.username == username }!
         self.unreadCount = 0
-        self.lemmyHttp?.setJwt(jwt: self.accounts.first { $0.username == username }!.jwt)
+        self.lemmyHttp?.setJwt(jwt: account.jwt)
         if let timer = timer {
             timer.fire()
         } else {
@@ -132,6 +133,10 @@ class ApiModel: ObservableObject {
                 }.store(in: &self.cancellable)
             }
             timer!.fire()
+        }
+        if account.notificationsEnabled == true {
+            UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
+            UIApplication.shared.registerForRemoteNotifications()
         }
         self.lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {

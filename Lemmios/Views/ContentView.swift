@@ -34,7 +34,7 @@ struct ContentView: View {
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab
         if apiModel.serverSelected {
-            self.userModel = UserModel(path: "\(apiModel.selectedAccount)@\(URL(string: apiModel.url)!.host()!)")
+            self.userModel = UserModel(path: apiModel.selectedAccount)
         }
     }
 
@@ -177,7 +177,7 @@ struct ContentView: View {
                 }
                 .onChange(of: apiModel.selectedAccount) { newValue in
                     showingAuth = false
-                    userModel.name = "\(newValue)@\(URL(string: apiModel.url)!.host()!)"
+                    userModel.name = newValue
                     userModel.reset()
                     inboxModel.reset()
                 }

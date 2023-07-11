@@ -25,10 +25,16 @@ class UserModel: ObservableObject, Hashable {
     
     @Published var name: String
     
+    private var userId: Int?
+    
     private var cancellable: Set<AnyCancellable> = Set()
     
     init(user: LemmyHttp.ApiUserData) {
-        self.name = "\(user.name)@\(user.actor_id.host()!)"
+        self.name = "\(user.name)"
+        if !user.local {
+            name.append("@\(user.actor_id.host()!)")
+        }
+        self.userId = user.id
     }
     
     init(path: String) {
@@ -55,22 +61,22 @@ class UserModel: ObservableObject, Hashable {
         }
         apiModel.lemmyHttp?.getUser(name: name, page: page, sort: sort, time: time, saved: saved) { user, error in
             DispatchQueue.main.async {
-                if error == nil {
-                    self.userData = user!.person_view
+                if let user = user {
+                    self.userData = user.person_view
                     if saved {
-                        if user!.comments.isEmpty && user!.posts.isEmpty {
+                        if user.comments.isEmpty && user.posts.isEmpty {
                             self.savedPageStatus = .done
                         } else {
-                            self.saved.append(contentsOf: user!.comments)
-                            self.saved.append(contentsOf: user!.posts)
+                            self.saved.append(contentsOf: user.comments)
+                            self.saved.append(contentsOf: user.posts)
                             self.savedPageStatus = .ready(nextPage: page + 1)
                         }
                     } else {
-                        if user!.comments.isEmpty && user!.posts.isEmpty {
+                        if user.comments.isEmpty && user.posts.isEmpty {
                             self.pageStatus = .done
                         } else {
-                            self.comments.append(contentsOf: user!.comments)
-                            self.posts.append(contentsOf: user!.posts)
+                            self.comments.append(contentsOf: user.comments)
+                            self.posts.append(contentsOf: user.posts)
                             self.pageStatus = .ready(nextPage: page + 1)
                         }
                     }
@@ -80,5 +86,11 @@ class UserModel: ObservableObject, Hashable {
                 }
             }
         }.store(in: &cancellable)
+    }
+    
+    func message(content: String, apiModel: ApiModel) {
+        if let userId = userId {
+            apiModel.lemmyHttp?.sendMessage(to: userId, content: content) { _, _ in }.store(in: &cancellable)
+        }
     }
 }

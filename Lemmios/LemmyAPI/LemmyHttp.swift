@@ -310,6 +310,7 @@ class LemmyHttp {
         let content: String
         let path: String
         let ap_id: URL
+        let local: Bool
     }
     
     struct ApiPost: Codable, Identifiable, WithCounts {
@@ -329,6 +330,7 @@ class LemmyHttp {
         let actor_id: URL
         let published: Date
         let avatar: URL?
+        let local: Bool
         
         var icon: URL? {
             avatar
@@ -352,6 +354,7 @@ class LemmyHttp {
         let name: String
         let icon: URL?
         let actor_id: URL
+        let local: Bool
     }
     
     struct ApiPostData: Codable {
@@ -364,6 +367,7 @@ class LemmyHttp {
         let creator_id: Int
         let nsfw: Bool
         let ap_id: URL
+        let local: Bool
     }
     
     struct ApiPostCounts: Codable, WithPublished {
@@ -544,4 +548,5 @@ protocol WithNameHost {
     var actor_id: URL { get }
     var name: String { get }
     var icon: URL? { get }
+    var local: Bool { get }
 }

@@ -5,9 +5,8 @@ struct UserView: View {
     @ObservedObject var userModel: UserModel
     @State var selectedTab = UserViewTab.Overview
     var body: some View {
-        let apiHost = URL(string: apiModel.url)!.host()!
         let split = userModel.name.split(separator: "@")
-        if let name = split.first, let from = split.last {
+        if let name = split.first {
             ColoredListComponent {
                 UserHeaderComponent(person_view: userModel.userData)
                     .frame(maxWidth: .infinity)
@@ -69,7 +68,7 @@ struct UserView: View {
                 userModel.fetchData(apiModel: apiModel, saved: selectedTab == UserViewTab.Saved)
             }
             .listStyle(.plain)
-            .navigationTitle(from == apiHost ? String(name) : userModel.name)
+            .navigationTitle(userModel.userData?.person.local == true ? String(name) : userModel.name)
             .navigationBarTitleDisplayMode(.inline)
         } else {
             Text("This should never be seen")

@@ -16,16 +16,15 @@ struct PostActionsComponent: View {
         VStack {
             HStack {
                 if showInfo {
-                    let communityHost = postModel.community!.actor_id.host()!
-                    let apiHost = URL(string: apiModel.url)!.host()!
                     VStack(alignment: .leading) {
                         HStack {
                             if showCommunity {
                                 ShowFromComponent(item: postModel.community!)
                                     .highPriorityGesture(TapGesture().onEnded {
-                                        if communityHost == apiHost {
+                                        if postModel.community!.local {
                                             navModel.path.append(PostsModel(path: postModel.community!.name))
                                         } else {
+                                            let communityHost = postModel.community!.actor_id.host()!
                                             navModel.path.append(PostsModel(path: "\(postModel.community!.name)@\(communityHost)"))
                                         }
                                     })

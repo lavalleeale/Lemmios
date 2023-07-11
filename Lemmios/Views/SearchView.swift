@@ -38,14 +38,14 @@ struct SearchView: View {
             .frame(maxHeight: typing ? .infinity : 0)
             .clipped()
             ColoredListComponent {
-                    if searchModel.communities.count == 0 {
-                        HStack {
-                            Text("Loading Rising...")
-                            Spacer()
-                            ProgressView()
-                        }
+                if searchModel.communities.count == 0 {
+                    HStack {
+                        Text("Loading Rising...")
+                        Spacer()
+                        ProgressView()
                     }
-                    CommmunityListComponent(communities: searchModel.communities, rising: true)
+                }
+                CommmunityListComponent(communities: searchModel.communities, rising: true)
             }
             .frame(maxHeight: typing ? 0 : .infinity)
             .clipped()
@@ -81,8 +81,6 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
     var rising = false
     var body: some View {
         ForEach(communities) { community in
-            let communityHost = community.community.actor_id.host()!
-            let apiHost = URL(string: apiModel.url)!.host()!
             NavigationLink(
             ) {} label: {
                 if rising {
@@ -104,8 +102,9 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
             }
             .contentShape(Rectangle())
             .onTapGesture {
+                let communityHost = community.community.actor_id.host()!
                 navModel.path.append(PostsModel(
-                    path: apiHost == communityHost ? community.community.name : "\(community.community.name)@\(communityHost)"))
+                    path: community.community.local ? community.community.name : "\(community.community.name)@\(communityHost)"))
             }
             .buttonStyle(.plain)
         }

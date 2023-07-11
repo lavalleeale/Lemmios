@@ -7,7 +7,6 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            let apiHost = URL(string: apiModel.url)!.host()!
             ColoredListComponent {
                 NavigationLink("All", value: PostsModel(path: "All"))
                 NavigationLink("Local", value: PostsModel(path: "Local"))
@@ -16,9 +15,15 @@ struct HomeView: View {
                     ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
                         Section {
                             ForEach(subscribed[firstLetter]!) { community in
-                                let communityHost = community.actor_id.host()!
-                                NavigationLink(value: PostsModel(path: communityHost == apiHost ? community.name : "\(community.name)@\(communityHost)")) {
-                                    ShowFromComponent(item: community)
+                                if community.local {
+                                    NavigationLink(value: PostsModel(path: community.name)) {
+                                        ShowFromComponent(item: community)
+                                    }
+                                } else {
+                                    let communityHost = community.actor_id.host()!
+                                    NavigationLink(value: PostsModel(path: "\(community.name)@\(communityHost)")) {
+                                        ShowFromComponent(item: community)
+                                    }
                                 }
                             }
                         } header: {
