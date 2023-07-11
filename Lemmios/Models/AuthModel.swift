@@ -11,7 +11,7 @@ class AuthModel: ObservableObject {
     private let decoder = JSONDecoder()
 
     func register(apiModel: ApiModel, info: LemmyHttp.RegisterPayload) {
-        apiModel.lemmyHttp!.register(info: info) { response, error in
+        apiModel.lemmyHttp?.register(info: info) { response, error in
             if let response = response {
                 if let jwt = response.jwt {
                     apiModel.addAuth(username: info.username, jwt: jwt)
@@ -28,7 +28,7 @@ class AuthModel: ObservableObject {
     }
 
     func login(apiModel: ApiModel, info: LemmyHttp.LoginPayload) {
-        apiModel.lemmyHttp!.login(info: info) { response, error in
+        apiModel.lemmyHttp?.login(info: info) { response, error in
             if let jwt = response?.jwt {
                 apiModel.addAuth(username: info.username_or_email, jwt: jwt)
             } else if case let .network(code, description) = error {

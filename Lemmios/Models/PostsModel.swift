@@ -38,19 +38,19 @@ class PostsModel: ObservableObject, Hashable {
             return
         }
         if posts.isEmpty && !specialPostPathList.contains(self.path) {
-            apiModel.lemmyHttp!.getCommunity(name: self.path) { posts, error in
-                if error == nil {
-                    self.communityView = posts!
+            apiModel.lemmyHttp?.getCommunity(name: self.path) { posts, error in
+                if let posts = posts {
+                    self.communityView = posts
                 }
             }.store(in: &cancellable)
         }
         pageStatus = .loading(page: page)
-        apiModel.lemmyHttp!.getPosts(path: path, page: page, sort: sort, time: time) { posts, error in
-            if error == nil {
-                if posts!.posts.isEmpty {
+        apiModel.lemmyHttp?.getPosts(path: path, page: page, sort: sort, time: time) { posts, error in
+            if let posts = posts {
+                if posts.posts.isEmpty {
                     self.pageStatus = .done
                 } else {
-                    self.posts.append(contentsOf: posts!.posts)
+                    self.posts.append(contentsOf: posts.posts)
                     self.pageStatus = .ready(nextPage: page + 1)
                 }
             } else {
@@ -85,7 +85,7 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     func createPost(type: PostType, title: String, content: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.createPost(type: type, title: title, content: content, communityId: communityView!.community_view.community.id) { post, error in
+        apiModel.lemmyHttp?.createPost(type: type, title: title, content: content, communityId: communityView!.community_view.community.id) { post, error in
             if let postView = post?.post_view {
                 self.posts.insert(postView, at: 0)
                 self.postCreated = true
@@ -95,7 +95,7 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     func follow(apiModel: ApiModel) {
-        apiModel.lemmyHttp!.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, error in
+        apiModel.lemmyHttp?.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, error in
             self.communityView = communityView
         }.store(in: &cancellable)
     }

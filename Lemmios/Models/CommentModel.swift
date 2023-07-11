@@ -29,14 +29,14 @@ class CommentModel: VotableModel {
         } else if direction {
             targetVote = 1
         }
-        apiModel.lemmyHttp!.voteComment(id: comment.id, target: targetVote) { commentView, _ in
+        apiModel.lemmyHttp?.voteComment(id: comment.id, target: targetVote) { commentView, _ in
             self.score = commentView?.comment_view.counts.score ?? self.score
             self.likes = targetVote
         }.store(in: &cancellable)
     }
     
     func comment(body: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.addComment(content: body, postId: comment.post.id, parentId: comment.id) { response, _ in
+        apiModel.lemmyHttp?.addComment(content: body, postId: comment.post.id, parentId: comment.id) { response, _ in
             if let response = response {
                 self.children.append(response.comment_view)
             }
@@ -48,7 +48,7 @@ class CommentModel: VotableModel {
             return
         }
         pageStatus = .loading
-        apiModel.lemmyHttp!.getComments(postId: comment.post.id, parentId: comment.id, sort: postModel.sort) { comments, error in
+        apiModel.lemmyHttp?.getComments(postId: comment.post.id, parentId: comment.id, sort: postModel.sort) { comments, error in
             if error == nil {
                 self.children.append(contentsOf: comments!.comments)
                 self.pageStatus = .done
@@ -59,7 +59,7 @@ class CommentModel: VotableModel {
     }
     
     func read(replyInfo: LemmyHttp.ReplyInfo, apiModel: ApiModel, completion: @escaping () -> Void) {
-        apiModel.lemmyHttp!.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
+        apiModel.lemmyHttp?.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
             if commentView != nil {
                 completion()
             }
@@ -67,7 +67,7 @@ class CommentModel: VotableModel {
     }
     
     func edit(body: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.editComment(content: body, commentId: comment.id) { response, _ in
+        apiModel.lemmyHttp?.editComment(content: body, commentId: comment.id) { response, _ in
             if let response = response {
                 self.comment = response.comment_view
             }
@@ -75,7 +75,7 @@ class CommentModel: VotableModel {
     }
     
     func report(reason: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.reportComment(commentId: comment.id, reason: reason) { response, _ in
+        apiModel.lemmyHttp?.reportComment(commentId: comment.id, reason: reason) { response, _ in
             if let response = response {
                 self.comment = response.comment_report_view
             }

@@ -78,7 +78,7 @@ struct SwiperContainer: ViewModifier {
             }
         }
         .contentShape(Rectangle())
-        .gesture(DragGesture(minimumDistance: 25, coordinateSpace: .local)
+        .gesture(DragGesture(minimumDistance: 40, coordinateSpace: .local)
             .onChanged { value in
                 var totalSlide = value.translation.width
                 if totalSlide < 0 && trailingOptions.isEmpty {

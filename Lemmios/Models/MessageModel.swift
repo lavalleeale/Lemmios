@@ -4,7 +4,7 @@ import Foundation
 class MessageModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     func read(message: LemmyHttp.MessageContent, apiModel: ApiModel, completion: @escaping () -> Void) {
-        apiModel.lemmyHttp!.readMessage(messageId: message.id, read: !message.read) { commentView, _ in
+        apiModel.lemmyHttp?.readMessage(messageId: message.id, read: !message.read) { commentView, _ in
             if commentView != nil {
                 completion()
             }
@@ -12,6 +12,6 @@ class MessageModel: ObservableObject {
     }
 
     func send(to: Int, content: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.sendMessage(to: to, content: content) { _, _ in }.store(in: &cancellable)
+        apiModel.lemmyHttp?.sendMessage(to: to, content: content) { _, _ in }.store(in: &cancellable)
     }
 }

@@ -24,7 +24,7 @@ struct MessageComponent: View {
                     .foregroundStyle(.secondary)
             }
             HStack {
-                Text(processMarkdown(input: message.private_message.content, comment: false))
+                Text(processMarkdown(input: message.private_message.content, stripImages: false))
                 Spacer()
             }
         }

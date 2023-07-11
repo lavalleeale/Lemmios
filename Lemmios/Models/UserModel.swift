@@ -53,7 +53,7 @@ class UserModel: ObservableObject, Hashable {
         } else {
             pageStatus = .loading(page: page)
         }
-        apiModel.lemmyHttp!.getUser(name: name, page: page, sort: sort, time: time, saved: saved) { user, error in
+        apiModel.lemmyHttp?.getUser(name: name, page: page, sort: sort, time: time, saved: saved) { user, error in
             DispatchQueue.main.async {
                 if error == nil {
                     self.userData = user!.person_view

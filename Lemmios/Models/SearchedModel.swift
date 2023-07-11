@@ -57,7 +57,7 @@ class SearchedModel: ObservableObject, Hashable {
             return
         }
         pageStatus = .loading(page: page)
-        apiModel.lemmyHttp!.searchCommunities(query: query, page: page, sort: sort, time: time) { communities, error in
+        apiModel.lemmyHttp?.searchCommunities(query: query, page: page, sort: sort, time: time) { communities, error in
             if let communities = communities?.communities {
                 if reset {
                     self.communities = communities
@@ -76,7 +76,7 @@ class SearchedModel: ObservableObject, Hashable {
             return
         }
         pageStatus = .loading(page: page)
-        apiModel.lemmyHttp!.searchPosts(query: query, page: page, sort: sort, time: time) { posts, error in
+        apiModel.lemmyHttp?.searchPosts(query: query, page: page, sort: sort, time: time) { posts, error in
             if error == nil {
                 self.posts!.append(contentsOf: posts!.posts)
                 self.pageStatus = .ready(nextPage: page+1)
@@ -91,7 +91,7 @@ class SearchedModel: ObservableObject, Hashable {
             return
         }
         pageStatus = .loading(page: page)
-        apiModel.lemmyHttp!.searchUsers(query: query, page: page, sort: sort, time: time) { users, error in
+        apiModel.lemmyHttp?.searchUsers(query: query, page: page, sort: sort, time: time) { users, error in
             if error == nil {
                 self.users!.append(contentsOf: users!.users)
                 self.pageStatus = .ready(nextPage: page+1)

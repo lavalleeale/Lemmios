@@ -17,6 +17,7 @@ struct CommentComponent: View {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var postModel: PostModel
+    @AppStorage("commentImages") var commentImages = true
 
     let depth: Int
 
@@ -74,7 +75,7 @@ struct CommentComponent: View {
                         }
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         if !collapsed {
-                            Markdown(processMarkdown(input: commentModel.comment.comment.content, comment: true), baseURL: URL(string: apiModel.url)!)
+                            Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
                         }
                     }
                     .contentShape(Rectangle())

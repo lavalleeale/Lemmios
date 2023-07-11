@@ -56,7 +56,7 @@ class LemmyHttp {
     
     func makeRequestWithBody<ResponseType: Decodable, BodyType: Encodable>(path: String, query: [URLQueryItem] = [], responseType: ResponseType.Type, body: BodyType, receiveValue: @escaping (ResponseType?, NetworkError?) -> Void) -> AnyCancellable where BodyType: WithMethod {
         var url = apiUrl.appending(path: path).appending(queryItems: query)
-        os_log("\(url) with jwt: \(self.jwt?.count ?? 0)")
+        os_log("url %{public}s", url.absoluteString)
         if jwt != nil {
             url = url.appending(queryItems: [URLQueryItem(name: "auth", value: jwt!)])
         }
@@ -77,6 +77,7 @@ class LemmyHttp {
             .tryMap { v in
                 let code = (v.response as! HTTPURLResponse).statusCode
                 if code != 200 {
+                    os_log("body %{public}s", String(data: v.data, encoding: .utf8) ?? "")
                     throw NetworkError.network(code: code, description: String(data: v.data, encoding: .utf8) ?? "")
                 }
                 return v

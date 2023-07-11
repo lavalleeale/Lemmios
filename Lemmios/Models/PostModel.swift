@@ -67,7 +67,7 @@ class PostModel: VotableModel, Hashable {
             return
         }
         detailsStatus = .loading
-        apiModel.lemmyHttp!.getPost(id: post.id) { post, error in
+        apiModel.lemmyHttp?.getPost(id: post.id) { post, error in
             if let post = post?.post_view {
                 self.detailsStatus = .done
                 self.creator = post.creator
@@ -94,7 +94,7 @@ class PostModel: VotableModel, Hashable {
         } else if direction {
             targetVote = 1
         }
-        apiModel.lemmyHttp!.votePost(id: post.id, target: targetVote) { postView, _ in
+        apiModel.lemmyHttp?.votePost(id: post.id, target: targetVote) { postView, _ in
             if let postView = postView?.post_view {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
@@ -108,7 +108,7 @@ class PostModel: VotableModel, Hashable {
             return
         }
         pageStatus = .loading
-        apiModel.lemmyHttp!.getComments(postId: post.id, parentId: commentId, sort: sort) { comments, error in
+        apiModel.lemmyHttp?.getComments(postId: post.id, parentId: commentId, sort: sort) { comments, error in
             if error == nil {
                 if self.commentId == nil {
                     self.comments.append(contentsOf: comments!.comments)
@@ -138,7 +138,7 @@ class PostModel: VotableModel, Hashable {
     }
     
     func comment(body: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.addComment(content: body, postId: post.id, parentId: nil) { response, error in
+        apiModel.lemmyHttp?.addComment(content: body, postId: post.id, parentId: nil) { response, error in
             if error == nil {
                 if case .done = self.pageStatus, self.comments.count != 0 {
                     self.comments.insert(response!.comment_view, at: 0)
@@ -148,7 +148,7 @@ class PostModel: VotableModel, Hashable {
     }
     
     func save(apiModel: ApiModel) {
-        apiModel.lemmyHttp!.savePost(save: !saved, post_id: post.id) { postView, _ in
+        apiModel.lemmyHttp?.savePost(save: !saved, post_id: post.id) { postView, _ in
             if let postView = postView?.post_view {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
@@ -158,7 +158,7 @@ class PostModel: VotableModel, Hashable {
     }
     
     func report(reason: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.reportPost(postId: post.id, reason: reason) { response, _ in
+        apiModel.lemmyHttp?.reportPost(postId: post.id, reason: reason) { response, _ in
             if let response = response?.post_report_view {
                 self.score = response.counts.score
             }

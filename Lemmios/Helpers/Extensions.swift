@@ -1,4 +1,5 @@
 import Foundation
+import ImageViewerRemote
 import SwiftUI
 import SwiftUIKit
 import WebKit
@@ -29,12 +30,12 @@ extension Date {
 public extension View {
     internal func splashStyle(_ selectedTheme: Theme) -> some View {
         padding()
-        .buttonStyle(.bordered)
-        .navigationBarBackButtonHidden(true)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(selectedTheme.backgroundColor)
+            .buttonStyle(.bordered)
+            .navigationBarBackButtonHidden(true)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(selectedTheme.backgroundColor)
     }
-    
+
     func onFirstAppear(_ action: @escaping () -> ()) -> some View {
         modifier(FirstAppear(action: action))
     }
@@ -93,6 +94,7 @@ private struct WithNavigationModifier: ViewModifier {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @ObservedObject var navModel: NavModel
     @State var url: URL?
+    @State var imageUrl: URL?
 
     let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
@@ -118,10 +120,17 @@ private struct WithNavigationModifier: ViewModifier {
                     PostUrlViewWrapper(url: item)
                         .ignoresSafeArea()
                 }
+                .fullScreenCover(item: $imageUrl) { item in
+                    ImageViewerRemote(imageURL: .constant(item.absoluteString), viewerShown: Binding(get: { true }, set: { self.imageUrl = $0 ? self.imageUrl : nil }), closeButtonTopRight: true) {
+                        EmptyView()
+                    }
+                }
         }
         .environmentObject(navModel)
         .environment(\.openURL, OpenURLAction { url in
-            if let match = url.absoluteString.firstMatch(of: communityRegex) {
+            if imageExtensions.contains(url.pathExtension) {
+                self.imageUrl = url
+            } else if let match = url.absoluteString.firstMatch(of: communityRegex) {
                 if let instance = match.3 {
                     navModel.path.append(PostsModel(path: "\(match.2)\(instance)"))
                 } else {
@@ -285,13 +294,12 @@ public extension UIApplication {
         let connectedScenes = UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
             .compactMap { $0 as? UIWindowScene }
-        
+
         let window = connectedScenes.first?
             .windows
             .first { $0.isKeyWindow }
 
         return window
-        
     }
 }
 

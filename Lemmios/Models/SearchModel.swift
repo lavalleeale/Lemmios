@@ -13,7 +13,7 @@ class SearchModel: ObservableObject {
             return
         }
         pageStatus = .loading
-        apiModel.lemmyHttp!.getCommunities(page: 1, sort: sort, time: time, limit: 5) { communities, error in
+        apiModel.lemmyHttp?.getCommunities(page: 1, sort: sort, time: time, limit: 5) { communities, error in
             if error == nil {
                 self.communities.append(contentsOf: communities!.communities)
                 self.pageStatus = .done

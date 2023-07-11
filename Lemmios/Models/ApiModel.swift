@@ -78,8 +78,7 @@ class ApiModel: ObservableObject {
                 return
             }
             
-            if granted {
-                let account = self.accounts.first { $0.username == username }!
+            if granted, let account = self.accounts.first { $0.username == username } {
                 UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
                 DispatchQueue.main.async {
                     self.accounts[self.accounts.firstIndex { $0.username == username }!].notificationsEnabled = true
@@ -121,12 +120,12 @@ class ApiModel: ObservableObject {
     func selectAuth(username: String, showSubscribe: Bool = false) {
         self.selectedAccount = username
         self.unreadCount = 0
-        self.lemmyHttp!.setJwt(jwt: self.accounts.first { $0.username == username }!.jwt)
+        self.lemmyHttp?.setJwt(jwt: self.accounts.first { $0.username == username }!.jwt)
         if let timer = timer {
             timer.fire()
         } else {
             timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-                self.lemmyHttp!.getUnreadCount { unreadCount, _ in
+                self.lemmyHttp?.getUnreadCount { unreadCount, _ in
                     if let unreadCount = unreadCount {
                         self.unreadCount = unreadCount.replies + unreadCount.private_messages
                     }
@@ -134,7 +133,7 @@ class ApiModel: ObservableObject {
             }
             timer!.fire()
         }
-        self.lemmyHttp!.getSiteInfo { siteInfo, error in
+        self.lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {
                 self.subscribed = [:]
                 siteInfo.my_user.follows.map { $0.community }.forEach { community in

@@ -12,6 +12,7 @@ struct SettingsView: View {
     @AppStorage("blurNSFW") var blurNsfw = true
     @AppStorage("fontSize") var fontSize: Double = -1
     @AppStorage("systemFont") var systemFont = true
+    @AppStorage("commentImages") var commentImages = true
     @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
@@ -41,6 +42,7 @@ struct SettingsView: View {
             }
             Section("Comments") {
                 SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
+                Toggle("Show Images in Comments", isOn: $commentImages)
             }
             Section("Other") {
                 if apiModel.accounts.first(where: { $0.username == apiModel.selectedAccount })?.notificationsEnabled != true {
