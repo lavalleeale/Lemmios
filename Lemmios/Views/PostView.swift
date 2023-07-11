@@ -19,7 +19,7 @@ struct PostView: View {
                     VStack {
                         Text(postModel.post.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.title3)
+                            .bold()
                             .lineLimit(collapsed ? 1 : .max)
                             .multilineTextAlignment(.leading)
                         if !collapsed {

@@ -7,10 +7,13 @@ struct ContentView: View {
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
     @AppStorage("splashAccepted") var splashAccepted = false
+    @AppStorage("fontSize") var fontSize: Double = -1
+    @AppStorage("systemFont") var systemFont = true
 
     @Environment(\.colorScheme) var systemColorScheme
+    @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
+    
     @ObservedObject var selectedTab: StartingTab
-
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
     @ObservedObject var searchNavModel = NavModel(startNavigated: false)
@@ -195,6 +198,7 @@ struct ContentView: View {
                 .environment(\.colorScheme, colorScheme == .System ? systemColorScheme : colorScheme == .Dark ? .dark : .light)
             }
         }
+        .environment(\.dynamicTypeSize, systemFont ? size : DynamicTypeSize.allCases[Int(fontSize)])
     }
 }
 

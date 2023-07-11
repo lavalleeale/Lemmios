@@ -10,9 +10,12 @@ struct SettingsView: View {
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
     @AppStorage("blurNSFW") var blurNsfw = true
+    @AppStorage("fontSize") var fontSize: Double = -1
+    @AppStorage("systemFont") var systemFont = true
     @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
+    @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
 
     var body: some View {
         ColoredListComponent {
@@ -20,6 +23,18 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
                 SettingViewComponent(selection: $colorScheme, desciption: "Color Scheme", options: ColorScheme.allCases)
                 Toggle("Pure Black Dark Mode", isOn: $pureBlack)
+                ZStack {
+                    Slider(value: systemFont ? .constant(sizeDouble(size: size)) : $fontSize, in: 0...Double(DynamicTypeSize.allCases.filter {!$0.isAccessibilitySize}.count - 1), step: 1)
+                    HStack {
+                        ForEach(0...(DynamicTypeSize.allCases.filter {!$0.isAccessibilitySize}.count - 1), id: \.self) { _ in
+                            Divider()
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    .padding(.horizontal, -9)
+                }
+                .disabled(systemFont)
+                Toggle("Use System Font Size", isOn: $systemFont)
             }
             Section("Posts") {
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
@@ -28,10 +43,10 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
             }
             Section("Other") {
-                if apiModel.accounts.first(where: {$0.username == apiModel.selectedAccount})?.notificationsEnabled != true {
+                if apiModel.accounts.first(where: { $0.username == apiModel.selectedAccount })?.notificationsEnabled != true {
                     Button("Enable push notifications for current account") {
                         apiModel.enablePush(username: apiModel.selectedAccount)
-                    }                    
+                    }
                 }
                 Toggle("Blur NSFW", isOn: $blurNsfw)
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
@@ -47,6 +62,11 @@ struct SettingsView: View {
             }
             NavigationLink("About", value: SettingsNav.About)
             ApolloImportView()
+        }
+        .onAppear {
+            if self.fontSize == -1 {
+                self.fontSize = sizeDouble(size: size)
+            }
         }
         .navigationDestination(for: SettingsNav.self) { location in
             switch location {
@@ -116,4 +136,8 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
 
 enum ColorScheme: String, CaseIterable {
     case System, Light, Dark
+}
+
+func sizeDouble(size: DynamicTypeSize) -> Double {
+    Double(DynamicTypeSize.allCases.firstIndex(of: size)!)
 }

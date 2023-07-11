@@ -85,7 +85,7 @@ struct CommentComponent: View {
             }
             .onTapGesture {
                 if preview {
-                    if let replyInfo = replyInfo {
+                    if let replyInfo = replyInfo, replyInfo.read == false {
                         commentModel.read(replyInfo: replyInfo, apiModel: apiModel) {
                             read!()
                         }
