@@ -21,7 +21,7 @@ class LemmyHttp {
         if !baseUrl.contains(/https?:\/\//) {
             baseUrl = "https://" + baseUrl
         }
-        guard let apiUrl = URL(string: "\(baseUrl.replacing("/+$", with: ""))/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
+        guard let apiUrl = URL(string: "\(baseUrl.lowercased().replacing("/+$", with: ""))/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
             throw LemmyError.invalidUrl
         }
         self.apiUrl = apiUrl
