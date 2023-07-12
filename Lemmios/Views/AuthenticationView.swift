@@ -20,6 +20,7 @@ struct AuthenticationView: View {
                         ForEach(apiModel.accounts) { account in
                             Button {
                                 apiModel.selectAuth(account: account)
+                                dismiss()
                             } label: {
                                 HStack {
                                     Text("\(account.username)@\(account.instance)")
