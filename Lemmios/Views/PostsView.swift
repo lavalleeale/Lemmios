@@ -119,7 +119,11 @@ struct PostsView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button {
-                            showingCreate.toggle()
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                showingCreate.toggle()
+                            }
                         } label: {
                             Label("Submit Post", systemImage: "plus")
                         }

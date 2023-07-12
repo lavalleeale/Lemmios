@@ -11,9 +11,9 @@ import SwiftUI
 class ImageModel: ObservableObject {
     @Published var imageState = ImageState.empty
     
-    func setImage(imageSelection: PhotosPickerItem?, apiModel: ApiModel) {
+    func setImage(imageSelection: PhotosPickerItem?, targetSize: Int, apiModel: ApiModel) {
         if let imageSelection {
-            let progress = loadTransferable(from: imageSelection, apiModel: apiModel)
+            let progress = loadTransferable(from: imageSelection, targetSize: targetSize, apiModel: apiModel)
             imageState = .loading(progress)
         } else {
             imageState = .empty
@@ -21,97 +21,105 @@ class ImageModel: ObservableObject {
     }
     
     func delete(apiModel: ApiModel) {
-        if case let .success(file, _) = imageState {
+        if case .success(let file, _) = imageState {
             apiModel.lemmyHttp!.deletePhoto(data: file)
             imageState = .empty
         }
     }
     
-    private func loadTransferable(from imageSelection: PhotosPickerItem, apiModel: ApiModel) -> Progress {
+    private func loadTransferable(from imageSelection: PhotosPickerItem, targetSize: Int, apiModel: ApiModel) -> Progress {
         return imageSelection.loadTransferable(type: ProfileImage.self) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let profileImage?):
-                    apiModel.lemmyHttp!.uploadPhoto(data: profileImage.data, mimeType: profileImage.mimeType) { percentDone in
-                        DispatchQueue.main.async {
-                            self.imageState = .uploading(percentDone, profileImage.image)
-                        }
-                    } doneCallback: { url, error in
-                        DispatchQueue.main.async {
-                            if let url = url {
-                                print(1)
-                                self.imageState = .success(url.files[0], profileImage.image)
-                            } else if case .network(let code, _) = error {
-                                print("test")
-                                if code == 413 {
-                                    self.imageState = .failure(.tooLarge)
-                                } else {
-                                    self.imageState = .failure(.unknown)
-                                }
-                            }
-                        }
-                    }
-                    self.imageState = .uploading(0, profileImage.image)
+                    self.loadImage(profileImage.image, targetSize: targetSize, apiModel: apiModel)
                 case .success(nil):
                     self.imageState = .empty
                 case .failure(let error):
-                    self.imageState = .failure(.loadingImage)
+                    self.imageState = .failure(.loadingImage, nil)
                 }
             }
         }
     }
     
+    func loadImage(_ image: UIImage, targetSize: Int, apiModel: ApiModel) {
+        let baseSize = image.jpegData(compressionQuality: 1)!
+        guard let data = baseSize.count < targetSize ? baseSize : self.jpegImage(image: image, maxSize: targetSize, minSize: targetSize * 9 / 10, times: 10) else {
+            self.imageState = .failure(.tooLarge, image)
+            return
+        }
+        let image = UIImage(data: data)!
+        self.imageState = .uploading(0, image)
+        apiModel.lemmyHttp!.uploadPhoto(data: data, mimeType: "image/jpeg") { percentDone in
+            DispatchQueue.main.async {
+                self.imageState = .uploading(percentDone, image)
+            }
+        } doneCallback: { url, error in
+            DispatchQueue.main.async {
+                if let url = url {
+                    self.imageState = .success(url.files[0], image)
+                } else if case .network(let code, _) = error {
+                    if code == 413 {
+                        self.imageState = .failure(.tooLarge, image)
+                    } else {
+                        self.imageState = .failure(.unknown, nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func jpegImage(image: UIImage, maxSize: Int, minSize: Int, times: Int) -> Data? {
+        var maxQuality: CGFloat = 1.0
+        var minQuality: CGFloat = 0.0
+        var bestData: Data?
+        for _ in 1 ... times {
+            let thisQuality = (maxQuality + minQuality) / 2
+            guard let data = resizeWithPercent(image, percentage: thisQuality)!.jpegData(compressionQuality: thisQuality) else { return nil }
+            let thisSize = data.count
+            print(thisSize, thisQuality)
+            if thisSize > maxSize {
+                maxQuality = thisQuality
+            } else {
+                minQuality = thisQuality
+                bestData = data
+                if thisSize > minSize {
+                    return bestData
+                }
+            }
+        }
+
+        return bestData
+    }
+    
+    func resizeWithPercent(_ image: UIImage, percentage: CGFloat) -> UIImage? {
+        let imageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: image.size.width * percentage, height: image.size.height * percentage)))
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, image.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        imageView.layer.render(in: context)
+        guard let result = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+        UIGraphicsEndImageContext()
+        return result
+    }
+    
     struct ProfileImage: Transferable {
-        let image: Image
+        let image: UIImage
         let data: Data
         
         static var transferRepresentation: some TransferRepresentation {
             DataRepresentation(importedContentType: .image) { data in
-                #if canImport(AppKit)
-                    guard let nsImage = NSImage(data: data) else {
-                        throw TransferError.importFailed
-                    }
-                    let image = Image(nsImage: nsImage)
-                    return ProfileImage(image: image, data: data)
-                #elseif canImport(UIKit)
-                    guard let uiImage = UIImage(data: data) else {
-                        throw TransferError.importFailed
-                    }
-                    let image = Image(uiImage: uiImage)
-                    return ProfileImage(image: image, data: data)
-                #else
+                guard let uiImage = UIImage(data: data) else {
                     throw TransferError.importFailed
-                #endif
-            }
-        }
-        
-        var mimeType: String {
-            var b: UInt8 = 0
-            data.copyBytes(to: &b, count: 1)
-
-            switch b {
-            case 0xff:
-                return "image/jpeg"
-            case 0x89:
-                return "image/png"
-            case 0x47:
-                return "image/gif"
-            case 0x4d, 0x49:
-                return "image/tiff"
-            case 0x25:
-                return "application/pdf"
-            case 0xd0:
-                return "application/vnd"
-            case 0x46:
-                return "text/plain"
-            default:
-                return "application/octet-stream"
+                }
+                return ProfileImage(image: uiImage, data: data)
             }
         }
     }
     
     enum ImageError: String {
-        case loadingImage = "Error while loading image", tooLarge = "Image too large", unknown = "Unkown image error"
+        case loadingImage = "Error while loading image", tooLarge = "Image too large, tap to downsize", resize = "Resizing failed, size too small? Tap to retry", unknown = "Unkown image error"
     }
     
     enum ImageState: Equatable {
@@ -121,7 +129,8 @@ class ImageModel: ObservableObject {
             }
             return false
         }
-        case empty, loading(_ progress: Progress), uploading(_ percentDone: Double, _ image: Image), success(_ url: LemmyHttp.File, _ image: Image), failure(_ error: ImageError)
+
+        case empty, loading(_ progress: Progress), uploading(_ percentDone: Double, _ image: UIImage), success(_ url: LemmyHttp.File, _ image: UIImage), failure(_ error: ImageError, _ image: UIImage?)
     }
     
     enum TransferError: Error {

@@ -11,6 +11,9 @@ struct PostCreateComponent: View {
     @State var postData = ""
     @State var postUrl = ""
     @State var showToast = false
+    @State var showError = false
+    @State var showResize = false
+    @State var size = 5000
 
     @StateObject var imageModel = ImageModel()
     @ObservedObject var postsModel: PostsModel
@@ -27,7 +30,7 @@ struct PostCreateComponent: View {
                             .textInputAutocapitalization(.never)
                             .textContentType(.URL)
                             .autocorrectionDisabled(true)
-                        PhotosPicker(selection: Binding(get: { nil }, set: { imageModel.setImage(imageSelection: $0, apiModel: apiModel) }),
+                        PhotosPicker(selection: Binding(get: { nil }, set: { imageModel.setImage(imageSelection: $0, targetSize: .max, apiModel: apiModel) }),
                                      matching: .images,
                                      photoLibrary: .shared()) {
                             Image(systemName: "camera")
@@ -41,7 +44,7 @@ struct PostCreateComponent: View {
                     }
                 }
                 if case let .success(_, image) = imageModel.imageState {
-                    image
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxHeight: 100)
@@ -59,7 +62,7 @@ struct PostCreateComponent: View {
                             .padding([.trailing, .top], -11.5)
                         }
                 } else if case let .uploading(progress, image) = imageModel.imageState {
-                    image
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxHeight: 100)
@@ -67,11 +70,6 @@ struct PostCreateComponent: View {
                             ProgressView(value: progress)
                                 .padding()
                         }
-                } else if case .failure = imageModel.imageState {
-                    Text("test")
-                }
-                if imageModel.imageState.isError {
-                    Text("test1")
                 }
                 NavigationLink(postData == "" ? "Text (optional)" : postData) {
                     TextEditor(text: $postData)
@@ -111,14 +109,40 @@ struct PostCreateComponent: View {
                 }
             })
         }
+        .alert("Resize", isPresented: $showResize) {
+            let formatter: NumberFormatter = {
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .decimal
+                return formatter
+            }()
+            TextField("Target Size", value: $size, formatter: formatter)
+                .keyboardType(.numberPad)
+            Button("Cancel", role: .cancel) {}
+            Button("Resize") {
+                if case let .failure(_, image) = imageModel.imageState, let image = image {
+                    imageModel.loadImage(image, targetSize: size, apiModel: apiModel)
+                }
+            }
+        }
         .toast(isPresenting: $showToast) {
             AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid URL")
         }
-        .toast(isPresenting: Binding(get: { imageModel.imageState.isError }, set: { _ in imageModel.imageState = .empty })) {
-            if case let .failure(error) = imageModel.imageState {
+        .toast(isPresenting: $showError) {
+            if case let .failure(error, _) = imageModel.imageState {
                 return AlertToast(displayMode: .alert, type: .error(.red), title: error.rawValue)
             } else {
                 return AlertToast(displayMode: .alert, type: .error(.red), title: "Error loading image")
+            }
+        } onTap: {
+            if case let .failure(error, _) = imageModel.imageState {
+                if (.tooLarge == error || .resize == error) {
+                    self.showResize = true
+                }
+            }
+        }
+        .onChange(of: imageModel.imageState.isError) { newValue in
+            if newValue == true {
+                self.showError = true
             }
         }
     }
