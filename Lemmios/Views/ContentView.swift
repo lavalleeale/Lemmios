@@ -68,7 +68,9 @@ struct ContentView: View {
                     Group {
                         ZStack {
                             if !apiModel.serverSelected {
-                                ServerSelectorView()
+                                NavigationView {
+                                    ServerSelectorView()
+                                }
                             } else {
                                 HomeView()
                                     .handleNavigations(navModel: homeNavModel)
@@ -80,7 +82,9 @@ struct ContentView: View {
                         .tag(Tab.Posts)
                         ZStack {
                             if !apiModel.serverSelected {
-                                ServerSelectorView()
+                                NavigationView {
+                                    ServerSelectorView()
+                                }
                             } else if apiModel.selectedAccount == nil {
                                 AuthenticationView(currentInstanceOnly: true)
                             } else {
@@ -97,7 +101,9 @@ struct ContentView: View {
                         .tag(Tab.Inbox)
                         ZStack {
                             if !apiModel.serverSelected {
-                                ServerSelectorView()
+                                NavigationView {
+                                    ServerSelectorView()
+                                }
                             } else if apiModel.selectedAccount == nil {
                                 AuthenticationView()
                             } else {
@@ -113,7 +119,9 @@ struct ContentView: View {
                         .tag(Tab.Accounts)
                         ZStack {
                             if !apiModel.serverSelected {
-                                ServerSelectorView()
+                                NavigationView {
+                                    ServerSelectorView()
+                                }
                             } else {
                                 SearchView()
                             }
