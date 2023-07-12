@@ -15,6 +15,7 @@ struct SettingsView: View {
     @AppStorage("commentImages") var commentImages = true
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
+    @State var showingDelete = false
     @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
 
     var body: some View {
@@ -55,9 +56,19 @@ struct SettingsView: View {
                 NavigationLink("Change Instance") {
                     ServerSelectorView()
                 }
+                if apiModel.selectedAccount != "" {
+                    Button("Delete Account") {
+                        showingDelete = true
+                    }                    
+                }
             }
             NavigationLink("About", value: SettingsNav.About)
             ApolloImportView()
+        }
+        .alert("Delete Account", isPresented: $showingDelete) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("To delete your Lemmy account, you müst first visit \(apiModel.url) and sign in. Then navigate to the Profile tab. You may delete your account by pressing \"Delete Account\".")
         }
         .onAppear {
             if self.fontSize == -1 {
