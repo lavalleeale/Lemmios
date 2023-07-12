@@ -15,8 +15,7 @@ class InboxModel: ObservableObject {
         }
         messagesStatus = .loading(page: page)
         apiModel.lemmyHttp?.getMessages(page: page, sort: sort, unread: onlyUnread) { messages, _ in
-            if let messages = messages?.private_messages.filter({ $0.creator.name != apiModel.selectedAccount || !$0.creator.local
-            }) {
+            if let messages = messages?.private_messages.filter({ apiModel.selectedAccount! != $0.creator }) {
                 if messages.isEmpty {
                     self.messagesStatus = .done
                 } else {

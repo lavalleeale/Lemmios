@@ -159,7 +159,7 @@ struct PostButton: View {
     
     var body: some View {
         Button {
-            if apiModel.selectedAccount == "" {
+            if apiModel.selectedAccount == nil {
                 apiModel.getAuth()
             } else {
                 action()

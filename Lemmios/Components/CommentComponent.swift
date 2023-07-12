@@ -42,7 +42,7 @@ struct CommentComponent: View {
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
                             Menu {
-                                if commentModel.comment.creator.name == apiModel.selectedAccount {
+                                if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
                                     PostButton(label: "Edit", image: "pencil") {
                                         showingEdit = true
                                     }
@@ -110,7 +110,7 @@ struct CommentComponent: View {
                 replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
                 SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
             ]) { swiped in
-                if apiModel.selectedAccount == "" {
+                if apiModel.selectedAccount == nil {
                     apiModel.getAuth()
                 } else {
                     switch swiped {

@@ -56,7 +56,7 @@ struct ContentView: View {
                         if let selectedNavModel = selectedNavModel {
                             selectedNavModel.clear()
                         } else {
-                            if apiModel.selectedAccount != "" {
+                            if !apiModel.accounts.isEmpty {
                                 withAnimation(.linear(duration: 0.1)) {
                                     apiModel.showingAuth.toggle()
                                 }
@@ -81,8 +81,8 @@ struct ContentView: View {
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
-                            } else if apiModel.selectedAccount == "" {
-                                AuthenticationView()
+                            } else if apiModel.selectedAccount == nil {
+                                AuthenticationView(currentInstanceOnly: true)
                             } else {
                                 InboxView()
                                     .navigationTitle("Inbox")
@@ -98,7 +98,7 @@ struct ContentView: View {
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
-                            } else if apiModel.selectedAccount == "" {
+                            } else if apiModel.selectedAccount == nil {
                                 AuthenticationView()
                             } else {
                                 UserView(currentUser: true)

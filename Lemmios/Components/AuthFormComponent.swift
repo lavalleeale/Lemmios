@@ -26,6 +26,9 @@ struct AuthFormComponent: View {
             }
             .pickerStyle(.segmented)
             Section {
+                ServerSelectorView(needsForm: false)
+            }
+            Section {
                 TextField("Username", text: $username)
                     .textContentType(.username)
                 if case .Signup = selectedTab {

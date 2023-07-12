@@ -19,7 +19,7 @@ class CommentModel: VotableModel {
     }
     
     func vote(direction: Bool, apiModel: ApiModel) {
-        guard apiModel.selectedAccount != "" else {
+        guard apiModel.selectedAccount != nil else {
             apiModel.getAuth()
             return
         }

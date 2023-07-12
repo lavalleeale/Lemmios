@@ -10,14 +10,12 @@ struct ServerSelectorView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("serverUrl") public var url = ""
 
-    init(callback: (() -> Void)? = nil) {
-        self.callback = callback
-    }
-
-    let callback: (() -> Void)?
+    @State var needsForm = true
+    
+    var callback: (() -> Void)? = nil
 
     var body: some View {
-        Form {
+        Group {
             if errorString != "" {
                 Text(errorString)
                     .foregroundColor(.red)
@@ -83,10 +81,14 @@ struct ServerSelectorView: View {
                     callback?()
                 }
             }
+        }.if(needsForm) { view in
+            Form {
+                view
+            }
+            .listBackgroundModifier(backgroundColor: selectedTheme.secondaryColor)
         }
-        .navigationTitle("test")
+        .navigationTitle("Server Selector")
         .navigationBarTitleDisplayMode(.inline)
-        .listBackgroundModifier(backgroundColor: selectedTheme.secondaryColor)
         .onAppear {
             if url == "" {
                 self.selected = defaultServers[0]

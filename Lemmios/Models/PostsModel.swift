@@ -67,6 +67,7 @@ class PostsModel: ObservableObject, Hashable {
     func refresh(apiModel: ApiModel) {
         cancellable.removeAll()
         pageStatus = PostsPageStatus.ready(nextPage: 1)
+        self.notFound = false
         posts.removeAll()
         fetchPosts(apiModel: apiModel)
     }

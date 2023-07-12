@@ -45,18 +45,16 @@ struct SettingsView: View {
                 Toggle("Show Images in Comments", isOn: $commentImages)
             }
             Section("Other") {
-                if apiModel.accounts.first(where: { $0.username == apiModel.selectedAccount })?.notificationsEnabled != true {
+                if apiModel.selectedAccount?.notificationsEnabled != true {
                     Button("Enable push notifications for current account") {
-                        apiModel.enablePush(username: apiModel.selectedAccount)
+                        apiModel.enablePush(account: apiModel.selectedAccount!)
                     }
                 }
                 Toggle("Blur NSFW", isOn: $blurNsfw)
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
-                NavigationLink("Change Instance") {
-                    ServerSelectorView()
-                }
-                if apiModel.selectedAccount != "" {
+                NavigationLink("Change Instance", value: SettingsNav.ServerSelector)
+                if apiModel.selectedAccount != nil {
                     Button("Delete Account") {
                         showingDelete = true
                     }                    
@@ -79,6 +77,10 @@ struct SettingsView: View {
             switch location {
             case .About:
                 AboutView()
+            case .ServerSelector:
+                ServerSelectorView() {
+                    navModel.clear()
+                }
             }
         }
         .navigationTitle("Settings")
@@ -87,7 +89,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About
+    case About, ServerSelector
 }
 
 protocol HasCustom {

@@ -6,9 +6,9 @@ import SwiftUI
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl") public var url = ""
-    @AppStorage("selectedAccount") var selectedAccount = ""
     @AppStorage("seen") var seen: [Int] = []
     
+    @Published var selectedAccount: StoredAccount?
     @Published var lemmyHttp: LemmyHttp?
     @Published var serverSelected = false
     @Published var accounts = [StoredAccount]()
@@ -19,38 +19,46 @@ class ApiModel: ObservableObject {
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
+    private var decoder = JSONDecoder()
     private var cancellable = Set<AnyCancellable>()
     
     private var timer: Timer?
     
     init() {
-        if self.url != "" {
-            _ = self.selectServer(url: self.url)
+        if try! simpleKeychain.hasItem(forKey: "accounts") {
+            let data = try! simpleKeychain.data(forKey: "accounts")
+            if let decoded = try? decoder.decode([StoredAccount].self, from: data) {
+                self.accounts = decoded
+            }
+        }
+        if url != "" {
+            _ = selectServer(url: url)
+        }
+        if let selectedAccount = UserDefaults.standard.string(forKey: "account"), let account = accounts.first(where: { selectedAccount.contains($0.instance) && selectedAccount.contains($0.username) }) {
+            self.selectedAccount = account
         }
     }
     
     func getAuth() {
-        self.showingAuth = true
+        showingAuth = true
     }
     
     func selectServer(url: String) -> String {
-        self.accounts = []
+        self.selectedAccount = nil
         do {
-            self.lemmyHttp = try LemmyHttp(baseUrl: url)
-            self.url = String(self.lemmyHttp!.baseUrl)
-            self.serverSelected = true
-            if try! self.simpleKeychain.hasItem(forKey: "accounts for \(url)") {
-                let data = try! self.simpleKeychain.data(forKey: "accounts for \(url)")
-                self.accounts = try! JSONDecoder().decode([StoredAccount].self, from: data)
-                if self.accounts.isEmpty {
-                    self.selectedAccount = ""
-                } else if !self.accounts.contains(where: { $0.username == selectedAccount }) {
-                    self.selectedAccount = self.accounts[0].username
-                }
-            } else {
-                self.selectedAccount = ""
+            lemmyHttp = try LemmyHttp(baseUrl: url)
+            self.url = String(lemmyHttp!.baseUrl)
+            if let storedAccount = UserDefaults.standard.string(forKey: "account"), storedAccount.contains(lemmyHttp!.apiUrl.absoluteString) {
+                UserDefaults.standard.removeObject(forKey: "account")
             }
-            self.updateAuth()
+            serverSelected = true
+            if try! simpleKeychain.hasItem(forKey: "accounts for \(url)") {
+                let data = try! simpleKeychain.data(forKey: "accounts for \(url)")
+                accounts.append(contentsOf: try! decoder.decode([StoredAccount_OLD].self, from: data).map { StoredAccount(username: $0.username, jwt: $0.jwt, instance: lemmyHttp!.apiUrl.host()!, notificationsEnabled: $0.notificationsEnabled == true) })
+                try! simpleKeychain.deleteItem(forKey: "accounts for \(url)")
+                try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
+            }
+            updateAuth()
         } catch LemmyHttp.LemmyError.invalidUrl {
             return "Invalid URL"
         } catch {
@@ -60,16 +68,17 @@ class ApiModel: ObservableObject {
     }
     
     func addAuth(username: String, jwt: String) {
-        if !self.accounts.contains(where: { $0.username == username }) {
-            self.accounts.append(StoredAccount(username: username, jwt: jwt))
-            try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
-            self.lemmyHttp?.setJwt(jwt: jwt)
-            self.selectAuth(username: username, showSubscribe: true)
-            self.enablePush(username: username)
+        if !accounts.contains(where: { $0.username == username && $0.instance == lemmyHttp?.apiUrl.host() }) {
+            let account = StoredAccount(username: username, jwt: jwt, instance: lemmyHttp!.apiUrl.host()!, notificationsEnabled: false)
+            accounts.append(account)
+            try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
+            lemmyHttp?.setJwt(jwt: jwt)
+            selectAuth(account: account, showSubscribe: true)
+            enablePush(account: account)
         }
     }
     
-    func enablePush(username: String) {
+    func enablePush(account: StoredAccount) {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             
@@ -77,10 +86,10 @@ class ApiModel: ObservableObject {
                 return
             }
             
-            if granted, let account = self.accounts.first { $0.username == username } {
+            if granted {
                 DispatchQueue.main.async {
-                    self.accounts[self.accounts.firstIndex { $0.username == username }!].notificationsEnabled = true
-                    try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
+                    self.accounts[self.accounts.firstIndex(of: account)!].notificationsEnabled = true
+                    try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts")
                     #if !DEBUG
                     UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
                     UIApplication.shared.registerForRemoteNotifications()
@@ -90,23 +99,23 @@ class ApiModel: ObservableObject {
         }
     }
     
-    func deleteAuth(username: String) {
-        let index = self.accounts.firstIndex { $0.username == username }!
-        let account = self.accounts[index]
-        self.accounts.remove(at: index)
-        try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
-        if self.selectedAccount == username {
-            self.selectedAccount = ""
-            self.lemmyHttp?.setJwt(jwt: nil)
-            self.unreadCount = 0
-            self.timer?.invalidate()
+    func deleteAuth(account: StoredAccount) {
+        let index = accounts.firstIndex(of: account)!
+        accounts.remove(at: index)
+        try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
+        if selectedAccount == account {
+            selectedAccount = nil
+            UserDefaults.standard.removeObject(forKey: "account")
+            lemmyHttp?.setJwt(jwt: nil)
+            unreadCount = 0
+            timer?.invalidate()
         }
         if account.notificationsEnabled == true {
             let registerUrl = URL(string: "https://lemmios.lavallee.one/remove")!
             
             var request = URLRequest(url: registerUrl)
             request.httpMethod = "POST"
-            request.httpBody = try! self.encoder.encode(["jwt": account.jwt])
+            request.httpBody = try! encoder.encode(["jwt": account.jwt])
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             
             let task = URLSession.shared.dataTask(with: request) { data, _, _ in
@@ -118,11 +127,12 @@ class ApiModel: ObservableObject {
         }
     }
     
-    func selectAuth(username: String, showSubscribe: Bool = false) {
-        self.selectedAccount = username
-        let account = self.accounts.first { $0.username == username }!
-        self.unreadCount = 0
-        self.lemmyHttp?.setJwt(jwt: account.jwt)
+    func selectAuth(account: StoredAccount, showSubscribe: Bool = false) {
+        _ = selectServer(url: account.instance)
+        selectedAccount = account
+        unreadCount = 0
+        lemmyHttp?.setJwt(jwt: account.jwt)
+        UserDefaults.standard.set("\(account.username)@\(account.instance)", forKey: "account")
         if let timer = timer {
             timer.fire()
         } else {
@@ -141,7 +151,7 @@ class ApiModel: ObservableObject {
             UIApplication.shared.registerForRemoteNotifications()
             #endif
         }
-        self.lemmyHttp?.getSiteInfo { siteInfo, error in
+        lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {
                 self.subscribed = [:]
                 siteInfo.my_user.follows.map { $0.community }.forEach { community in
@@ -158,27 +168,52 @@ class ApiModel: ObservableObject {
                 }
             } else if case let .decoding(_, error) = error {
                 if (error as CustomDebugStringConvertible).debugDescription.contains("my_user") {
-                    self.invalidUser = self.selectedAccount
-                    self.deleteAuth(username: self.selectedAccount)
+                    self.invalidUser = account.username
+                    self.deleteAuth(account: account)
                 }
             }
-        }.store(in: &self.cancellable)
+        }.store(in: &cancellable)
     }
     
     private func updateAuth() {
-        if self.selectedAccount != "" {
-            self.selectAuth(username: self.selectedAccount)
+        if let selectedAccount = selectedAccount {
+            selectAuth(account: selectedAccount)
         } else {
-            self.lemmyHttp?.setJwt(jwt: nil)
-            self.subscribed = [:]
+            lemmyHttp?.setJwt(jwt: nil)
+            subscribed = [:]
         }
     }
     
     struct StoredAccount: Codable, Identifiable, Equatable {
-        var id: String { self.jwt }
+        static func == (lhs: StoredAccount, rhs: LemmyHttp.ApiUserData) -> Bool {
+            return rhs.actor_id.pathComponents.last! == lhs.username && rhs.actor_id.host() == lhs.instance
+        }
+        
+        static func == (lhs: LemmyHttp.ApiUserData, rhs: StoredAccount) -> Bool {
+            return rhs == lhs
+        }
+        
+        static func != (lhs: StoredAccount, rhs: LemmyHttp.ApiUserData) -> Bool {
+            return !(lhs == rhs)
+        }
+        
+        static func != (lhs: LemmyHttp.ApiUserData, rhs: StoredAccount) -> Bool {
+            return !(lhs == rhs)
+        }
+        
+        var id: String { jwt }
         
         let username: String
-        var jwt: String
+        let jwt: String
+        let instance: String
+        var notificationsEnabled: Bool
+    }
+    
+    struct StoredAccount_OLD: Codable, Identifiable, Equatable {
+        var id: String { jwt }
+        
+        let username: String
+        let jwt: String
         var notificationsEnabled: Bool?
     }
 }

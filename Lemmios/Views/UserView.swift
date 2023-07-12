@@ -6,6 +6,7 @@ struct UserView: View {
     @State var selectedTab = UserViewTab.Overview
     @State var currentUser = false
     @State var showMessage = false
+    @State var showingAccounts = false
     var body: some View {
         Group {
             let split = userModel.name.split(separator: "@")
@@ -20,7 +21,7 @@ struct UserView: View {
                     Picker(selection: $selectedTab, label: Text("Profile Section")) {
                         ForEach(UserViewTab.allCases, id: \.id) { tab in
                             // Skip tabs that are meant for only our profile
-                            if !tab.onlyShowInOwnProfile || name == apiModel.selectedAccount {
+                            if let account = apiModel.selectedAccount, let userData = userModel.userData, !tab.onlyShowInOwnProfile || userData.person == account {
                                 Text(tab.rawValue)
                             }
                         }
@@ -74,26 +75,37 @@ struct UserView: View {
                 .navigationTitle(userModel.userData?.person.local == true ? String(name) : userModel.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    if name != apiModel.selectedAccount, userModel.userData != nil {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Menu {
-                                Button {
-                                    showMessage = true
+                    if let userData = userModel.userData, let account = apiModel.selectedAccount {
+                        if userData.person != account {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Menu {
+                                    Button {
+                                        showMessage = true
+                                    } label: {
+                                        Label("Message", systemImage: "arrowshape.turn.up.left")
+                                    }
+                                    let blocked = userModel.blocked
+                                    Button {
+                                        userModel.block(apiModel: apiModel, block: !blocked)
+                                    } label: {
+                                        Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
+                                    }
                                 } label: {
-                                    Label("Message", systemImage: "arrowshape.turn.up.left")
+                                    VStack {
+                                        Spacer()
+                                        Label("More Options", systemImage: "ellipsis")
+                                            .labelStyle(.iconOnly)
+                                        Spacer()
+                                    }
                                 }
-                                let blocked = userModel.blocked
-                                Button {
-                                    userModel.block(apiModel: apiModel, block: !blocked)
-                                } label: {
-                                    Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
+                            }
+                        } else {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Accounts") {
+                                    showingAccounts = true
                                 }
-                            } label: {
-                                VStack {
-                                    Spacer()
-                                    Label("More Options", systemImage: "ellipsis")
-                                        .labelStyle(.iconOnly)
-                                    Spacer()
+                                .popupNavigationView(isPresented: $showingAccounts, heightRatio: 1.5, widthRatio: 1.1) {
+                                    AuthenticationView()
                                 }
                             }
                         }
@@ -102,15 +114,17 @@ struct UserView: View {
             } else {
                 Text("This should never be seen")
             }
-        }.onAppear {
+        }
+        .onAppear {
             if currentUser {
-                userModel.name = apiModel.selectedAccount
+                userModel.name = apiModel.selectedAccount?.username ?? ""
                 userModel.reset()
             }
         }
         .onChange(of: apiModel.selectedAccount) { newValue in
+            self.showingAccounts = false
             if currentUser {
-                userModel.name = newValue
+                userModel.name = newValue?.username ?? ""
                 userModel.reset()
             }
         }

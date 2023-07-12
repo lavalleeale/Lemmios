@@ -82,7 +82,7 @@ class PostModel: VotableModel, Hashable {
     }
     
     func vote(direction: Bool, apiModel: ApiModel) {
-        guard apiModel.selectedAccount != "" else {
+        guard apiModel.selectedAccount != nil else {
             apiModel.getAuth()
             return
         }

@@ -124,7 +124,7 @@ struct PostsView: View {
                             Label("Submit Post", systemImage: "plus")
                         }
                         Button {
-                            if apiModel.selectedAccount == "" {
+                            if apiModel.selectedAccount == nil {
                                 apiModel.getAuth()
                             } else {
                                 postsModel.follow(apiModel: apiModel)
