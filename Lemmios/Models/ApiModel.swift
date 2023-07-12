@@ -78,11 +78,13 @@ class ApiModel: ObservableObject {
             }
             
             if granted, let account = self.accounts.first { $0.username == username } {
-                UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
                 DispatchQueue.main.async {
                     self.accounts[self.accounts.firstIndex { $0.username == username }!].notificationsEnabled = true
                     try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts for \(self.url)")
+                    #if !DEBUG
+                    UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
                     UIApplication.shared.registerForRemoteNotifications()
+                    #endif
                 }
             }
         }
@@ -134,8 +136,10 @@ class ApiModel: ObservableObject {
             timer!.fire()
         }
         if account.notificationsEnabled == true {
+            #if !DEBUG
             UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
             UIApplication.shared.registerForRemoteNotifications()
+            #endif
         }
         self.lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {

@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SearchView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
-    @ObservedObject var searchModel: SearchModel
-    @ObservedObject var searchedModel: SearchedModel
+    @StateObject var searchModel = SearchModel()
+    @StateObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var query = ""
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel

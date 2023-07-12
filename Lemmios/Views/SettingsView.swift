@@ -13,7 +13,6 @@ struct SettingsView: View {
     @AppStorage("fontSize") var fontSize: Double = -1
     @AppStorage("systemFont") var systemFont = true
     @AppStorage("commentImages") var commentImages = true
-    @State var showingChangeInstance = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
@@ -53,13 +52,8 @@ struct SettingsView: View {
                 Toggle("Blur NSFW", isOn: $blurNsfw)
                 SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
-                Button("Change Instance") {
-                    self.showingChangeInstance = true
-                }
-                .popupNavigationView(isPresented: $showingChangeInstance) {
-                    ServerSelectorView {
-                        self.showingChangeInstance = false
-                    }
+                NavigationLink("Change Instance") {
+                    ServerSelectorView()
                 }
             }
             NavigationLink("About", value: SettingsNav.About)

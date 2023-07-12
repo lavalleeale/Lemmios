@@ -20,10 +20,6 @@ struct ContentView: View {
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
     @ObservedObject var settingsNavModel = NavModel(startNavigated: false)
     @ObservedObject var inboxNavModel = NavModel(startNavigated: false)
-    @ObservedObject var searchModel = SearchModel()
-    @ObservedObject var userModel = UserModel(path: "")
-    @ObservedObject var inboxModel = InboxModel()
-    @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var showingAuth = false
     @State var selected = Tab.Posts
     @State var showInvalidUser = false
@@ -33,9 +29,6 @@ struct ContentView: View {
 
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab
-        if apiModel.serverSelected {
-            self.userModel = UserModel(path: apiModel.selectedAccount)
-        }
     }
 
     var selectedNavModel: NavModel? {
@@ -91,7 +84,7 @@ struct ContentView: View {
                             } else if apiModel.selectedAccount == "" {
                                 AuthenticationView()
                             } else {
-                                InboxView(inboxModel: inboxModel)
+                                InboxView()
                                     .navigationTitle("Inbox")
                                     .navigationBarTitleDisplayMode(.inline)
                                     .handleNavigations(navModel: inboxNavModel)
@@ -108,7 +101,7 @@ struct ContentView: View {
                             } else if apiModel.selectedAccount == "" {
                                 AuthenticationView()
                             } else {
-                                UserView(userModel: userModel)
+                                UserView()
                                     .navigationTitle("Accounts")
                                     .navigationBarTitleDisplayMode(.inline)
                                     .handleNavigations(navModel: userNavModel)
@@ -122,7 +115,7 @@ struct ContentView: View {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
                             } else {
-                                SearchView(searchModel: searchModel, searchedModel: searchedModel)
+                                SearchView()
                             }
                         }
                         .handleNavigations(navModel: searchNavModel)
@@ -175,14 +168,8 @@ struct ContentView: View {
                         }
                     }
                 }
-                .onChange(of: apiModel.selectedAccount) { newValue in
-                    showingAuth = false
-                    userModel.name = newValue
-                    userModel.reset()
-                    inboxModel.reset()
-                }
                 .toast(isPresenting: $showInvalidUser) {
-                    AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid token, please relogin. (if using lemmy.world it's their issue)")
+                    AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid token, please relogin.")
                 } completion: {
                     apiModel.invalidUser = nil
                 }

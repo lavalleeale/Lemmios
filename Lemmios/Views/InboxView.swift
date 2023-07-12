@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct InboxView: View {
-    @ObservedObject var inboxModel: InboxModel
+    @StateObject var inboxModel = InboxModel()
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var onlyUnread = true
@@ -69,12 +69,12 @@ struct InboxView: View {
                         Group {
                             ForEach(Array(inboxModel.messages.enumerated()), id: \.element.id) { _, message in
                                 MessageComponent(message: message)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                .onAppear {
-                                    if message.id == inboxModel.messages.last!.id {
-                                        inboxModel.getMessages(apiModel: apiModel, onlyUnread: onlyUnread)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                    .onAppear {
+                                        if message.id == inboxModel.messages.last!.id {
+                                            inboxModel.getMessages(apiModel: apiModel, onlyUnread: onlyUnread)
+                                        }
                                     }
-                                }
                             }
                             if case .failed = inboxModel.messagesStatus {
                                 HStack {
@@ -113,6 +113,11 @@ struct InboxView: View {
             if inboxModel.messages.isEmpty {
                 inboxModel.getMessages(apiModel: apiModel, onlyUnread: onlyUnread)
             }
+        }
+        .onChange(of: apiModel.selectedAccount) { newValue in
+            inboxModel.reset()
+            inboxModel.getReplies(apiModel: apiModel, onlyUnread: onlyUnread)
+            inboxModel.getMessages(apiModel: apiModel, onlyUnread: onlyUnread)
         }
     }
 }
