@@ -274,8 +274,8 @@ class LemmyHttp {
         }
         
         let person_view: ApiUser
-        let comments: [ApiComment]
-        let posts: [ApiPost]
+        let comments: [ApiComment]?
+        let posts: [ApiPost]?
     }
     
     struct ApiUser: Codable, Identifiable {
@@ -344,6 +344,7 @@ class LemmyHttp {
         let community: ApiCommunityData
         let subscribed: String
         let counts: ApiCommunityCounts
+        let blocked: Bool?
     }
     
     struct ApiCommunityCounts: Codable {

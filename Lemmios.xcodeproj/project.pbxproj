@@ -26,6 +26,7 @@
 		FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */ = {isa = PBXBuildFile; productRef = FA44D6BA2A5394D70086AD56 /* SimpleHaptics */; };
 		FA4534AD2A5E38DF00EA9EE8 /* Pictrs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4534AC2A5E38DF00EA9EE8 /* Pictrs.swift */; };
 		FA4534AF2A5E4B7D00EA9EE8 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */; };
+		FA4534B12A5EAC2800EA9EE8 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4534B02A5EAC2800EA9EE8 /* Block.swift */; };
 		FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596242A59C5A500368DBB /* ThemeManger.swift */; };
 		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
@@ -116,6 +117,7 @@
 		FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA4534AC2A5E38DF00EA9EE8 /* Pictrs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pictrs.swift; sourceTree = "<group>"; };
 		FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		FA4534B02A5EAC2800EA9EE8 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		FA4596242A59C5A500368DBB /* ThemeManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManger.swift; sourceTree = "<group>"; };
 		FA4596262A59C83700368DBB /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				FA2A46692A5BA67400DBE134 /* Create.swift */,
 				FA2A466A2A5BA67400DBE134 /* Search.swift */,
 				FA4534AC2A5E38DF00EA9EE8 /* Pictrs.swift */,
+				FA4534B02A5EAC2800EA9EE8 /* Block.swift */,
 			);
 			path = LemmyAPI;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 			files = (
 				FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */,
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
+				FA4534B12A5EAC2800EA9EE8 /* Block.swift in Sources */,
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
@@ -615,7 +619,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -658,7 +662,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;

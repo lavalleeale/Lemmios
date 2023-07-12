@@ -4,6 +4,8 @@ struct UserView: View {
     @EnvironmentObject var apiModel: ApiModel
     @StateObject var userModel = UserModel(path: "")
     @State var selectedTab = UserViewTab.Overview
+    @State var currentUser = false
+    @State var showMessage = false
     var body: some View {
         Group {
             let split = userModel.name.split(separator: "@")
@@ -71,16 +73,52 @@ struct UserView: View {
                 .listStyle(.plain)
                 .navigationTitle(userModel.userData?.person.local == true ? String(name) : userModel.name)
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    if name != apiModel.selectedAccount, userModel.userData != nil {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Menu {
+                                Button {
+                                    showMessage = true
+                                } label: {
+                                    Label("Message", systemImage: "arrowshape.turn.up.left")
+                                }
+                                let blocked = userModel.blocked
+                                Button {
+                                    userModel.block(apiModel: apiModel, block: !blocked)
+                                } label: {
+                                    Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
+                                }
+                            } label: {
+                                VStack {
+                                    Spacer()
+                                    Label("More Options", systemImage: "ellipsis")
+                                        .labelStyle(.iconOnly)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 Text("This should never be seen")
             }
         }.onAppear {
-            userModel.name = apiModel.selectedAccount
-            userModel.reset()
+            if currentUser {
+                userModel.name = apiModel.selectedAccount
+                userModel.reset()
+            }
         }
         .onChange(of: apiModel.selectedAccount) { newValue in
-            userModel.name = newValue
-            userModel.reset()
+            if currentUser {
+                userModel.name = newValue
+                userModel.reset()
+            }
+        }
+        .sheet(isPresented: $showMessage) {
+            CommentSheet(title: "Send Message") { commentBody in
+                userModel.message(content: commentBody, apiModel: apiModel)
+            }
+            .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
     }
 }

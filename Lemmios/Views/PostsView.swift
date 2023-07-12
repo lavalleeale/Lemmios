@@ -130,7 +130,14 @@ struct PostsView: View {
                                 postsModel.follow(apiModel: apiModel)
                             }
                         } label: {
-                            Label(postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "Unfollow" : "Follow", systemImage: postsModel.communityView?.community_view.subscribed != "NotSubscribed" ? "heart.slash" : "heart")
+                            let subscribed = postsModel.communityView?.community_view.subscribed != "NotSubscribed"
+                            Label(subscribed ? "Unfollow" : "Follow", systemImage: subscribed ? "heart.slash" : "heart")
+                        }
+                        let blocked = postsModel.communityView?.community_view.blocked == true
+                        Button {
+                            postsModel.block(apiModel: apiModel, block: !blocked)
+                        } label: {
+                            Label(blocked ? "Unblock" :  "Block", systemImage: "x.circle")
                         }
                     } label: {
                         VStack {

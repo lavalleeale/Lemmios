@@ -101,7 +101,7 @@ struct ContentView: View {
                             } else if apiModel.selectedAccount == "" {
                                 AuthenticationView()
                             } else {
-                                UserView()
+                                UserView(currentUser: true)
                                     .navigationTitle("Accounts")
                                     .navigationBarTitleDisplayMode(.inline)
                                     .handleNavigations(navModel: userNavModel)

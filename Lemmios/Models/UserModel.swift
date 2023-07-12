@@ -24,6 +24,7 @@ class UserModel: ObservableObject, Hashable {
     @Published var savedPageStatus = PostsPageStatus.ready(nextPage: 1)
     
     @Published var name: String
+    @Published var blocked = false
     
     private var userId: Int?
     
@@ -64,19 +65,19 @@ class UserModel: ObservableObject, Hashable {
                 if let user = user {
                     self.userData = user.person_view
                     if saved {
-                        if user.comments.isEmpty && user.posts.isEmpty {
+                        if user.comments!.isEmpty && user.posts!.isEmpty {
                             self.savedPageStatus = .done
                         } else {
-                            self.saved.append(contentsOf: user.comments)
-                            self.saved.append(contentsOf: user.posts)
+                            self.saved.append(contentsOf: user.comments!)
+                            self.saved.append(contentsOf: user.posts!)
                             self.savedPageStatus = .ready(nextPage: page + 1)
                         }
                     } else {
-                        if user.comments.isEmpty && user.posts.isEmpty {
+                        if user.comments!.isEmpty && user.posts!.isEmpty {
                             self.pageStatus = .done
                         } else {
-                            self.comments.append(contentsOf: user.comments)
-                            self.posts.append(contentsOf: user.posts)
+                            self.comments.append(contentsOf: user.comments!)
+                            self.posts.append(contentsOf: user.posts!)
                             self.pageStatus = .ready(nextPage: page + 1)
                         }
                     }
@@ -91,6 +92,19 @@ class UserModel: ObservableObject, Hashable {
     func message(content: String, apiModel: ApiModel) {
         if let userId = userId {
             apiModel.lemmyHttp?.sendMessage(to: userId, content: content) { _, _ in }.store(in: &cancellable)
+        }
+    }
+    
+    func block(apiModel: ApiModel, block: Bool) {
+        if let id = userId {
+            apiModel.lemmyHttp?.blockUser(id: id, block: block) { userView, _ in
+                if let userView = userView {
+                    DispatchQueue.main.async {
+                        self.userData = userView.person_view
+                        self.blocked.toggle()
+                    }
+                }
+            }.store(in: &cancellable)
         }
     }
 }

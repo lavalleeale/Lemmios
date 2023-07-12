@@ -37,8 +37,8 @@ class PostsModel: ObservableObject, Hashable {
         guard case let .ready(page) = pageStatus else {
             return
         }
-        if posts.isEmpty && !specialPostPathList.contains(self.path) {
-            apiModel.lemmyHttp?.getCommunity(name: self.path) { posts, error in
+        if posts.isEmpty && !specialPostPathList.contains(path) {
+            apiModel.lemmyHttp?.getCommunity(name: path) { posts, _ in
                 if let posts = posts {
                     self.communityView = posts
                 }
@@ -85,7 +85,7 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     func createPost(title: String, content: String, url: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView!.community_view.community.id) { post, error in
+        apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView!.community_view.community.id) { post, _ in
             if let postView = post?.post_view {
                 self.posts.insert(postView, at: 0)
                 self.postCreated = true
@@ -95,9 +95,19 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     func follow(apiModel: ApiModel) {
-        apiModel.lemmyHttp?.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, error in
+        apiModel.lemmyHttp?.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, _ in
             self.communityView = communityView
         }.store(in: &cancellable)
+    }
+    
+    func block(apiModel: ApiModel, block: Bool) {
+        if let id = communityView?.community_view.id {
+            apiModel.lemmyHttp?.blockCommunity(id: id, block: block) { communityView, error in
+                if let communityView = communityView {
+                    self.communityView = communityView
+                }
+            }.store(in: &cancellable)
+        }
     }
 }
 
