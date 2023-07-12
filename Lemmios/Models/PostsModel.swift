@@ -84,8 +84,8 @@ class PostsModel: ObservableObject, Hashable {
         fetchPosts(apiModel: apiModel)
     }
     
-    func createPost(type: PostType, title: String, content: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp?.createPost(type: type, title: title, content: content, communityId: communityView!.community_view.community.id) { post, error in
+    func createPost(title: String, content: String, url: String, apiModel: ApiModel) {
+        apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView!.community_view.community.id) { post, error in
             if let postView = post?.post_view {
                 self.posts.insert(postView, at: 0)
                 self.postCreated = true

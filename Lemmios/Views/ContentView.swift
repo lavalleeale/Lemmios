@@ -76,8 +76,6 @@ struct ContentView: View {
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
-                            } else if apiModel.selectedAccount == "" {
-                                AuthenticationView()
                             } else {
                                 HomeView()
                                     .handleNavigations(navModel: homeNavModel)
@@ -90,6 +88,8 @@ struct ContentView: View {
                         ZStack {
                             if !apiModel.serverSelected {
                                 ServerSelectorView()
+                            } else if apiModel.selectedAccount == "" {
+                                AuthenticationView()
                             } else {
                                 InboxView(inboxModel: inboxModel)
                                     .navigationTitle("Inbox")
@@ -182,7 +182,7 @@ struct ContentView: View {
                     inboxModel.reset()
                 }
                 .toast(isPresenting: $showInvalidUser) {
-                    AlertToast(displayMode: .banner(.slide), type: .error(.red), title: "Invalid token for \(apiModel.invalidUser ?? "user"), please relogin.")
+                    AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid token, please relogin. (if using lemmy.world it's their issue)")
                 } completion: {
                     apiModel.invalidUser = nil
                 }

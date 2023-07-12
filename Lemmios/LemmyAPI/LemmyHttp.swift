@@ -7,6 +7,7 @@ let VERSION = "v3"
 
 class LemmyHttp {
     var apiUrl: URL
+    var baseUrl: String
     private var cancellable: Set<AnyCancellable> = Set()
     internal var jwt: String?
     private var encoder = JSONEncoder()
@@ -21,7 +22,8 @@ class LemmyHttp {
         if !baseUrl.contains(/https?:\/\//) {
             baseUrl = "https://" + baseUrl
         }
-        guard let apiUrl = URL(string: "\(baseUrl.lowercased().replacing("/+$", with: ""))/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
+        self.baseUrl = baseUrl.lowercased().replacing("/+$", with: "")
+        guard let apiUrl = URL(string: "\(self.baseUrl)/api/\(VERSION)"), UIApplication.shared.canOpenURL(apiUrl) else {
             throw LemmyError.invalidUrl
         }
         self.apiUrl = apiUrl

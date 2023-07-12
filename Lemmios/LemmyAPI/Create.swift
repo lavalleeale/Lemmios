@@ -1,15 +1,10 @@
-import Foundation
 import Combine
+import Foundation
 
 extension LemmyHttp {
-    func createPost(type: PostType, title: String, content: String, communityId: Int, receiveValue: @escaping (PostView?, NetworkError?) -> Void) -> AnyCancellable {
+    func createPost(title: String, content: String, url: String, communityId: Int, receiveValue: @escaping (PostView?, NetworkError?) -> Void) -> AnyCancellable {
         var body: SentPost {
-            switch type {
-            case .Link:
-                return SentPost(auth: self.jwt!, community_id: communityId, name: title, url: content, body: nil)
-            case .Text:
-                return SentPost(auth: self.jwt!, community_id: communityId, name: title, url: nil, body: content)
-            }
+            return SentPost(auth: self.jwt!, community_id: communityId, name: title, url: url == "" ? nil : url, body: content)
         }
         return makeRequestWithBody(path: "post", responseType: PostView.self, body: body, receiveValue: receiveValue)
     }
