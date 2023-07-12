@@ -1,7 +1,7 @@
 import Combine
 import Foundation
-import SwiftUI
 import OSLog
+import SwiftUI
 
 class PostModel: VotableModel, Hashable {
     private var id = UUID()
@@ -46,10 +46,8 @@ class PostModel: VotableModel, Hashable {
     init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
         if let comment = comment {
             let commentId = Int(comment.comment.path.split(separator: ".").dropLast().last!, radix: 10)
-            if commentId != 0 {
-                self.commentId = commentId
-                self.pageStatus = .done
-            }
+            self.pageStatus = .done
+            self.commentId = commentId
             self.comments = [comment]
         }
         self.detailsStatus = .ready
@@ -108,13 +106,9 @@ class PostModel: VotableModel, Hashable {
             return
         }
         pageStatus = .loading
-        apiModel.lemmyHttp?.getComments(postId: post.id, parentId: commentId, sort: sort) { comments, error in
+        apiModel.lemmyHttp?.getComments(postId: post.id, parentId: commentId != 0 ? commentId : nil, sort: sort) { comments, error in
             if error == nil {
-                if self.commentId == nil {
-                    self.comments.append(contentsOf: comments!.comments)
-                } else {
-                    self.comments = comments!.comments
-                }
+                self.comments.append(contentsOf: comments!.comments)
                 self.pageStatus = .done
             } else {
                 self.pageStatus = .failed

@@ -83,6 +83,8 @@ struct PostView: View {
                 }
                 .listRowSeparator(.hidden)
                 .listRowInsets(.none)
+                Spacer()
+                    .frame(height: 100)
             }
             .scrollContentBackground(.hidden)
             .refreshable {
