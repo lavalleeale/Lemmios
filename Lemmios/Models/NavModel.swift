@@ -16,6 +16,7 @@ class NavModel: ObservableObject {
     }
 
     func clear() {
-        self.path.removeLast(self.startNavigated ? self.path.count - 1 : self.path.count)
+        let keepOne = startNavigated && path.count != 1
+        self.path.removeLast(keepOne ? self.path.count - 1 : self.path.count)
     }
 }

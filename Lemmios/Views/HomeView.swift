@@ -8,21 +8,48 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             ColoredListComponent {
-                NavigationLink("All", value: PostsModel(path: "All"))
-                NavigationLink("Local", value: PostsModel(path: "Local"))
+                HStack {
+                    Image(systemName: "arrow.up")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(3)
+                        .background(.red)
+                        .clipShape(Circle())
+                        .frame(width: 24, height: 24)
+                    NavigationLink("All", value: PostsModel(path: "All"))
+                }
+                HStack {
+                    Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(3)
+                        .background(.blue)
+                        .clipShape(Circle())
+                        .frame(width: 24, height: 24)
+                    NavigationLink("Local", value: PostsModel(path: "Local"))
+                }
                 if let subscribed = apiModel.subscribed {
-                    NavigationLink("Home", value: PostsModel(path: "Subscribed"))
+                    HStack {
+                        Image(systemName: "house")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(3)
+                            .background(.green)
+                            .clipShape(Circle())
+                            .frame(width: 24, height: 24)
+                        NavigationLink("Home", value: PostsModel(path: "Subscribed"))
+                    }
                     ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
                         Section {
                             ForEach(subscribed[firstLetter]!) { community in
                                 if community.local {
                                     NavigationLink(value: PostsModel(path: community.name)) {
-                                        ShowFromComponent(item: community)
+                                        ShowFromComponent(item: community, showPlaceholder: true)
                                     }
                                 } else {
                                     let communityHost = community.actor_id.host()!
                                     NavigationLink(value: PostsModel(path: "\(community.name)@\(communityHost)")) {
-                                        ShowFromComponent(item: community)
+                                        ShowFromComponent(item: community, showPlaceholder: true)
                                     }
                                 }
                             }
