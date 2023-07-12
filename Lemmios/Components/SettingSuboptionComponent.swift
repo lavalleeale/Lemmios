@@ -26,23 +26,3 @@ struct SettingSuboptionComponent<T>: View where T: Equatable, T: HasCustom, T: R
             }
     }
 }
-
-struct DefaultFocusView: View {
-    @State private var custom = ""
-    @FocusState private var isFocused: Bool
-    let customDescription: String
-    let onCommit: (String) -> Void
-    var body: some View {
-        Form {
-            TextField(customDescription, text: $custom, onCommit: {
-                onCommit(custom)
-            })
-            .focused($isFocused)
-            .onAppear {
-                self.isFocused = true
-            }
-            .disableAutocorrection(true)
-            .textInputAutocapitalization(.never)
-        }
-    }
-}

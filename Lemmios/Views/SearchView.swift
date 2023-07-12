@@ -79,6 +79,9 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
     @EnvironmentObject var navModel: NavModel
     let communities: T
     var rising = false
+    
+    var callback: ((LemmyHttp.ApiCommunity)->Void)?
+    
     var body: some View {
         ForEach(communities) { community in
             NavigationLink(
@@ -102,9 +105,13 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                let communityHost = community.community.actor_id.host()!
-                navModel.path.append(PostsModel(
-                    path: community.community.local ? community.community.name : "\(community.community.name)@\(communityHost)"))
+                if let callback = callback {
+                    callback(community)
+                } else {
+                    let communityHost = community.community.actor_id.host()!
+                    navModel.path.append(PostsModel(
+                        path: community.community.local ? community.community.name : "\(community.community.name)@\(communityHost)"))
+                }
             }
             .buttonStyle(.plain)
         }

@@ -6,7 +6,7 @@ let specialPostPathList = ["All", "Subscribed", "Local"]
 
 struct PostsView: View {
     @ObservedObject var postsModel: PostsModel
-    @ObservedObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
+    @StateObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @State var newPath: String = ""
     @State var showingCreate = false
     @EnvironmentObject var navModel: NavModel

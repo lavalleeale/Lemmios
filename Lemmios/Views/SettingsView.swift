@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("defaultStart") var defaultStart = DefaultStart.Subscribed
+    @AppStorage("defaultStart") var defaultStart = DefaultStart.All
     @AppStorage("defaultPostSort") var defaultPostSort = LemmyHttp.Sort.Active
     @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyHttp.Sort.Hot
     @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyHttp.TopTime.All
@@ -51,7 +51,7 @@ struct SettingsView: View {
                     }
                 }
                 Toggle("Blur NSFW", isOn: $blurNsfw)
-                SettingCustomComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, base: "c/", customDescription: "Community Name")
+                DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 NavigationLink("Change Instance", value: SettingsNav.ServerSelector)
                 if apiModel.selectedAccount != nil {
