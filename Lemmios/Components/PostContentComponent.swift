@@ -49,6 +49,20 @@ struct PostContentComponent: View {
                         showingNSFW = true
                     }
                 })
+                .overlay(alignment: .topLeading) {
+                    if post.post.nsfw && blurNsfw {
+                        Button {
+                            withAnimation(.linear(duration: 0.1)) {
+                                showingNSFW.toggle()
+                            }
+                        } label: {
+                            Label(showingNSFW ? "Hide content" : "Show content", systemImage: showingNSFW ? "eye.slash" :  "eye")
+                                .labelStyle(.iconOnly)
+                        }
+                        .buttonStyle(.bordered)
+                        .padding(3)
+                    }
+                }
                 .fullScreenCover(isPresented: $showingImage) {
                     ImageViewerRemote(imageURL: .constant(url.absoluteString), viewerShown: $showingImage, closeButtonTopRight: true) {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false)
@@ -80,6 +94,7 @@ struct PostContentComponent: View {
                                 ForegroundColor(.blue)
                             }
                         )
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxHeight: 100, alignment: .top)
                         .clipped()
                     Spacer()
