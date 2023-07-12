@@ -1,7 +1,5 @@
 import SwiftUI
 
-let defaultServers = ["https://lemmy.world", "https://lemmy.ml", "https://sh.itjust.works", "custom"]
-
 struct ServerSelectorView: View {
     @State var serverUrl = ""
     @State var selected = ""
@@ -9,6 +7,7 @@ struct ServerSelectorView: View {
     @EnvironmentObject var apiModel: ApiModel
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("serverUrl") public var url = ""
+    @AppStorage("servers") var defaultServers = ["https://lemmy.world", "https://lemmy.ml", "https://sh.itjust.works", "custom"]
 
     @State var needsForm = true
     
@@ -78,6 +77,9 @@ struct ServerSelectorView: View {
             Button("Submit") {
                 errorString = apiModel.selectServer(url: selected == "custom" ? serverUrl : selected)
                 if errorString == "" {
+                    if !defaultServers.contains(apiModel.url) {
+                        defaultServers.insert(apiModel.url, at: defaultServers.count - 1)
+                    }
                     callback?()
                 }
             }
