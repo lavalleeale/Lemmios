@@ -35,7 +35,8 @@ class ApiModel: ObservableObject {
             _ = selectServer(url: url)
         }
         if let selectedAccount = UserDefaults.standard.string(forKey: "account"), let account = accounts.first(where: { selectedAccount.contains($0.instance) && selectedAccount.contains($0.username) }) {
-            self.selectedAccount = account
+            selectAuth(account: account)
+            enablePush(account: account)
         }
     }
     
@@ -73,7 +74,7 @@ class ApiModel: ObservableObject {
             accounts.append(account)
             try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
             lemmyHttp?.setJwt(jwt: jwt)
-            selectAuth(account: account, showSubscribe: true)
+            selectAuth(account: account)
             enablePush(account: account)
         }
     }
@@ -127,7 +128,7 @@ class ApiModel: ObservableObject {
         }
     }
     
-    func selectAuth(account: StoredAccount, showSubscribe: Bool = false) {
+    func selectAuth(account: StoredAccount) {
         _ = selectServer(url: account.instance)
         selectedAccount = account
         unreadCount = 0
