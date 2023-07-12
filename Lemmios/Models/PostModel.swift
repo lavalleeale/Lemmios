@@ -134,7 +134,7 @@ class PostModel: VotableModel, Hashable {
     func comment(body: String, apiModel: ApiModel) {
         apiModel.lemmyHttp?.addComment(content: body, postId: post.id, parentId: nil) { response, error in
             if error == nil {
-                if case .done = self.pageStatus, self.comments.count != 0 {
+                if case .done = self.pageStatus {
                     self.comments.insert(response!.comment_view, at: 0)
                 }
             }
