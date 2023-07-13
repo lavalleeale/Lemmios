@@ -63,11 +63,9 @@ struct PostContentComponent: View {
                         .padding(3)
                     }
                 }
-//                .fullScreenCover(isPresented: $showingImage) {
                     ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false)
                     }
-//                }
             } else if let url = post.post.url {
                 LinkPreview(url: url)
                     .type(previewType)
