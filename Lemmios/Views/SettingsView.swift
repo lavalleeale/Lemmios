@@ -45,7 +45,7 @@ struct SettingsView: View {
                 Toggle("Show Images in Comments", isOn: $commentImages)
             }
             Section("Other") {
-                if apiModel.selectedAccount?.notificationsEnabled != true {
+                if apiModel.selectedAccount?.notificationsEnabled == false {
                     Button("Enable push notifications for current account") {
                         apiModel.enablePush(account: apiModel.selectedAccount!)
                     }
