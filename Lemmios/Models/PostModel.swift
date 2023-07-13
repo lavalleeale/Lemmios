@@ -18,6 +18,7 @@ class PostModel: VotableModel, Hashable {
     @Published var score: Int
     @Published var saved: Bool
     @Published var pageStatus = CommentsPageStatus.ready
+    @Published var parentStatus = CommentsPageStatus.ready
     @Published var detailsStatus: CommentsPageStatus
     @Published var sort = LemmyHttp.Sort.Hot
     @Published var comments = [LemmyHttp.ApiComment]()
@@ -56,6 +57,22 @@ class PostModel: VotableModel, Hashable {
         if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
             self.sort = LemmyHttp.Sort(rawValue: defaultCommentSort)!
         }
+    }
+    
+    func getParent(currentDepth: Int, apiModel: ApiModel) {
+        guard case .ready = parentStatus else {
+            return
+        }
+        parentStatus = .loading
+        let split = selectedComment!.comment.path.split(separator: ".")
+        apiModel.lemmyHttp?.getComment(id: Int(split.dropFirst(currentDepth - 2).first!, radix: 10)!) { comment, error in
+            if let comment = comment {
+                self.parentStatus = .ready
+                self.comments.append(comment.comment_view)
+            } else {
+                print(error)
+            }
+        }.store(in: &cancellable)
     }
     
     func getPostDetails(apiModel: ApiModel) {

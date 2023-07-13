@@ -53,10 +53,20 @@ struct PostView: View {
                     let minDepth = postModel.comments.min { $0.comment.path.split(separator: ".").count < $1.comment.path.split(separator: ".").count }?.comment.path.split(separator: ".").count
                     let topLevels = postModel.comments.filter { $0.comment.path.split(separator: ".").count == minDepth }
                     LazyVStack(spacing: 0) {
+                        if let minDepth = minDepth, minDepth > 2 {
+                            HStack {
+                                Image(systemName: "chevron.up")
+                                    .foregroundStyle(Color.accentColor)
+                                Button("Load parent comment...") {
+                                    postModel.getParent(currentDepth: minDepth, apiModel: apiModel)
+                                }
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            Divider()
+                        }
                         ForEach(topLevels) { comment in
                             CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil)
-                                .listRowSeparator(.automatic)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             Divider()
                         }
                         .environmentObject(postModel)
@@ -78,15 +88,11 @@ struct PostView: View {
                             ProgressView()
                             Spacer()
                         }
-                        .listRowSeparator(.hidden)
                     }
                 }
-                .listRowSeparator(.hidden)
-                .listRowInsets(.none)
                 Spacer()
                     .frame(height: 100)
             }
-            .scrollContentBackground(.hidden)
             .refreshable {
                 postModel.refresh(apiModel: apiModel)
             }

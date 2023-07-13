@@ -140,6 +140,11 @@ class LemmyHttp {
         return makeRequest(path: "post", query: query, responseType: PostView.self, receiveValue: receiveValue)
     }
     
+    func getComment(id: Int, receiveValue: @escaping (LemmyHttp.CommentView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
+        let query = [URLQueryItem(name: "id", value: String(id))]
+        return makeRequest(path: "comment", query: query, responseType: CommentView.self, receiveValue: receiveValue)
+    }
+    
     func getCommunity(name: String, receiveValue: @escaping (LemmyHttp.CommunityView?, LemmyHttp.NetworkError?) -> Void) -> AnyCancellable {
         let query = [URLQueryItem(name: "name", value: name)]
         return makeRequest(path: "community", query: query, responseType: CommunityView.self, receiveValue: receiveValue)
