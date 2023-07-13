@@ -1,5 +1,5 @@
 import CachedAsyncImage
-import ImageViewerRemote
+import ImageViewer
 import LinkPresentation
 import LinkPreview
 import MarkdownUI
@@ -56,18 +56,18 @@ struct PostContentComponent: View {
                                 showingNSFW.toggle()
                             }
                         } label: {
-                            Label(showingNSFW ? "Hide content" : "Show content", systemImage: showingNSFW ? "eye.slash" :  "eye")
+                            Label(showingNSFW ? "Hide content" : "Show content", systemImage: showingNSFW ? "eye.slash" : "eye")
                                 .labelStyle(.iconOnly)
                         }
                         .buttonStyle(.bordered)
                         .padding(3)
                     }
                 }
-                .fullScreenCover(isPresented: $showingImage) {
-                    ImageViewerRemote(imageURL: .constant(url.absoluteString), viewerShown: $showingImage, closeButtonTopRight: true) {
+//                .fullScreenCover(isPresented: $showingImage) {
+                    ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false)
                     }
-                }
+//                }
             } else if let url = post.post.url {
                 LinkPreview(url: url)
                     .type(previewType)

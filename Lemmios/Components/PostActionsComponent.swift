@@ -111,9 +111,18 @@ struct PostButtons: View {
             PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
                 showingReply = true
             }
-            PostButton(label: "Share", image: "square.and.arrow.up") {
-                showShareSheet(url: postModel.post.ap_id)
+            ShareLink(item: postModel.post.ap_id) {
+                Label {
+                    Text("Share")
+                } icon: {
+                    Image(systemName: "square.and.arrow.up")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .padding(.all, 10)
+                }
             }
+            .foregroundStyle(.secondary)
         }
     }
     

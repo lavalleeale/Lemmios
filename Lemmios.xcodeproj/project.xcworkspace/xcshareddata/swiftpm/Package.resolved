@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "imageviewer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lavalleeale/ImageViewer",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ff9a29bff2737aca262b74f8092bcc237c8fd59"
+      }
+    },
+    {
       "identity" : "linkpreview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/NuPlay/LinkPreview.git",
@@ -55,30 +64,12 @@
       }
     },
     {
-      "identity" : "swiftui-image-viewer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lavalleeale-forks/swiftui-image-viewer.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "e02868132b3b2d5253dfd700a314d07174051fee"
-      }
-    },
-    {
       "identity" : "swiftuikit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/danielsaidi/SwiftUIKit.git",
       "state" : {
         "revision" : "317d9d55a6a4b3ad12b34760c0ec231eab7f891e",
         "version" : "3.3.0"
-      }
-    },
-    {
-      "identity" : "url-image",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dmytro-anokhin/url-image.git",
-      "state" : {
-        "revision" : "ccab89ad1cedb04f25dd4df1776dd8c8583b914a",
-        "version" : "2.2.5"
       }
     }
   ],

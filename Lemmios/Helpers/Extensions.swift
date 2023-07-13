@@ -1,5 +1,4 @@
 import Foundation
-import ImageViewerRemote
 import SwiftUI
 import SwiftUIKit
 import WebKit
@@ -121,9 +120,9 @@ private struct WithNavigationModifier: ViewModifier {
                         .ignoresSafeArea()
                 }
                 .fullScreenCover(item: $imageUrl) { item in
-                    ImageViewerRemote(imageURL: .constant(item.absoluteString), viewerShown: Binding(get: { true }, set: { self.imageUrl = $0 ? self.imageUrl : nil }), closeButtonTopRight: true) {
-                        EmptyView()
-                    }
+//                    ImageViewerRemote(imageURL: .constant(item.absoluteString), viewerShown: Binding(get: { true }, set: { self.imageUrl = $0 ? self.imageUrl : nil }), closeButtonTopRight: true) {
+//                        EmptyView()
+//                    }
                 }
         }
         .environmentObject(navModel)

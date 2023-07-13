@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */; };
 		FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */; };
+		FA1A33002A5FC2BF000A99CB /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = FA1A32FF2A5FC2BF000A99CB /* ImageViewer */; };
 		FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */; };
 		FA2214932A5B57D80023C696 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2214922A5B57D80023C696 /* SplashView.swift */; };
 		FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */; };
@@ -42,8 +43,6 @@
 		FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */; };
 		FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145072A581F23009DDA23 /* MixedListComponent.swift */; };
 		FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145092A5895D5009DDA23 /* NSFWBadgeComponent.swift */; };
-		FAA1450F2A589CDC009DDA23 /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = FAA1450E2A589CDC009DDA23 /* ImageViewer */; };
-		FAA145112A589CDC009DDA23 /* ImageViewerRemote in Frameworks */ = {isa = PBXBuildFile; productRef = FAA145102A589CDC009DDA23 /* ImageViewerRemote */; };
 		FAA145142A58B89A009DDA23 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145132A58B89A009DDA23 /* AuthModel.swift */; };
 		FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAF8592A524D9500C9BFD8 /* PostPreviewComponent.swift */; };
 		FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAAF85B2A524F0F00C9BFD8 /* PostView.swift */; };
@@ -69,7 +68,6 @@
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
 		FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */; };
 		FAD0930C2A5D0BF600CFEC3E /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */; };
-		FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD411F02A5A8EFF0012DE37 /* Share.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
 		FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD20462A5204B4002CE443 /* Assets.xcassets */; };
@@ -155,7 +153,6 @@
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
-		FAD411F02A5A8EFF0012DE37 /* Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADD20422A5204B3002CE443 /* ArtemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisApp.swift; sourceTree = "<group>"; };
 		FADD20442A5204B3002CE443 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -176,15 +173,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAA1450F2A589CDC009DDA23 /* ImageViewer in Frameworks */,
 				FAAAF8712A52929500C9BFD8 /* SimpleKeychain in Frameworks */,
 				FA72A69B2A577D8A001AFA61 /* LinkPreview in Frameworks */,
 				FAAAF8692A5288CB00C9BFD8 /* MarkdownUI in Frameworks */,
+				FA1A33002A5FC2BF000A99CB /* ImageViewer in Frameworks */,
 				FAAAF86C2A528C6600C9BFD8 /* CachedAsyncImage in Frameworks */,
 				FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */,
 				FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */,
 				FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */,
-				FAA145112A589CDC009DDA23 /* ImageViewerRemote in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,7 +208,6 @@
 			children = (
 				FA72A6972A573DAD001AFA61 /* Extensions.swift */,
 				FADFF8642A560933006F216A /* Markdown.swift */,
-				FAD411F02A5A8EFF0012DE37 /* Share.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -224,6 +219,13 @@
 				FA4596262A59C83700368DBB /* ThemeModifiers.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		FA60B9C02A5FB9E3002A87A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FAAAF8582A524D8700C9BFD8 /* Components */ = {
@@ -257,6 +259,7 @@
 			children = (
 				FADD20412A5204B3002CE443 /* Lemmios */,
 				FADD20402A5204B3002CE443 /* Products */,
+				FA60B9C02A5FB9E3002A87A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -364,8 +367,7 @@
 				FA52397B2A56371D00C80CDD /* SwiftUIKit */,
 				FAF000AC2A5676D700F07E04 /* AlertToast */,
 				FA72A69A2A577D8A001AFA61 /* LinkPreview */,
-				FAA1450E2A589CDC009DDA23 /* ImageViewer */,
-				FAA145102A589CDC009DDA23 /* ImageViewerRemote */,
+				FA1A32FF2A5FC2BF000A99CB /* ImageViewer */,
 			);
 			productName = Artemis;
 			productReference = FADD203F2A5204B3002CE443 /* Lemmios.app */;
@@ -403,7 +405,7 @@
 				FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */,
 				FAF000AB2A5676D700F07E04 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				FA72A6992A577D8A001AFA61 /* XCRemoteSwiftPackageReference "LinkPreview" */,
-				FAA1450D2A589CDC009DDA23 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
+				FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */,
 			);
 			productRefGroup = FADD20402A5204B3002CE443 /* Products */;
 			projectDirPath = "";
@@ -473,7 +475,6 @@
 				FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */,
 				FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */,
 				FA2A46712A5BA67400DBE134 /* Create.swift in Sources */,
-				FAD411F12A5A8EFF0012DE37 /* Share.swift in Sources */,
 				FA4534AD2A5E38DF00EA9EE8 /* Pictrs.swift in Sources */,
 				FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */,
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
@@ -619,7 +620,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -662,7 +663,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -721,6 +722,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lavalleeale/ImageViewer";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hallee/simple-haptics";
@@ -743,14 +752,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.1.0;
-			};
-		};
-		FAA1450D2A589CDC009DDA23 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lavalleeale-forks/swiftui-image-viewer.git";
-			requirement = {
-				branch = master;
-				kind = branch;
 			};
 		};
 		FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
@@ -788,6 +789,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FA1A32FF2A5FC2BF000A99CB /* ImageViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */;
+			productName = ImageViewer;
+		};
 		FA44D6BA2A5394D70086AD56 /* SimpleHaptics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */;
@@ -802,16 +808,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA72A6992A577D8A001AFA61 /* XCRemoteSwiftPackageReference "LinkPreview" */;
 			productName = LinkPreview;
-		};
-		FAA1450E2A589CDC009DDA23 /* ImageViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAA1450D2A589CDC009DDA23 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
-			productName = ImageViewer;
-		};
-		FAA145102A589CDC009DDA23 /* ImageViewerRemote */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAA1450D2A589CDC009DDA23 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
-			productName = ImageViewerRemote;
 		};
 		FAAAF8682A5288CB00C9BFD8 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;

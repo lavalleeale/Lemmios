@@ -34,11 +34,11 @@ struct CommentComponent: View {
                             Button {} label: {
                                 ShowFromComponent(item: commentModel.comment.creator)
                             }
-                                .highPriorityGesture(TapGesture().onEnded {
-                                    navModel.path.append(UserModel(user: commentModel.comment.creator))
-                                })
-                                .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
-                                .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
+                            .highPriorityGesture(TapGesture().onEnded {
+                                navModel.path.append(UserModel(user: commentModel.comment.creator))
+                            })
+                            .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
+                            .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
                             Menu {
@@ -51,9 +51,18 @@ struct CommentComponent: View {
                                         showingReport = true
                                     }
                                 }
-                                PostButton(label: "Share", image: "square.and.arrow.up") {
-                                    showShareSheet(url: commentModel.comment.comment.ap_id)
+                                ShareLink(item: commentModel.comment.comment.ap_id) {
+                                    Label {
+                                        Text("Share")
+                                    } icon: {
+                                        Image(systemName: "square.and.arrow.up")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                            .padding(.all, 10)
+                                    }
                                 }
+                                .foregroundStyle(.secondary)
                             } label: {
                                 Label {
                                     Text("Comment Options")

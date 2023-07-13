@@ -1,6 +1,7 @@
 import AlertToast
 import SafariServices
 import SwiftUI
+import ImageViewer
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -12,7 +13,7 @@ struct ContentView: View {
 
     @Environment(\.colorScheme) var systemColorScheme
     @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
-    
+
     @ObservedObject var selectedTab: StartingTab
     @ObservedObject var apiModel = ApiModel()
     @ObservedObject var homeNavModel = NavModel(startNavigated: true)
