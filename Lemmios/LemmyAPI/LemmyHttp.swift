@@ -376,6 +376,8 @@ class LemmyHttp {
         let nsfw: Bool
         let ap_id: URL
         let local: Bool
+        let featured_community: Bool
+        let featured_local: Bool
     }
     
     struct ApiPostCounts: Codable, WithPublished {

@@ -21,7 +21,6 @@ struct PostPreviewComponent: View {
     }
 
     var body: some View {
-        VStack {
             Button {
                 navModel.path.append(postModel)
             } label: {
@@ -30,6 +29,32 @@ struct PostPreviewComponent: View {
                         Text(postModel.post.name)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
+                        if postModel.post.featured_community {
+                            Label {
+                                Text("Community Pin")
+                            } icon: {
+                                Image(systemName: "pin")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 15, height: 15)
+                                    .rotationEffect(.degrees(45))
+                            }
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(.green)
+                        }
+                        if postModel.post.featured_local {
+                            Label {
+                                Text("Local Pin")
+                            } icon: {
+                                Image(systemName: "pin")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 15, height: 15)
+                                    .rotationEffect(.degrees(45))
+                            }
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(.secondary)
+                        }
                         if postModel.post.nsfw {
                             NSFWBadgeComponent()
                         }
@@ -76,5 +101,4 @@ struct PostPreviewComponent: View {
             }
             .accessibility(identifier: "post id: \(postModel.post.id)")
         }
-    }
 }

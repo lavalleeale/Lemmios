@@ -17,6 +17,16 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>meepzee.lan</key>
+			<string></string>
+		</dict>
+	</dict>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Requires sending auth token (revoked on password change) to Lemmios servers</string>
 	<key>UIApplicationShortcutItems</key>

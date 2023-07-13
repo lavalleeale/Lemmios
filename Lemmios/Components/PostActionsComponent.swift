@@ -30,12 +30,10 @@ struct PostActionsComponent: View {
                                     })
                             }
                             if showUser {
-                                HStack(spacing: 0) {
-                                    ShowFromComponent(item: postModel.creator!)
-                                }
-                                .highPriorityGesture(TapGesture().onEnded {
-                                    navModel.path.append(UserModel(user: postModel.creator!))
-                                })
+                                ShowFromComponent(item: postModel.creator!)
+                                    .highPriorityGesture(TapGesture().onEnded {
+                                        navModel.path.append(UserModel(user: postModel.creator!))
+                                    })
                             }
                         }
                         HStack {

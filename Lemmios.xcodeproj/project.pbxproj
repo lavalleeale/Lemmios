@@ -353,7 +353,6 @@
 				FADD203C2A5204B3002CE443 /* Frameworks */,
 				FADD203D2A5204B3002CE443 /* Resources */,
 				FAFAB4592A5BD9CB00C545BE /* Embed Foundation Extensions */,
-				FAE0683B2A60A1BF00207938 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -428,26 +427,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		FAE0683B2A60A1BF00207938 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/zsh\n#  ci_post_xcodebuild.sh\n\n\nif [[ -d \"$CI_APP_STORE_SIGNED_APP_PATH\" ]]; then\n  TESTFLIGHT_DIR_PATH=../TestFlight\n  mkdir $TESTFLIGHT_DIR_PATH\n  git fetch --deepen 1 && git log -1 --pretty=format:\"%s\" >! $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FADD203B2A5204B3002CE443 /* Sources */ = {
