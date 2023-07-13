@@ -139,7 +139,11 @@ struct PostsView: View {
                         }
                         let blocked = postsModel.communityView?.community_view.blocked == true
                         Button {
-                            postsModel.block(apiModel: apiModel, block: !blocked)
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                postsModel.block(apiModel: apiModel, block: !blocked)
+                            }
                         } label: {
                             Label(blocked ? "Unblock" :  "Block", systemImage: "x.circle")
                         }

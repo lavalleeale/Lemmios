@@ -119,19 +119,32 @@ struct CommentComponent: View {
                 replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
                 SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
             ]) { swiped in
-                if apiModel.selectedAccount == nil {
-                    apiModel.getAuth()
-                } else {
                     switch swiped {
                     case "upvote":
-                        commentModel.vote(direction: true, apiModel: apiModel)
+                        if apiModel.selectedAccount == nil {
+                            apiModel.getAuth()
+                        } else {
+                            commentModel.vote(direction: true, apiModel: apiModel)
+                        }
                     case "downvote":
-                        commentModel.vote(direction: false, apiModel: apiModel)
+                        if apiModel.selectedAccount == nil {
+                            apiModel.getAuth()
+                        } else {
+                            commentModel.vote(direction: false, apiModel: apiModel)
+                        }
                     case "reply":
-                        showingReply = true
+                        if apiModel.selectedAccount == nil {
+                            apiModel.getAuth()
+                        } else {
+                            showingReply = true
+                        }
                     case "read":
-                        commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
-                            read!()
+                        if apiModel.selectedAccount == nil {
+                            apiModel.getAuth()
+                        } else {
+                            commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
+                                read!()
+                            }
                         }
                     case "collapse":
                         withAnimation {
@@ -145,7 +158,6 @@ struct CommentComponent: View {
                     default:
                         break
                     }
-                }
             }
             .overlay {
                 Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)

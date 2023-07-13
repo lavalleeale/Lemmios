@@ -86,7 +86,11 @@ struct UserView: View {
                                     }
                                     let blocked = userModel.blocked
                                     Button {
-                                        userModel.block(apiModel: apiModel, block: !blocked)
+                                        if apiModel.selectedAccount == nil {
+                                            apiModel.getAuth()
+                                        } else {
+                                            userModel.block(apiModel: apiModel, block: !blocked)
+                                        }
                                     } label: {
                                         Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
                                     }
