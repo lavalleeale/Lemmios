@@ -45,7 +45,7 @@ struct PostView: View {
                     if postModel.creator != nil {
                         PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false)
                             .onAppear {
-                                if postModel.comments.count == (postModel.commentId == nil ? 0 : 1) {
+                                if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
                                     postModel.fetchComments(apiModel: apiModel)
                                 }
                             }
@@ -90,7 +90,7 @@ struct PostView: View {
             .refreshable {
                 postModel.refresh(apiModel: apiModel)
             }
-            .toast(isPresenting: .constant(postModel.commentId != nil && postModel.community != nil), duration: .infinity) {
+            .toast(isPresenting: .constant(postModel.selectedComment != nil && postModel.community != nil), duration: .infinity) {
                 AlertToast(displayMode: .banner(.pop), type: .regular, title: "View All Comments", subTitle: "This is a single comment thread from the post.", style: .style(backgroundColor: .blue, titleColor: .primary, subTitleColor: .secondary))
             } onTap: {
                 navModel.path.append(PostModel(post: LemmyHttp.ApiPost(post: postModel.post, creator: postModel.creator!, community: postModel.community!, counts: postModel.counts!, my_vote: postModel.likes, saved: postModel.saved)))

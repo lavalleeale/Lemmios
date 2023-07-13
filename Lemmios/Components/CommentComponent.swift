@@ -184,6 +184,10 @@ struct CommentComponent: View {
             .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
             .clipped()
         }
+        .overlay {
+            Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)
+                .allowsHitTesting(false)
+        }
         .alert("Report", isPresented: $showingReport) {
             TextField("Reason", text: $reportReason)
             Button("OK") {

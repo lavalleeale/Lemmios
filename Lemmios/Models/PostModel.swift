@@ -27,7 +27,7 @@ class PostModel: VotableModel, Hashable {
     @Published var creator: LemmyHttp.ApiUserData?
     @Published var community: LemmyHttp.ApiCommunityData?
     @Published var counts: LemmyHttp.ApiPostCounts?
-    @Published var commentId: Int?
+    @Published var selectedComment: LemmyHttp.ApiComment?
     
     init(post: LemmyHttp.ApiPost) {
         self.detailsStatus = .done
@@ -45,9 +45,7 @@ class PostModel: VotableModel, Hashable {
     
     init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
         if let comment = comment {
-            let commentId = Int(comment.comment.path.split(separator: ".").dropLast().last!, radix: 10)
-            self.pageStatus = .done
-            self.commentId = commentId
+            self.selectedComment = comment
             self.comments = [comment]
         }
         self.detailsStatus = .ready
@@ -106,9 +104,10 @@ class PostModel: VotableModel, Hashable {
             return
         }
         pageStatus = .loading
-        apiModel.lemmyHttp?.getComments(postId: post.id, parentId: commentId != 0 ? commentId : nil, sort: sort) { comments, error in
+        let parentId = selectedComment == nil ? 0 : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last!, radix: 10)
+        apiModel.lemmyHttp?.getComments(postId: post.id, parentId: parentId, sort: sort) { comments, error in
             if error == nil {
-                self.comments.append(contentsOf: comments!.comments)
+                self.comments = comments!.comments
                 self.pageStatus = .done
             } else {
                 self.pageStatus = .failed
