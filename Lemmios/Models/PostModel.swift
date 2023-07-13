@@ -104,7 +104,10 @@ class PostModel: VotableModel, Hashable {
             return
         }
         pageStatus = .loading
-        let parentId = selectedComment == nil ? 0 : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last!, radix: 10)
+        var parentId = selectedComment == nil ? nil : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last!, radix: 10)
+        if parentId == 0 {
+            parentId = nil
+        }
         apiModel.lemmyHttp?.getComments(postId: post.id, parentId: parentId, sort: sort) { comments, error in
             if error == nil {
                 self.comments = comments!.comments
