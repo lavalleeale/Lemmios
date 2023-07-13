@@ -147,6 +147,10 @@ struct CommentComponent: View {
                     }
                 }
             }
+            .overlay {
+                Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)
+                    .allowsHitTesting(false)
+            }
             if commentModel.comment.counts.child_count != 0 && commentModel.children.isEmpty && !preview {
                 Divider()
                     .padding(.leading, CGFloat(depth + 1) * 10)
@@ -166,7 +170,7 @@ struct CommentComponent: View {
                 .frame(maxWidth: .infinity)
                 .commentDepthIndicator(depth: depth + 1)
             }
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 let directChildren = commentModel.children.filter { isCommentParent(parentId: commentModel.comment.id, possibleChild: $0) }
                 ForEach(directChildren) { comment in
                     Divider()
@@ -183,10 +187,6 @@ struct CommentComponent: View {
             .allowsHitTesting(!collapsed)
             .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
             .clipped()
-        }
-        .overlay {
-            Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)
-                .allowsHitTesting(false)
         }
         .alert("Report", isPresented: $showingReport) {
             TextField("Reason", text: $reportReason)
