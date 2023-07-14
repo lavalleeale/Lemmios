@@ -1,6 +1,7 @@
 import SimpleHaptics
 import SwiftUI
 import OSLog
+import SimpleKeychain
 
 class StartingTab: ObservableObject {
     @Published var requestedTab: String?
@@ -13,6 +14,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        
+        if ProcessInfo().arguments.contains("test") {
+            UIView.setAnimationsEnabled(false)
+            UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+            try! SimpleKeychain().deleteAll()
+        }
 
         if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
             startingTab.requestedTab = "Inbox"

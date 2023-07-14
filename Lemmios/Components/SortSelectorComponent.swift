@@ -62,7 +62,8 @@ struct SortSelectorComponent: View {
                 }
             }
         } label: {
-            Image(systemName: currentSort.image)
+            Label("Sort", systemImage: currentSort.image)
+                .labelStyle(.iconOnly)
         }
     }
 }

@@ -14,70 +14,64 @@ struct PostsView: View {
 
     var body: some View {
         let isSpecialPath = specialPostPathList.contains(postsModel.path)
-        ZStack {
-            if apiModel.serverSelected {
-                ColoredListComponent {
-                    ForEach(postsModel.posts) { post in
-                        VStack {
-                            PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
-                                .onAppear {
-                                    if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
-                                        postsModel.fetchPosts(apiModel: apiModel)
-                                    }
-                                }
-                            Rectangle()
-                                .fill(.secondary.opacity(0.1))
-                                .frame(height: 10)
-                        }
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .listRowSeparator(.hidden)
-                    }
-                    if postsModel.notFound {
-                        Text("Community not found.")
-                    } else if case .failed = postsModel.pageStatus {
-                        HStack {
-                            Text("Lemmy Request Failed, ")
-                            Button("refresh?") {
-                                postsModel.refresh(apiModel: apiModel)
+        ColoredListComponent {
+            ForEach(postsModel.posts) { post in
+                VStack {
+                    PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
+                        .onAppear {
+                            if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
+                                postsModel.fetchPosts(apiModel: apiModel)
                             }
                         }
-                        .listRowSeparator(.hidden)
-                    } else if case .done = postsModel.pageStatus {
-                        Text("Last Post Found ):")
-                            .listRowSeparator(.hidden)
-                    } else if case .loading = postsModel.pageStatus {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                        .listRowSeparator(.hidden)
-                    }
+                    Rectangle()
+                        .fill(.secondary.opacity(0.1))
+                        .frame(height: 10)
                 }
-                .listStyle(.plain)
-                .refreshable {
-                    withAnimation {
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowSeparator(.hidden)
+            }
+            if postsModel.notFound {
+                Text("Community not found.")
+            } else if case .failed = postsModel.pageStatus {
+                HStack {
+                    Text("Lemmy Request Failed, ")
+                    Button("refresh?") {
                         postsModel.refresh(apiModel: apiModel)
                     }
                 }
-                .onAppear {
-                    postsModel.fetchPosts(apiModel: apiModel)
+                .listRowSeparator(.hidden)
+            } else if case .done = postsModel.pageStatus {
+                Text("Last Post Found ):")
+                    .listRowSeparator(.hidden)
+            } else if case .loading = postsModel.pageStatus {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
                 }
-                .overlay {
-                    if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
-                        ColoredListComponent(customBackground: .black.opacity(0.25)) {
-                            CommmunityListComponent(communities: communities)
-                        }
-                        .onTapGesture {
-                            withAnimation(.linear(duration: 0.1)) {
-                                newPath = ""
-                            }
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        }
+                .listRowSeparator(.hidden)
+            }
+        }
+        .listStyle(.plain)
+        .refreshable {
+            withAnimation {
+                postsModel.refresh(apiModel: apiModel)
+            }
+        }
+        .onAppear {
+            postsModel.fetchPosts(apiModel: apiModel)
+        }
+        .overlay {
+            if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
+                ColoredListComponent(customBackground: .black.opacity(0.25)) {
+                    CommmunityListComponent(communities: communities)
+                }
+                .onTapGesture {
+                    withAnimation(.linear(duration: 0.1)) {
+                        newPath = ""
                     }
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
-            } else {
-                ServerSelectorView()
             }
         }
         .onChange(of: apiModel.selectedAccount) { _ in
@@ -145,7 +139,7 @@ struct PostsView: View {
                                 postsModel.block(apiModel: apiModel, block: !blocked)
                             }
                         } label: {
-                            Label(blocked ? "Unblock" :  "Block", systemImage: "x.circle")
+                            Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
                         }
                     } label: {
                         VStack {

@@ -72,6 +72,7 @@ struct ContentView: View {
                                 NavigationView {
                                     ServerSelectorView()
                                 }
+                                .navigationViewStyle(.stack)
                             } else {
                                 HomeView()
                                     .handleNavigations(navModel: homeNavModel)
@@ -86,6 +87,7 @@ struct ContentView: View {
                                 NavigationView {
                                     ServerSelectorView()
                                 }
+                                .navigationViewStyle(.stack)
                             } else if apiModel.selectedAccount == nil {
                                 NavigationView {
                                     AuthenticationView()
@@ -107,10 +109,12 @@ struct ContentView: View {
                                 NavigationView {
                                     ServerSelectorView()
                                 }
+                                .navigationViewStyle(.stack)
                             } else if apiModel.selectedAccount == nil {
                                 NavigationView {
                                     AuthenticationView()
                                 }
+                                .navigationViewStyle(.stack)
                             } else {
                                 UserView(currentUser: true)
                                     .navigationTitle("Accounts")
@@ -127,6 +131,7 @@ struct ContentView: View {
                                 NavigationView {
                                     ServerSelectorView()
                                 }
+                                .navigationViewStyle(.stack)
                             } else {
                                 SearchView()
                             }
