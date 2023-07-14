@@ -6,6 +6,7 @@ struct ShowFromComponent<T: WithNameHost>: View {
     @State var item: T
     @State var showPlaceholder = false
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
+    @AppStorage("showCommuntiies") var showCommuntiies = true
 
     var body: some View {
         HStack {
@@ -26,9 +27,8 @@ struct ShowFromComponent<T: WithNameHost>: View {
                         Text(item.name.first!.uppercased())
                     }
             }
-            if item.local {
+            if item.local || !showCommuntiies {
                 Text(item.name)
-                    .font(.caption)
                     .lineLimit(1)
             } else {
                 let itemHost = item.actor_id.host()!

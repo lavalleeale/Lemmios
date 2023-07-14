@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage("systemFont") var systemFont = true
     @AppStorage("commentImages") var commentImages = true
     @AppStorage("compact") var compactPosts = false
+    @AppStorage("showCommuntiies") var showCommuntiies = true
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -21,6 +22,9 @@ struct SettingsView: View {
 
     var body: some View {
         ColoredListComponent {
+            Section("General") {
+                Toggle("Show community names", isOn: $showCommuntiies)
+            }
             Section("Appearance") {
                 SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
                 SettingViewComponent(selection: $colorScheme, desciption: "Color Scheme", options: ColorScheme.allCases)
