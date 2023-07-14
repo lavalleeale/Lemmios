@@ -107,9 +107,9 @@ struct PostContentComponent: View {
                     }
                 }
             }
-//            if !preview, let body = post.post.body {
-//                Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
-//            }
+            if !preview, let body = post.post.body {
+                Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
+            }
         }
     }
 }
