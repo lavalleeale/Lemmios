@@ -4,7 +4,7 @@ final class MainTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
     }
-    
+
     func testSearch() throws {
         let app = XCUIApplication()
         app.launchArguments.append("test")
@@ -21,7 +21,7 @@ final class MainTests: XCTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.textFields["Search"].tap()
         app.textFields["Search"].typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 3)
- + "alex")
+            + "alex")
         app.buttons["Users with \"alex\""].tap()
         XCTAssert(app.staticTexts["alex95712"].waitForExistence(timeout: 10))
     }
@@ -39,8 +39,9 @@ final class MainTests: XCTestCase {
         let post = app.buttons.containing(postPredicate).firstMatch
         post.tap()
         let showMore = app.buttons["Show 2 More"]
+        app.scrollTo(showMore)
         XCTAssert(showMore.waitForExistence(timeout: 10))
-            showMore.tap()
+        showMore.tap()
         XCTAssert(app.staticTexts["tenth"].waitForExistence(timeout: 10))
         let comment = app.staticTexts["first"]
         comment.tap()
@@ -81,5 +82,16 @@ extension XCUIApplication {
         textFields["Server URL"].tap()
         textFields["Server URL"].typeText("https://lemmy.lavallee.one")
         buttons["Submit"].tap()
+    }
+
+    func scrollTo(_ element: XCUIElement) {
+        var count = 0
+        let relativeTouchPoint = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        let relativeOffset = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: -1))
+        while !element.exists {
+            relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset)
+            XCTAssert(count < 10)
+            count += 1
+        }
     }
 }

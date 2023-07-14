@@ -25,14 +25,7 @@ final class ScreenshotTests: XCTestCase {
         add(normalAttachment)
         app.buttons["Settings"].tap()
         let compact = app.switches["Compact Posts"]
-        var count = 0
-        let relativeTouchPoint = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        let relativeOffset = app.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: -1))
-        while !compact.exists {
-            relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset)
-            XCTAssert(count < 10)
-            count += 1
-        }
+        app.scrollTo(compact)
         compact.switches.firstMatch.tap()
         app.buttons["Posts"].tap()
         XCTAssert(app.staticTexts["Comment Depth"].waitForExistence(timeout: 10))
