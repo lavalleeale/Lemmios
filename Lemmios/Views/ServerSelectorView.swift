@@ -74,7 +74,7 @@ struct ServerSelectorView: View {
                 }
                 .foregroundColor(.accentColor)
             }
-            Button("Submit") {
+            Button("Select") {
                 errorString = apiModel.selectServer(url: selected == "custom" ? serverUrl : selected)
                 if errorString == "" {
                     if !defaultServers.contains(apiModel.url) {

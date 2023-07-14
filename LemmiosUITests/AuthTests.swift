@@ -20,7 +20,7 @@ final class AuthTests: XCTestCase {
         app.scrollTo(password)
         password.tap()
         password.typeText(ProcessInfo().environment["PASSWORD"]! + "\n")
-        let submit = app.buttons.matching(identifier: "Submit").allElementsBoundByIndex[1]
+        let submit = app.buttons["Submit"]
         app.scrollTo(submit)
         submit.tap()
         XCTAssert(app.staticTexts["Account Age"].waitForExistence(timeout: 10))
