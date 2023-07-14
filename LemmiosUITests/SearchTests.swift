@@ -13,7 +13,6 @@ final class SearchTests: XCTestCase {
         app.textFields["All"].tap()
         app.textFields["All"].typeText("artemis")
         XCTAssert(app.staticTexts["artemistesting"].waitForExistence(timeout: 10))
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         app.textFields["All"].typeText("\n")
         app.buttons["Search"].tap()
         app.textFields["Search"].tap()
