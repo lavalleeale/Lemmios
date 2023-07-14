@@ -38,7 +38,9 @@ final class MainTests: XCTestCase {
         let postPredicate = NSPredicate(format: "label CONTAINS[c] %@", "Comment Depth")
         let post = app.buttons.containing(postPredicate).firstMatch
         post.tap()
-        app.buttons["Show 2 More"].tap()
+        let showMore = app.buttons["Show 2 More"]
+        XCTAssert(showMore.waitForExistence(timeout: 10))
+            showMore.tap()
         XCTAssert(app.staticTexts["tenth"].waitForExistence(timeout: 10))
         let comment = app.staticTexts["first"]
         comment.tap()
