@@ -9,7 +9,7 @@ class DBModel {
     static var instance = DBModel()
     init() {
         db = try! Connection(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("read.db").absoluteString)
-        if UserDefaults.standard.bool(forKey: "dbCopied") == false {
+        if !UserDefaults.standard.bool(forKey: "dbCopied") {
             UserDefaults.standard.set(true, forKey: "dbCopied")
             try! db.run(readPosts.create { t in
                 t.column(id, primaryKey: true)

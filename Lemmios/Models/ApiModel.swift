@@ -16,11 +16,13 @@ class ApiModel: ObservableObject {
     @Published var showingAuth = false
     @Published var unreadCount = 0
     @Published var invalidUser: String?
+    @Published var siteInfo: LemmyHttp.SiteInfo?
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
     private var cancellable = Set<AnyCancellable>()
+    private var serverInfoCancellable: AnyCancellable?
     
     private var timer: Timer?
     
@@ -42,6 +44,25 @@ class ApiModel: ObservableObject {
     
     func getAuth() {
         showingAuth = true
+    }
+    
+    func verifyServer(url: String, receiveValue: @escaping (String?, LemmyHttp.SiteInfo?)->Void) {
+        siteInfo = nil
+        do {
+            lemmyHttp = try LemmyHttp(baseUrl: url)
+            serverInfoCancellable = lemmyHttp?.getSiteInfo { siteInfo, error in
+                print(siteInfo, error)
+                if let siteInfo = siteInfo {
+                    receiveValue(nil, siteInfo)
+                } else {
+                    receiveValue("Not a lemmy server", nil)
+                }
+            }
+        } catch LemmyHttp.LemmyError.invalidUrl {
+            receiveValue("Invalid URL", nil)
+        } catch {
+            receiveValue("Unknown Error", nil)
+        }
     }
     
     func selectServer(url: String) -> String {
@@ -154,21 +175,21 @@ class ApiModel: ObservableObject {
         }
         lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {
-                self.subscribed = [:]
-                siteInfo.my_user.follows.map { $0.community }.forEach { community in
-                    let nameString = community.name
-                    let firstCharacter = nameString.first!.uppercased()
-                    
-                    if let array = self.subscribed![firstCharacter] {
-                        var newArray = array
-                        newArray.append(community)
-                        self.subscribed![firstCharacter] = newArray.sorted { $0.name > $1.name }
-                    } else {
-                        self.subscribed![firstCharacter] = [community]
+                if let user = siteInfo.my_user {
+                    self.subscribed = [:]
+                    user.follows.map { $0.community }.forEach { community in
+                        let nameString = community.name
+                        let firstCharacter = nameString.first!.uppercased()
+                        
+                        if let array = self.subscribed![firstCharacter] {
+                            var newArray = array
+                            newArray.append(community)
+                            self.subscribed![firstCharacter] = newArray.sorted { $0.name > $1.name }
+                        } else {
+                            self.subscribed![firstCharacter] = [community]
+                        }
                     }
-                }
-            } else if case let .decoding(_, error) = error {
-                if (error as CustomDebugStringConvertible).debugDescription.contains("my_user") {
+                } else {
                     self.invalidUser = account.username
                     self.deleteAuth(account: account)
                 }

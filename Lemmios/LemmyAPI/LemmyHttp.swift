@@ -400,7 +400,17 @@ class LemmyHttp {
     }
     
     struct SiteInfo: Codable {
-        let my_user: MyUser
+        let my_user: MyUser?
+        let site_view: SiteView
+    }
+    
+    struct SiteView: Codable {
+        let site: Site
+    }
+    
+    struct Site: Codable {
+        let name: String
+        let description: String?
     }
     
     struct MyUser: Codable {
@@ -490,8 +500,8 @@ public extension Publisher {
         scheduler: S
     ) -> AnyPublisher<Output, Failure> where S: Scheduler {
         delayIfFailure(for: delay, scheduler: scheduler) { error in
-            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error, code >= 400, code < 500 {
-                return false
+            if let error = error as? LemmyHttp.NetworkError, case let .network(code, _) = error {
+                return !(code <= 0 || (code >= 400 && code < 500))
             } else {
                 return true
             }

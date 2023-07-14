@@ -3,7 +3,8 @@ import SwiftUI
 struct ServerSelectorView: View {
     @State var serverUrl = ""
     @State var selected = ""
-    @State var errorString = ""
+    @State var errorString: String?
+    @State var siteInfo: LemmyHttp.SiteInfo?
     @EnvironmentObject var apiModel: ApiModel
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("serverUrl") public var url = ""
@@ -15,14 +16,16 @@ struct ServerSelectorView: View {
 
     var body: some View {
         Group {
-            if errorString != "" {
-                Text(errorString)
-                    .foregroundColor(.red)
-            }
             Section {
                 Picker("Server", selection: $selected) {
                     ForEach(defaultServers, id: \.self) {
                         Text($0)
+                    }
+                }
+                .onChange(of: selected == "custom" ? serverUrl : selected) { newValue in
+                    apiModel.verifyServer(url: newValue) { error, siteInfo in
+                        errorString = error
+                        self.siteInfo = siteInfo
                     }
                 }
                 if selected == "custom" {
@@ -36,6 +39,18 @@ struct ServerSelectorView: View {
                             errorString = apiModel.selectServer(url: serverUrl)
                         }
                         .padding()
+                }
+                if let errorString = errorString {
+                    Text(errorString)
+                        .foregroundColor(.red)
+                } else if let siteInfo = siteInfo?.site_view.site {
+                    VStack(alignment: .leading) {
+                        Text(siteInfo.name)
+                        if let description = siteInfo.description {
+                            Text(description)
+                                .font(.caption)
+                        }
+                    }
                 }
             }
             HStack(spacing: 0) {
@@ -75,8 +90,8 @@ struct ServerSelectorView: View {
                 .foregroundColor(.accentColor)
             }
             Button("Select") {
-                errorString = apiModel.selectServer(url: selected == "custom" ? serverUrl : selected)
-                if errorString == "" {
+                if errorString == nil {
+                    _ = apiModel.selectServer(url: selected == "custom" ? serverUrl : selected)
                     if !defaultServers.contains(apiModel.url) {
                         defaultServers.insert(apiModel.url, at: defaultServers.count - 1)
                     }
