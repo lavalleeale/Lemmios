@@ -9,14 +9,16 @@ struct PostView: View {
     @EnvironmentObject var navModel: NavModel
     @State var collapsed: Bool = false
     @State var parentContent: String? = nil
+    @State var showingPost = false
 
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(selectedTheme.backgroundColor)
-            ScrollView(.vertical) {
-                Group {
-                    VStack {
+            ScrollViewReader { value in
+                ScrollView(.vertical) {
+                    // Hack to make sure appear methods are called
+                    LazyVStack {
                         Text(postModel.post.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .bold()
@@ -26,6 +28,16 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 30)
                             PostContentComponent(post: postModel, preview: false)
+                                .onAppear {
+                                    withAnimation {
+                                        showingPost = true
+                                    }
+                                }
+                                .onDisappear {
+                                    withAnimation {
+                                        showingPost = false
+                                    }
+                                }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
@@ -67,6 +79,10 @@ struct PostView: View {
                         }
                         ForEach(topLevels) { comment in
                             CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil)
+                                .if(comment.id == topLevels.first!.id) { view in
+                                    view
+                                        .id("Comments")
+                                }
                             Divider()
                         }
                         .environmentObject(postModel)
@@ -89,9 +105,27 @@ struct PostView: View {
                             Spacer()
                         }
                     }
+
+                    Spacer()
+                        .frame(height: 100)
                 }
-                Spacer()
-                    .frame(height: 100)
+                .overlay(alignment: .bottomTrailing) {
+                    if showingPost {
+                        Button {
+                            withAnimation {
+                                value.scrollTo("Comments", anchor: .top)
+                            }
+                        } label: {
+                            Label("Scroll to Comments", systemImage: "chevron.down")
+                                .labelStyle(.iconOnly)
+                        }
+                        .foregroundStyle(.primary)
+                        .padding(20)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .padding([.bottom, .trailing], 5)
+                    }
+                }
             }
             .refreshable {
                 postModel.refresh(apiModel: apiModel)
