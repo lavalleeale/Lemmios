@@ -6,16 +6,14 @@ struct AuthenticationView: View {
     @EnvironmentObject var apiModel: ApiModel
     @ObservedObject var authModel = AuthModel()
     @Environment(\.dismiss) private var dismiss
-    @State var currentInstanceOnly = false
 
     var body: some View {
         ZStack {
             if !apiModel.serverSelected {
                 ServerSelectorView()
-            } else if currentInstanceOnly, apiModel.accounts.filter({ $0.instance == apiModel.lemmyHttp!.apiUrl.host() }).isEmpty {
+            } else if apiModel.accounts.filter({ $0.instance == apiModel.lemmyHttp!.apiUrl.host() }).isEmpty {
                 AuthFormComponent(authModel: authModel)
             } else {
-                NavigationView {
                     ColoredListComponent {
                         ForEach(apiModel.accounts) { account in
                             Button {
@@ -56,7 +54,6 @@ struct AuthenticationView: View {
                         }
                     })
                 }
-            }
         }
     }
 }

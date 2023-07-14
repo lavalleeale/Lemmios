@@ -87,7 +87,9 @@ struct ContentView: View {
                                     ServerSelectorView()
                                 }
                             } else if apiModel.selectedAccount == nil {
-                                AuthenticationView(currentInstanceOnly: true)
+                                NavigationView {
+                                    AuthenticationView()
+                                }
                             } else {
                                 InboxView()
                                     .navigationTitle("Inbox")
@@ -106,7 +108,9 @@ struct ContentView: View {
                                     ServerSelectorView()
                                 }
                             } else if apiModel.selectedAccount == nil {
-                                AuthenticationView()
+                                NavigationView {
+                                    AuthenticationView()
+                                }
                             } else {
                                 UserView(currentUser: true)
                                     .navigationTitle("Accounts")
