@@ -52,6 +52,7 @@ struct PostsView: View {
                 .listRowSeparator(.hidden)
             }
         }
+        .coordinateSpace(name: "posts")
         .listStyle(.plain)
         .refreshable {
             withAnimation {
@@ -93,7 +94,15 @@ struct PostsView: View {
             navModel.path.append(PostModel(post: postsModel.createdPost!))
         }
         .navigationBarTitle((postsModel.path != "") ? postsModel.path : "All", displayMode: .inline)
-        .toolbar(content: {
+        .toolbar(content: { navigationBar })
+        .sheet(isPresented: $showingCreate) {
+            PostCreateComponent(postsModel: postsModel)
+        }
+    }
+
+    var navigationBar: some ToolbarContent {
+        Group {
+            let isSpecialPath = specialPostPathList.contains(postsModel.path)
             ToolbarItem(placement: .principal) {
                 TextField((postsModel.path == "") ? "All" : postsModel.path, text: $newPath, onCommit: {
                     navModel.path.append(PostsModel(path: newPath))
@@ -151,9 +160,6 @@ struct PostsView: View {
                     }
                 }
             }
-        })
-        .sheet(isPresented: $showingCreate) {
-            PostCreateComponent(postsModel: postsModel)
         }
     }
 }

@@ -15,6 +15,9 @@ struct SettingsView: View {
     @AppStorage("commentImages") var commentImages = true
     @AppStorage("compact") var compactPosts = false
     @AppStorage("showCommuntiies") var showCommuntiies = true
+    @AppStorage("hideRead") var hideRead = false
+    @AppStorage("enableRead") var enableRead = true
+    @AppStorage("readOnScroll") var readOnScroll = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -30,9 +33,9 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $colorScheme, desciption: "Color Scheme", options: ColorScheme.allCases)
                 Toggle("Pure Black Dark Mode", isOn: $pureBlack)
                 ZStack {
-                    Slider(value: systemFont ? .constant(sizeDouble(size: size)) : $fontSize, in: 0...Double(DynamicTypeSize.allCases.filter {!$0.isAccessibilitySize}.count - 1), step: 1)
+                    Slider(value: systemFont ? .constant(sizeDouble(size: size)) : $fontSize, in: 0...Double(DynamicTypeSize.allCases.filter { !$0.isAccessibilitySize }.count - 1), step: 1)
                     HStack {
-                        ForEach(0...(DynamicTypeSize.allCases.filter {!$0.isAccessibilitySize}.count - 1), id: \.self) { _ in
+                        ForEach(0...(DynamicTypeSize.allCases.filter { !$0.isAccessibilitySize }.count - 1), id: \.self) { _ in
                             Divider()
                                 .frame(maxWidth: .infinity)
                         }
@@ -43,6 +46,7 @@ struct SettingsView: View {
                 Toggle("Use System Font Size", isOn: $systemFont)
             }
             Section("Posts") {
+                NavigationLink("Marking Read / Hiding", value: SettingsNav.Read)
                 Toggle("Compact Posts", isOn: $compactPosts)
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
             }
@@ -63,7 +67,7 @@ struct SettingsView: View {
                 if apiModel.selectedAccount != nil {
                     Button("Delete Account") {
                         showingDelete = true
-                    }                    
+                    }
                 }
             }
             NavigationLink("About", value: SettingsNav.About)
@@ -71,6 +75,7 @@ struct SettingsView: View {
         }
         .alert("Delete Account", isPresented: $showingDelete) {
             Button("OK", role: .cancel) {}
+            Link("Vist Instance", destination: URL(string: "\(apiModel.lemmyHttp!.baseUrl)/settings")!)
         } message: {
             Text("To delete your Lemmy account, you müst first visit \(apiModel.url) and sign in. Then navigate to the Profile tab. You may delete your account by pressing \"Delete Account\".")
         }
@@ -84,8 +89,19 @@ struct SettingsView: View {
             case .About:
                 AboutView()
             case .ServerSelector:
-                ServerSelectorView() {
+                ServerSelectorView {
                     navModel.clear()
+                }
+            case .Read:
+                ColoredListComponent {
+                    Toggle("Disable Marking Posts Read", isOn: Binding(get: { !enableRead }, set: { enableRead = !$0 }))
+                    if enableRead {
+                        Toggle("Auto Hide Read Posts", isOn: $hideRead)
+                        Toggle("Mark Read On Scroll", isOn: $readOnScroll)
+                    }
+                    Button("Clear Read") {
+                        DBModel.instance.clear()
+                    }
                 }
             }
         }
@@ -95,7 +111,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector
+    case About, ServerSelector, Read
 }
 
 protocol HasCustom {

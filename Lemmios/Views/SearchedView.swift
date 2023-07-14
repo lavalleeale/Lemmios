@@ -23,6 +23,7 @@ struct SearchedView: View {
                             }
                     }
                 }
+                .coordinateSpace(name: "posts")
                 .listStyle(.plain)
                 .onFirstAppear {
                     searchedModel.fetchPosts(apiModel: apiModel)

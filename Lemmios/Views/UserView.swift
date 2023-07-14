@@ -67,6 +67,7 @@ struct UserView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
+                .coordinateSpace(name: "posts")
                 .refreshable {
                     userModel.reset()
                     userModel.fetchData(apiModel: apiModel, saved: selectedTab == UserViewTab.Saved)

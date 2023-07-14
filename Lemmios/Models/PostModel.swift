@@ -17,6 +17,7 @@ class PostModel: VotableModel, Hashable {
     @Published var likes: Int
     @Published var score: Int
     @Published var saved: Bool
+    @Published var read: Bool
     @Published var pageStatus = CommentsPageStatus.ready
     @Published var parentStatus = CommentsPageStatus.ready
     @Published var detailsStatus: CommentsPageStatus
@@ -31,6 +32,7 @@ class PostModel: VotableModel, Hashable {
     @Published var selectedComment: LemmyHttp.ApiComment?
     
     init(post: LemmyHttp.ApiPost) {
+        self.read = DBModel.instance.isRead(postId: post.post.id)
         self.detailsStatus = .done
         self.post = post.post
         self.creator = post.creator
@@ -45,6 +47,7 @@ class PostModel: VotableModel, Hashable {
     }
     
     init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
+        self.read = DBModel.instance.isRead(postId: post.id)
         if let comment = comment {
             self.selectedComment = comment
             self.comments = [comment]

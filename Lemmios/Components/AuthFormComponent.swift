@@ -58,7 +58,7 @@ struct AuthFormComponent: View {
                         .textInputAutocapitalization(.none)
                 }
             }
-            Button("Login") {
+            Button("Submit") {
                 if selectedTab == .Login {
                     authModel.login(apiModel: apiModel, info: .init(username_or_email: username, password: password, totp_2fa_token: totpResponse.isEmpty ? nil : totpResponse))
                 } else {

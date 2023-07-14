@@ -16,7 +16,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         UNUserNotificationCenter.current().delegate = self
         
         if ProcessInfo().arguments.contains("test") {
+            #if targetEnvironment(simulator)
+            // Disable hardware keyboards.
+            let setHardwareLayout = NSSelectorFromString("setHardwareLayout:")
+            UITextInputMode.activeInputModes
+                // Filter `UIKeyboardInputMode`s.
+                .filter { $0.responds(to: setHardwareLayout) }
+                .forEach { $0.perform(setHardwareLayout, with: nil) }
+            #endif
             UIView.setAnimationsEnabled(false)
+            try? FileManager.default.removeItem(at: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("read.db"))
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
             try! SimpleKeychain().deleteAll()
         }
@@ -28,7 +37,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
+
         startingTab.requestedTab = "Inbox"
 
         completionHandler()

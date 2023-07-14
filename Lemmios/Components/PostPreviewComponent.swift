@@ -9,6 +9,8 @@ struct PostPreviewComponent: View {
     @ObservedObject var postModel: PostModel
     @State private var offset: CGFloat = 0
     @State var showingReply = false
+    @AppStorage("enableRead") var enableRead = true
+    @AppStorage("readOnScroll") var readOnScroll = false
 
     let showCommunity: Bool
     let showUser: Bool
@@ -21,6 +23,10 @@ struct PostPreviewComponent: View {
 
     var body: some View {
         Button {
+            if enableRead {
+                postModel.read = true
+                DBModel.instance.read(postId: postModel.post.id)
+            }
             navModel.path.append(postModel)
         } label: {
             HStack {
@@ -34,6 +40,7 @@ struct PostPreviewComponent: View {
                         Text(postModel.post.name)
                             .lineLimit(2)
                             .multilineTextAlignment(.leading)
+                            .foregroundStyle(postModel.read ? .secondary : .primary)
                         if postModel.post.featured_community {
                             Label {
                                 Text("Community Pin")
@@ -105,6 +112,19 @@ struct PostPreviewComponent: View {
                     }
                 }
             }
+        }
+        .overlay(alignment: .bottom) {
+            GeometryReader { geo in
+                let pos = geo.frame(in: CoordinateSpace.named("posts")).origin.y
+                Rectangle()
+                    .onChange(of: pos) { [pos] newValue in
+                        if enableRead, readOnScroll, pos >= 0, newValue < 0 {
+                            DBModel.instance.read(postId: postModel.post.id)
+                            postModel.read = true
+                        }
+                    }
+            }
+            .frame(height: 0)
         }
         .sheet(isPresented: $showingReply) {
             CommentSheet(title: "Add Comment") { commentBody in

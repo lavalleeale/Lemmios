@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SwiftUI
 
 class PostsModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -21,6 +22,8 @@ class PostsModel: ObservableObject, Hashable {
     @Published var postCreated = false
     @Published var createdPost: LemmyHttp.ApiPost?
     @Published var notFound = false
+    @AppStorage("hideRead") var hideRead = false
+    @AppStorage("enableRead") var enableRead = true
     var path: String
     
     init(path: String) {
@@ -50,8 +53,14 @@ class PostsModel: ObservableObject, Hashable {
                 if posts.posts.isEmpty {
                     self.pageStatus = .done
                 } else {
-                    self.posts.append(contentsOf: posts.posts)
+                    let posts = posts.posts.filter { post in
+                        return !(self.hideRead && self.enableRead) || !DBModel.instance.isRead(postId: post.id)
+                    }
+                    self.posts.append(contentsOf: posts)
                     self.pageStatus = .ready(nextPage: page + 1)
+                    if posts.isEmpty {
+                        self.fetchPosts(apiModel: apiModel)
+                    }
                 }
             } else {
                 if case let .network(code, _) = error! {

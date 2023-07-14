@@ -32,6 +32,10 @@
 		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
+		FA5A46102A61C1E70041D11B /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = FA5A460F2A61C1E70041D11B /* SQLite */; };
+		FA5A46122A61C2B30041D11B /* DBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A46112A61C2B30041D11B /* DBModel.swift */; };
+		FA5A461B2A61E2670041D11B /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A461A2A61E2670041D11B /* SearchTests.swift */; };
+		FA5A461D2A61E26F0041D11B /* AuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A461C2A61E26F0041D11B /* AuthTests.swift */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
 		FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68B2A572151001AFA61 /* SearchView.swift */; };
 		FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68D2A57228A001AFA61 /* SearchModel.swift */; };
@@ -39,7 +43,7 @@
 		FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6912A5729AE001AFA61 /* SearchedModel.swift */; };
 		FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */; };
 		FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6972A573DAD001AFA61 /* Extensions.swift */; };
-		FA96B4EB2A61105300053BBF /* MainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96B4EA2A61105300053BBF /* MainTests.swift */; };
+		FA96B4EB2A61105300053BBF /* CommentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96B4EA2A61105300053BBF /* CommentTests.swift */; };
 		FA96B4F22A612E2900053BBF /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */; };
 		FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */; };
 		FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145072A581F23009DDA23 /* MixedListComponent.swift */; };
@@ -131,6 +135,9 @@
 		FA4596242A59C5A500368DBB /* ThemeManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManger.swift; sourceTree = "<group>"; };
 		FA4596262A59C83700368DBB /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
+		FA5A46112A61C2B30041D11B /* DBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBModel.swift; sourceTree = "<group>"; };
+		FA5A461A2A61E2670041D11B /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
+		FA5A461C2A61E26F0041D11B /* AuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTests.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -141,7 +148,7 @@
 		FA72A6972A573DAD001AFA61 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lemmios.entitlements; sourceTree = "<group>"; };
 		FA96B4E62A61105300053BBF /* LemmiosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LemmiosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA96B4EA2A61105300053BBF /* MainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTests.swift; sourceTree = "<group>"; };
+		FA96B4EA2A61105300053BBF /* CommentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTests.swift; sourceTree = "<group>"; };
 		FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeaderComponent.swift; sourceTree = "<group>"; };
 		FAA145072A581F23009DDA23 /* MixedListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedListComponent.swift; sourceTree = "<group>"; };
@@ -201,6 +208,7 @@
 				FAE0683E2A60AC9700207938 /* LinkPreview in Frameworks */,
 				FAAAF86C2A528C6600C9BFD8 /* CachedAsyncImage in Frameworks */,
 				FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */,
+				FA5A46102A61C1E70041D11B /* SQLite in Frameworks */,
 				FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */,
 				FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */,
 			);
@@ -253,8 +261,10 @@
 		FA96B4E72A61105300053BBF /* LemmiosUITests */ = {
 			isa = PBXGroup;
 			children = (
-				FA96B4EA2A61105300053BBF /* MainTests.swift */,
+				FA96B4EA2A61105300053BBF /* CommentTests.swift */,
 				FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */,
+				FA5A461A2A61E2670041D11B /* SearchTests.swift */,
+				FA5A461C2A61E26F0041D11B /* AuthTests.swift */,
 			);
 			path = LemmiosUITests;
 			sourceTree = "<group>";
@@ -371,6 +381,7 @@
 				FAEE08D32A5A06CB00B54142 /* InboxModel.swift */,
 				FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */,
 				FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */,
+				FA5A46112A61C2B30041D11B /* DBModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -419,6 +430,7 @@
 				FAF000AC2A5676D700F07E04 /* AlertToast */,
 				FA1A32FF2A5FC2BF000A99CB /* ImageViewer */,
 				FAE0683D2A60AC9700207938 /* LinkPreview */,
+				FA5A460F2A61C1E70041D11B /* SQLite */,
 			);
 			productName = Artemis;
 			productReference = FADD203F2A5204B3002CE443 /* Lemmios.app */;
@@ -461,6 +473,7 @@
 				FAF000AB2A5676D700F07E04 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */,
 				FAE0683C2A60AC9700207938 /* XCRemoteSwiftPackageReference "LinkPreview" */,
+				FA5A460E2A61C1E70041D11B /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 			);
 			productRefGroup = FADD20402A5204B3002CE443 /* Products */;
 			projectDirPath = "";
@@ -496,8 +509,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA96B4EB2A61105300053BBF /* MainTests.swift in Sources */,
+				FA5A461B2A61E2670041D11B /* SearchTests.swift in Sources */,
+				FA96B4EB2A61105300053BBF /* CommentTests.swift in Sources */,
 				FA96B4F22A612E2900053BBF /* ScreenshotTests.swift in Sources */,
+				FA5A461D2A61E26F0041D11B /* AuthTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +535,7 @@
 				FAAAF8612A5256EB00C9BFD8 /* SortSelectorComponent.swift in Sources */,
 				FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */,
 				FABEC3062A54064E00620E9A /* NavModel.swift in Sources */,
+				FA5A46122A61C2B30041D11B /* DBModel.swift in Sources */,
 				FA2214932A5B57D80023C696 /* SplashView.swift in Sources */,
 				FA2A466F2A5BA67400DBE134 /* Vote.swift in Sources */,
 				FAF5D5422A53EC2800FDA8D9 /* PostActionsComponent.swift in Sources */,
@@ -874,6 +890,14 @@
 				minimumVersion = 3.3.0;
 			};
 		};
+		FA5A460E2A61C1E70041D11B /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
+			};
+		};
 		FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -931,6 +955,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */;
 			productName = SwiftUIKit;
+		};
+		FA5A460F2A61C1E70041D11B /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA5A460E2A61C1E70041D11B /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
 		};
 		FAAAF8682A5288CB00C9BFD8 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
