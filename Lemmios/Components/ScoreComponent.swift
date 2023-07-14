@@ -7,10 +7,11 @@ struct ScoreComponent<T: VotableModel>: View {
     @EnvironmentObject var apiModel: ApiModel
 
     var body: some View {
-        HStack(spacing: 3) {
+        HStack(spacing: 0) {
             Image(systemName: "arrow.up")
-                .scaleEffect(0.8)
+                .scaleEffect(0.5)
             Text(formatNum(num: votableModel.score))
+                .font(.caption)
         }
         .accessibility(addTraits: .isButton)
         .onTapGesture {

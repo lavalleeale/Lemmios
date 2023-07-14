@@ -11,27 +11,29 @@ let imageExtensions = ["png", "jpeg", "jpg", "heic", "bmp", "webp"]
 struct PostContentComponent: View {
     @ObservedObject var post: PostModel
     @AppStorage("blurNSFW") var blurNsfw = true
-    @State var preview: Bool
+    @AppStorage("compact") var compact = false
+    let preview: Bool
     @State var showingNSFW = false
     @State var showingImage = false
     @Environment(\.openURL) private var openURL
     @EnvironmentObject var apiModel: ApiModel
 
-    var previewType: LinkPreviewType = .auto
-
     var body: some View {
-        VStack {
+        let showCompact = compact && preview
+        Group {
             if let url = post.post.url, imageExtensions.contains(url.pathExtension) {
                 CachedAsyncImage(url: preview ? post.post.thumbnail_url ?? url : url, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
-                        .scaledToFit()
+                        .aspectRatio(showCompact ? 1 : nil, contentMode: showCompact ? .fill : .fit)
+                        .clipped()
+                        .cornerRadius(showCompact ? 12 : 0)
                 }, placeholder: {
                     if !preview, let thumbnail_url = post.post.thumbnail_url {
                         CachedAsyncImage(url: thumbnail_url, urlCache: .imageCache, content: { image in
                             image
                                 .resizable()
-                                .scaledToFit()
+                                .aspectRatio(contentMode: showCompact ? .fill : .fit)
                         }, placeholder: {
                             ProgressView()
                         })
@@ -62,15 +64,15 @@ struct PostContentComponent: View {
                         .buttonStyle(.bordered)
                         .padding(3)
                     }
-                }
                     ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
-                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false)
+                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false, preview: false)
                     }
+                }
             } else if let url = post.post.url {
                 LinkPreview(url: url)
-                    .type(previewType)
+                    .type(showCompact ? .small : .large)
                     .disabled(true)
-                    .frame(minHeight: 50)
+                    .frame(maxHeight: showCompact ? 100 : nil)
                     .blur(radius: !blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
                     .padding(!blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
                     .highPriorityGesture(TapGesture().onEnded {
@@ -82,25 +84,32 @@ struct PostContentComponent: View {
                         }
                     })
             } else if preview, let body = post.post.body {
-                HStack {
-                    Markdown(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!)
-                        .markdownTheme(MarkdownUI.Theme()
-                            .text {
-                                ForegroundColor(.secondary)
-                            }
-                            .link {
-                                ForegroundColor(.blue)
-                            }
-                        )
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxHeight: 100, alignment: .top)
-                        .clipped()
-                    Spacer()
+                if showCompact {
+                    Image(systemName: "text.aligncenter")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(10)
+                } else {
+                    HStack {
+                        Markdown(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!)
+                            .markdownTheme(MarkdownUI.Theme()
+                                .text {
+                                    ForegroundColor(.secondary)
+                                }
+                                .link {
+                                    ForegroundColor(.blue)
+                                }
+                            )
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxHeight: 100, alignment: .top)
+                            .clipped()
+                        Spacer()
+                    }
                 }
             }
-            if !preview, let body = post.post.body {
-                Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
-            }
+//            if !preview, let body = post.post.body {
+//                Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
+//            }
         }
     }
 }

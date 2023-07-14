@@ -43,7 +43,7 @@ struct PostView: View {
                         }
                     }
                     if postModel.creator != nil {
-                        PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false)
+                        PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, preview: false)
                             .onAppear {
                                 if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
                                     postModel.fetchComments(apiModel: apiModel)

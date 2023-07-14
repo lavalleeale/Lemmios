@@ -14,20 +14,21 @@ struct ShowFromComponent<T: WithNameHost>: View {
                     image
                         .resizable()
                         .clipShape(Circle())
-                        .frame(width: 24, height: 24)
+                        .frame(width: 12, height: 12)
                 }, placeholder: {
                     ProgressView()
                 })
             } else if showPlaceholder {
                 Circle()
                     .fill(selectedTheme.secondaryColor)
-                    .frame(width: 24, height: 24)
+                    .frame(width: 12, height: 12)
                     .overlay {
                         Text(item.name.first!.uppercased())
                     }
             }
             if item.local {
                 Text(item.name)
+                    .font(.caption)
                     .lineLimit(1)
             } else {
                 let itemHost = item.actor_id.host()!

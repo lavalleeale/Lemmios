@@ -13,6 +13,7 @@ struct SettingsView: View {
     @AppStorage("fontSize") var fontSize: Double = -1
     @AppStorage("systemFont") var systemFont = true
     @AppStorage("commentImages") var commentImages = true
+    @AppStorage("compact") var compactPosts = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -38,6 +39,7 @@ struct SettingsView: View {
                 Toggle("Use System Font Size", isOn: $systemFont)
             }
             Section("Posts") {
+                Toggle("Compact Posts", isOn: $compactPosts)
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
             }
             Section("Comments") {

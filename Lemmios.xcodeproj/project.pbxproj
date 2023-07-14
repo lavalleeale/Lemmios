@@ -39,7 +39,6 @@
 		FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6912A5729AE001AFA61 /* SearchedModel.swift */; };
 		FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */; };
 		FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6972A573DAD001AFA61 /* Extensions.swift */; };
-		FA72A69B2A577D8A001AFA61 /* LinkPreview in Frameworks */ = {isa = PBXBuildFile; productRef = FA72A69A2A577D8A001AFA61 /* LinkPreview */; };
 		FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */; };
 		FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145072A581F23009DDA23 /* MixedListComponent.swift */; };
 		FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145092A5895D5009DDA23 /* NSFWBadgeComponent.swift */; };
@@ -76,6 +75,7 @@
 		FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20582A520A4A002CE443 /* ApiModel.swift */; };
 		FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */; };
 		FADFF8652A560933006F216A /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADFF8642A560933006F216A /* Markdown.swift */; };
+		FAE0683E2A60AC9700207938 /* LinkPreview in Frameworks */ = {isa = PBXBuildFile; productRef = FAE0683D2A60AC9700207938 /* LinkPreview */; };
 		FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D12A5A06A100B54142 /* InboxView.swift */; };
 		FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE08D32A5A06CB00B54142 /* InboxModel.swift */; };
 		FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = FAF000AC2A5676D700F07E04 /* AlertToast */; };
@@ -174,9 +174,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAAAF8712A52929500C9BFD8 /* SimpleKeychain in Frameworks */,
-				FA72A69B2A577D8A001AFA61 /* LinkPreview in Frameworks */,
 				FAAAF8692A5288CB00C9BFD8 /* MarkdownUI in Frameworks */,
 				FA1A33002A5FC2BF000A99CB /* ImageViewer in Frameworks */,
+				FAE0683E2A60AC9700207938 /* LinkPreview in Frameworks */,
 				FAAAF86C2A528C6600C9BFD8 /* CachedAsyncImage in Frameworks */,
 				FAF000AD2A5676D700F07E04 /* AlertToast in Frameworks */,
 				FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */,
@@ -366,8 +366,8 @@
 				FA44D6BA2A5394D70086AD56 /* SimpleHaptics */,
 				FA52397B2A56371D00C80CDD /* SwiftUIKit */,
 				FAF000AC2A5676D700F07E04 /* AlertToast */,
-				FA72A69A2A577D8A001AFA61 /* LinkPreview */,
 				FA1A32FF2A5FC2BF000A99CB /* ImageViewer */,
+				FAE0683D2A60AC9700207938 /* LinkPreview */,
 			);
 			productName = Artemis;
 			productReference = FADD203F2A5204B3002CE443 /* Lemmios.app */;
@@ -404,8 +404,8 @@
 				FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */,
 				FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */,
 				FAF000AB2A5676D700F07E04 /* XCRemoteSwiftPackageReference "AlertToast" */,
-				FA72A6992A577D8A001AFA61 /* XCRemoteSwiftPackageReference "LinkPreview" */,
 				FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */,
+				FAE0683C2A60AC9700207938 /* XCRemoteSwiftPackageReference "LinkPreview" */,
 			);
 			productRefGroup = FADD20402A5204B3002CE443 /* Products */;
 			projectDirPath = "";
@@ -746,14 +746,6 @@
 				minimumVersion = 3.3.0;
 			};
 		};
-		FA72A6992A577D8A001AFA61 /* XCRemoteSwiftPackageReference "LinkPreview" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/NuPlay/LinkPreview.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 		FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
@@ -776,6 +768,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
+			};
+		};
+		FAE0683C2A60AC9700207938 /* XCRemoteSwiftPackageReference "LinkPreview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lavalleeale-forks/LinkPreview.git";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 		FAF000AB2A5676D700F07E04 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
@@ -804,11 +804,6 @@
 			package = FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */;
 			productName = SwiftUIKit;
 		};
-		FA72A69A2A577D8A001AFA61 /* LinkPreview */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FA72A6992A577D8A001AFA61 /* XCRemoteSwiftPackageReference "LinkPreview" */;
-			productName = LinkPreview;
-		};
 		FAAAF8682A5288CB00C9BFD8 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
@@ -823,6 +818,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FAAAF86F2A52929500C9BFD8 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
 			productName = SimpleKeychain;
+		};
+		FAE0683D2A60AC9700207938 /* LinkPreview */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAE0683C2A60AC9700207938 /* XCRemoteSwiftPackageReference "LinkPreview" */;
+			productName = LinkPreview;
 		};
 		FAF000AC2A5676D700F07E04 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;

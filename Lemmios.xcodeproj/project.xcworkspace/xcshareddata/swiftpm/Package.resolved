@@ -21,10 +21,10 @@
     {
       "identity" : "linkpreview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/NuPlay/LinkPreview.git",
+      "location" : "https://github.com/lavalleeale-forks/LinkPreview.git",
       "state" : {
-        "revision" : "14ed9e55ee4ce651de85ce3a86daceba10214fea",
-        "version" : "1.1.0"
+        "branch" : "main",
+        "revision" : "11c26206314a854d6097d8a5e5c493fee6c70210"
       }
     },
     {

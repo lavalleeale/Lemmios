@@ -6,17 +6,20 @@ struct PostActionsComponent: View {
     @ObservedObject var postModel: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
+    @AppStorage("compact") var compact = false
     
     let showCommunity: Bool
     let showUser: Bool
     let collapsedButtons: Bool
     var showInfo = true
+    var showArrows = true
+    let preview: Bool
     
     var body: some View {
         VStack {
             HStack {
                 if showInfo {
-                    VStack(alignment: .leading) {
+                    DynamicStack(vertical: !compact || !preview) {
                         HStack {
                             if showCommunity {
                                 ShowFromComponent(item: postModel.community!)
@@ -36,41 +39,70 @@ struct PostActionsComponent: View {
                                     })
                             }
                         }
-                        HStack {
+                        HStack(spacing: 0) {
                             ScoreComponent(votableModel: postModel)
-                            HStack {
-                                HStack(spacing: 3) {
+                            Group {
+                                HStack(spacing: 0) {
                                     Image(systemName: "bubble.left.and.bubble.right")
+                                        .scaleEffect(0.5)
                                     Text(formatNum(num: postModel.counts!.comments))
+                                        .font(.caption)
                                 }
-                                HStack(spacing: 3) {
+                                HStack(spacing: 0) {
                                     Image(systemName: "clock")
+                                        .scaleEffect(0.5)
                                     Text(postModel.counts!.published.relativeDateAsString())
+                                        .font(.caption)
                                 }
                             }
                             .foregroundStyle(.secondary)
                         }
                     }
+                }
+                if !compact || !preview {
                     Spacer()
                 }
                 if collapsedButtons {
                     HStack {
                         PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true)
                             .foregroundStyle(.secondary)
-                        ArrowsComponent(votableModel: postModel)
+                        if showArrows {
+                            ArrowsComponent(votableModel: postModel)                            
+                        }
                     }
+                }
+                if compact && preview {
+                    Spacer()
                 }
             }
             if !collapsedButtons {
                 Divider()
                 HStack {
                     Group {
-                        ArrowsComponent(votableModel: postModel)
+                        if showArrows {
+                            ArrowsComponent(votableModel: postModel)
+                        }
                         PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Divider()
+            }
+        }
+    }
+}
+
+struct DynamicStack<Content: View>: View {
+    let vertical: Bool
+    @ViewBuilder var content: Content
+    var body: some View {
+        if vertical {
+            VStack(alignment: .leading) {
+                content
+            }
+        } else {
+            HStack {
+                content
             }
         }
     }

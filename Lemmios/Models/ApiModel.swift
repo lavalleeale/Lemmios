@@ -49,7 +49,7 @@ class ApiModel: ObservableObject {
         do {
             lemmyHttp = try LemmyHttp(baseUrl: url)
             self.url = String(lemmyHttp!.baseUrl)
-            if let storedAccount = UserDefaults.standard.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.absoluteString) {
+            if let storedAccount = UserDefaults.standard.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.host()!) {
                 UserDefaults.standard.removeObject(forKey: "account")
             }
             serverSelected = true
