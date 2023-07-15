@@ -19,6 +19,7 @@ class PostsModel: ObservableObject, Hashable {
     @Published var sort = LemmyApi.Sort.Active
     @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
+    @Published var skipped = 0
     @Published var communityView: LemmyApi.CommunityView?
     @Published var postCreated = false
     @Published var createdPost: LemmyApi.ApiPost?
@@ -55,7 +56,11 @@ class PostsModel: ObservableObject, Hashable {
                     self.pageStatus = .done
                 } else {
                     let posts = posts.posts.filter { post in
-                        return !(self.hideRead && self.enableRead) || !DBModel.instance.isRead(postId: post.id)
+                        let shouldShow = !(self.hideRead && self.enableRead) || !DBModel.instance.isRead(postId: post.id)
+                        if !shouldShow {
+                            self.skipped += 1
+                        }
+                        return shouldShow
                     }
                     self.posts.append(contentsOf: posts)
                     self.pageStatus = .ready(nextPage: page + 1)

@@ -47,6 +47,9 @@ struct PostsView: View {
                 HStack {
                     Spacer()
                     ProgressView()
+                    if postsModel.skipped != 0 {
+                        Text("Loaded and skipped \(postsModel.skipped) read posts")
+                    }
                     Spacer()
                 }
                 .listRowSeparator(.hidden)
