@@ -309,3 +309,23 @@ extension UINavigationController: UIGestureRecognizerDelegate {
         return viewControllers.count > 1
     }
 }
+
+private struct ShowUsernames: EnvironmentKey {
+    static let defaultValue = true
+}
+
+private struct ShowCommunities: EnvironmentKey {
+    static let defaultValue = true
+}
+
+extension EnvironmentValues {
+    var showUsernames: Bool {
+        get { self[ShowUsernames.self] }
+        set { self[ShowUsernames.self] = newValue }
+    }
+
+    var showCommunities: Bool {
+        get { self[ShowCommunities.self] }
+        set { self[ShowCommunities.self] = newValue }
+    }
+}

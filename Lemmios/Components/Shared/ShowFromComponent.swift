@@ -7,11 +7,12 @@ struct UserLink: View {
     var showPlaceholder = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
+    @Environment(\.showUsernames) var showUsernames: Bool
 
     var body: some View {
         let model = UserModel(user: user)
         Button {} label: {
-            ShowFromComponent(item: user, showPlaceholder: showPlaceholder)
+            ShowFromComponent(item: user, showPlaceholder: showPlaceholder, show: showUsernames)
         }
         .highPriorityGesture(TapGesture().onEnded {
             navModel.path.append(model)
@@ -33,13 +34,14 @@ struct CommunityLink<Prefix: View, Suffix: View>: View {
     var showPlaceholder = false
     @ViewBuilder var prefix: Prefix
     @ViewBuilder var suffix: Suffix
+    @Environment(\.showCommunities) var showCommunities: Bool
 
     var body: some View {
         let model = PostsModel(path: "\(community.name)\(community.local ? "" : "@\(community.actor_id.host()!)")")
         Button {} label: {
             HStack {
                 prefix
-                ShowFromComponent(item: community, showPlaceholder: showPlaceholder)
+                ShowFromComponent(item: community, showPlaceholder: showPlaceholder, show: showCommunities)
                 suffix
             }
         }
@@ -60,8 +62,10 @@ private struct ShowFromComponent<T: WithNameHost>: View {
     @EnvironmentObject var apiModel: ApiModel
     @State var item: T
     var showPlaceholder = false
+    var show: Bool
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("showCommuntiies") var showCommuntiies = true
+    @Environment(\.redactionReasons) private var reasons
 
     var body: some View {
         HStack {
@@ -73,6 +77,7 @@ private struct ShowFromComponent<T: WithNameHost>: View {
                         .frame(width: 12, height: 12)
                 }, placeholder: {
                     ProgressView()
+                        .hidden(if: reasons.contains(.screenshot))
                 })
             } else if showPlaceholder {
                 Circle()
@@ -90,6 +95,9 @@ private struct ShowFromComponent<T: WithNameHost>: View {
                 Text("\(item.name)\(Text("@\(itemHost)").foregroundColor(.secondary))")
                     .lineLimit(1)
             }
+        }
+        .if(!show) { view in
+            view.redacted(reason: .placeholder)
         }
     }
 }

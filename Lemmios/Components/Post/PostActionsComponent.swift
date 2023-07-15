@@ -11,6 +11,7 @@ struct PostActionsComponent: View {
     let showCommunity: Bool
     let showUser: Bool
     let collapsedButtons: Bool
+    let rowButtons: Bool
     var showInfo = true
     var showArrows = true
     let preview: Bool
@@ -53,10 +54,10 @@ struct PostActionsComponent: View {
                 }
                 if collapsedButtons {
                     HStack {
-                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true)
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true, showAll: true)
                             .foregroundStyle(.secondary)
                         if showArrows {
-                            ArrowsComponent(votableModel: postModel)                            
+                            ArrowsComponent(votableModel: postModel)
                         }
                     }
                 }
@@ -64,14 +65,14 @@ struct PostActionsComponent: View {
                     Spacer()
                 }
             }
-            if !collapsedButtons {
+            if rowButtons {
                 Divider()
                 HStack {
                     Group {
                         if showArrows {
                             ArrowsComponent(votableModel: postModel)
                         }
-                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false)
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false, showAll: false)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -106,9 +107,11 @@ struct PostButtons: View {
     @State var showingReply = false
     @State var showingReport = false
     @State var reportReason = ""
+    @State var showingShare = false
     
     var showViewComments: Bool
     var menu: Bool
+    var showAll: Bool
     
     var buttons: some View {
         Group {
@@ -118,7 +121,7 @@ struct PostButtons: View {
                     navModel.path.append(postModel)
                 }
             }
-            if menu {
+            if showAll {
                 PostButton(label: "Report", image: "flag") {
                     showingReport = true
                 }
@@ -129,6 +132,19 @@ struct PostButtons: View {
             }
             PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
                 showingReply = true
+            }
+            if showAll {
+                Button() {showingShare = true} label: {
+                    Label {
+                        Text("Share as Image")
+                    } icon: {
+                        Image(systemName: "square.and.arrow.up")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 20, height: 20)
+                            .padding(.all, 10)
+                    }
+                }
             }
             ShareLink(item: postModel.post.ap_id) {
                 Label {
@@ -160,6 +176,9 @@ struct PostButtons: View {
                 buttons
                     .labelStyle(.iconOnly)
             }
+        }
+        .overlay {
+            PostSharePreview(postModel: postModel, isPresented: $showingShare, comments: [])
         }
         .sheet(isPresented: $showingReply) {
             CommentSheet(title: "Add Comment") { commentBody in

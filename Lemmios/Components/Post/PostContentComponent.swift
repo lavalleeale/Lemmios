@@ -16,6 +16,7 @@ struct PostContentComponent: View {
     @State var showingNSFW = false
     @State var showingImage = false
     @Environment(\.openURL) private var openURL
+    @Environment(\.redactionReasons) private var reasons
     @EnvironmentObject var apiModel: ApiModel
 
     var body: some View {
@@ -36,9 +37,11 @@ struct PostContentComponent: View {
                                 .aspectRatio(contentMode: showCompact ? .fill : .fit)
                         }, placeholder: {
                             ProgressView()
+                                .hidden(if: reasons.contains(.screenshot))
                         })
                     } else {
                         ProgressView()
+                            .hidden(if: reasons.contains(.screenshot))
                     }
                 })
                 .blur(radius: !blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
@@ -65,7 +68,7 @@ struct PostContentComponent: View {
                         .padding(3)
                     }
                     ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
-                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, showInfo: false, preview: false)
+                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, preview: false)
                     }
                 }
             } else if let url = post.post.url {

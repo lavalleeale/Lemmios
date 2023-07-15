@@ -1,7 +1,7 @@
 import AlertToast
+import LemmyApi
 import SwiftUI
 import WebKit
-import LemmyApi
 
 struct PostView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -11,9 +11,18 @@ struct PostView: View {
     @State var collapsed: Bool = false
     @State var parentContent: String? = nil
     @State var showingPost = false
+    @State var sharingComments: [LemmyApi.ApiComment]?
+
+    func share(commentId: Int) {
+        let sharingComment = postModel.comments.first { $0.id == commentId }
+        self.sharingComments = postModel.comments.filter { comment in sharingComment?.comment.path.components(separatedBy: ".").contains(String(comment.id)) == true }
+    }
 
     var body: some View {
         ZStack {
+            if let sharingComments = sharingComments {
+                PostSharePreview(postModel: postModel, isPresented: Binding(get: { self.sharingComments != nil }, set: { _ in self.sharingComments = nil }), comments: sharingComments)                
+            }
             Rectangle()
                 .fill(selectedTheme.backgroundColor)
             ScrollViewReader { value in
@@ -56,7 +65,7 @@ struct PostView: View {
                         }
                     }
                     if postModel.creator != nil {
-                        PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, preview: false)
+                        PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, rowButtons: true, preview: false)
                             .onAppear {
                                 if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
                                     postModel.fetchComments(apiModel: apiModel)
@@ -79,7 +88,7 @@ struct PostView: View {
                             Divider()
                         }
                         ForEach(topLevels) { comment in
-                            CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil)
+                            CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil, share: share)
                                 .if(comment.id == topLevels.first!.id) { view in
                                     view
                                         .id("Comments")
@@ -144,7 +153,7 @@ struct PostView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    PostButtons(postModel: postModel, showViewComments: false, menu: true)
+                    PostButtons(postModel: postModel, showViewComments: false, menu: true, showAll: true)
                 }
                 ToolbarItem(placement: .bottomBar) {
                     if self.parentContent != nil {

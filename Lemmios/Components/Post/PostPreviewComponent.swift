@@ -15,11 +15,20 @@ struct PostPreviewComponent: View {
 
     let showCommunity: Bool
     let showUser: Bool
+    let actions: Bool
 
-    init(post: LemmyApi.ApiPost, showCommunity: Bool, showUser: Bool) {
+    init(post: LemmyApi.ApiPost, showCommunity: Bool, showUser: Bool, actions: Bool = true) {
         self.postModel = PostModel(post: post)
         self.showCommunity = showCommunity
         self.showUser = showUser
+        self.actions = actions
+    }
+    
+    init(postModel: PostModel, showCommunity: Bool, showUser: Bool, actions: Bool = true) {
+        self.postModel = postModel
+        self.showCommunity = showCommunity
+        self.showUser = showUser
+        self.actions = actions
     }
 
     var body: some View {
@@ -76,7 +85,7 @@ struct PostPreviewComponent: View {
                     if !compact {
                         PostContentComponent(post: postModel, preview: true)
                     }
-                    PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: true, showArrows: !compact, preview: true)
+                    PostActionsComponent(postModel: postModel, showCommunity: showCommunity, showUser: showUser, collapsedButtons: actions, rowButtons: false, showArrows: !compact, preview: true)
                 }
                 if compact {
                     VStack {
@@ -115,7 +124,7 @@ struct PostPreviewComponent: View {
             }
         }
         .contextMenu {
-            PostButtons(postModel: postModel, showViewComments: true, menu: false)
+            PostButtons(postModel: postModel, showViewComments: true, menu: false, showAll: false)
         }
         .overlay(alignment: .bottom) {
             GeometryReader { geo in

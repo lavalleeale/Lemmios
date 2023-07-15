@@ -24,7 +24,7 @@
       "location" : "https://github.com/lavalleeale/LemmyApi.git",
       "state" : {
         "branch" : "main",
-        "revision" : "a2a7a25e24a74e39f3b49d266eed95a19f10a48b"
+        "revision" : "f76738c758b837b052fe3030d5843bfcfc550266"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/lavalleeale-forks/LinkPreview.git",
       "state" : {
         "branch" : "main",
-        "revision" : "11c26206314a854d6097d8a5e5c493fee6c70210"
+        "revision" : "3128a5dbc24f14f6de43949ea736ea846bdbb14d"
       }
     },
     {

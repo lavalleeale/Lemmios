@@ -6,6 +6,7 @@ import SwiftUIKit
 let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
 struct CommentComponent: View {
+    @Environment(\.redactionReasons) private var reasons
     @ObservedObject var commentModel: CommentModel
     @State var collapsed = false
     @State var preview = false
@@ -26,6 +27,8 @@ struct CommentComponent: View {
 
     let collapseParent: (() -> Void)?
 
+    var share: ((Int) -> Void)?
+
     var menuButtons: some View {
         Group {
             if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
@@ -36,6 +39,9 @@ struct CommentComponent: View {
                 PostButton(label: "Report", image: "flag") {
                     showingReport = true
                 }
+            }
+            PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
+                share?(commentModel.comment.id)
             }
             ShareLink(item: commentModel.comment.comment.ap_id) {
                 Label {
@@ -48,21 +54,20 @@ struct CommentComponent: View {
                         .padding(.all, 10)
                 }
             }
-            .foregroundStyle(.secondary)
         }
     }
 
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
-                ZStack {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            UserLink(user: commentModel.comment.creator)
+                VStack(alignment: .leading) {
+                    HStack {
+                        UserLink(user: commentModel.comment.creator)
                             .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
                             .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
-                            ScoreComponent(votableModel: commentModel)
-                            Spacer()
+                        ScoreComponent(votableModel: commentModel)
+                        Spacer()
+                        if !reasons.contains(.screenshot) {
                             Menu { menuButtons } label: {
                                 Label {
                                     Text("Comment Options")
@@ -76,21 +81,22 @@ struct CommentComponent: View {
                             }
                             .foregroundStyle(.secondary)
                             .highPriorityGesture(TapGesture())
-                            Text(commentModel.comment.counts.published.relativeDateAsString())
-                                .foregroundStyle(.secondary)
-                            if replyInfo != nil {
-                                Image(systemName: replyInfo!.read ? "envelope.open" : "envelope.badge")
-                                    .symbolRenderingMode(.multicolor)
-                                    .foregroundStyle(.secondary)
-                            }
                         }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                        if !collapsed {
-                            Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
+                        Text(commentModel.comment.counts.published.relativeDateAsString())
+                            .foregroundStyle(.secondary)
+                        if replyInfo != nil {
+                            Image(systemName: replyInfo!.read ? "envelope.open" : "envelope.badge")
+                                .symbolRenderingMode(.multicolor)
+                                .foregroundStyle(.secondary)
                         }
                     }
-                    .contentShape(Rectangle())
+                    .redacted(reason: .privacy)
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+                    if !collapsed {
+                        Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
+                    }
                 }
+                .contentShape(Rectangle())
                 .commentDepthIndicator(depth: depth)
                 .padding(.top, 10)
                 Spacer()
@@ -188,13 +194,13 @@ struct CommentComponent: View {
                 ForEach(directChildren) { comment in
                     Divider()
                         .padding(.leading, CGFloat(depth + 1) * 10)
-                    CommentComponent(commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1) {
+                    CommentComponent(commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1, collapseParent: {
                         if collapseParent != nil {
                             collapseParent!()
                         } else {
                             self.collapsed = true
                         }
-                    }
+                    }, share: share)
                 }
             }
             .allowsHitTesting(!collapsed)
@@ -222,4 +228,8 @@ struct CommentComponent: View {
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
     }
+}
+
+public extension RedactionReasons {
+    static let screenshot = RedactionReasons(rawValue: 1 << 10)
 }

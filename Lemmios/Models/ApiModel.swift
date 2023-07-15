@@ -27,6 +27,10 @@ class ApiModel: ObservableObject {
     
     private var timer: Timer?
     
+    init(doNothing: Bool) {
+        
+    }
+    
     init() {
         if try! simpleKeychain.hasItem(forKey: "accounts") {
             let data = try! simpleKeychain.data(forKey: "accounts")
