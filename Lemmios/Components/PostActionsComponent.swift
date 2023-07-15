@@ -124,7 +124,7 @@ struct PostButtons: View {
     var buttons: some View {
         Group {
             if showViewComments {
-                PostButton(label: "Comments", image: "bubble.left.and.bubble.right") {
+                PostButton(label: "Comments", image: "bubble.left.and.bubble.right", needsAuth: false) {
                     dismiss()
                     navModel.path.append(postModel)
                 }
@@ -194,11 +194,12 @@ struct PostButton: View {
     
     let label: String
     let image: String
+    var needsAuth = true
     let action: () -> Void
     
     var body: some View {
         Button {
-            if apiModel.selectedAccount == nil {
+            if needsAuth && apiModel.selectedAccount == nil {
                 apiModel.getAuth()
             } else {
                 action()

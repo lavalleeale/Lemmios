@@ -27,5 +27,13 @@ final class AuthTests: XCTestCase {
         app.buttons["Inbox"].tap()
         app.switches["Unread only"].tap()
         XCTAssert(app.staticTexts["tenth"].waitForExistence(timeout: 10))
+        app.terminate()
+        app.launchArguments = app.launchArguments.dropLast()
+        app.launch()
+        let inbox = app.buttons["Inbox"]
+        XCTAssert(inbox.waitForExistence(timeout: 10))
+        inbox.tap()
+        app.switches["Unread only"].tap()
+        XCTAssert(app.staticTexts["tenth"].waitForExistence(timeout: 10))
     }
 }

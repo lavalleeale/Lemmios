@@ -1,7 +1,7 @@
+import LemmyApi
 import MarkdownUI
 import SwiftUI
 import SwiftUIKit
-import LemmyApi
 
 let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
@@ -26,6 +26,32 @@ struct CommentComponent: View {
 
     let collapseParent: (() -> Void)?
 
+    var menuButtons: some View {
+        Group {
+            if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
+                PostButton(label: "Edit", image: "pencil") {
+                    showingEdit = true
+                }
+            } else {
+                PostButton(label: "Report", image: "flag") {
+                    showingReport = true
+                }
+            }
+            ShareLink(item: commentModel.comment.comment.ap_id) {
+                Label {
+                    Text("Share")
+                } icon: {
+                    Image(systemName: "square.and.arrow.up")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .padding(.all, 10)
+                }
+            }
+            .foregroundStyle(.secondary)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
@@ -42,29 +68,7 @@ struct CommentComponent: View {
                             .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)
                             Spacer()
-                            Menu {
-                                if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
-                                    PostButton(label: "Edit", image: "pencil") {
-                                        showingEdit = true
-                                    }
-                                } else {
-                                    PostButton(label: "Report", image: "flag") {
-                                        showingReport = true
-                                    }
-                                }
-                                ShareLink(item: commentModel.comment.comment.ap_id) {
-                                    Label {
-                                        Text("Share")
-                                    } icon: {
-                                        Image(systemName: "square.and.arrow.up")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20)
-                                            .padding(.all, 10)
-                                    }
-                                }
-                                .foregroundStyle(.secondary)
-                            } label: {
+                            Menu { menuButtons } label: {
                                 Label {
                                     Text("Comment Options")
                                 } icon: {
@@ -120,46 +124,47 @@ struct CommentComponent: View {
                 replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
                 SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
             ]) { swiped in
-                    switch swiped {
-                    case "upvote":
-                        if apiModel.selectedAccount == nil {
-                            apiModel.getAuth()
-                        } else {
-                            commentModel.vote(direction: true, apiModel: apiModel)
-                        }
-                    case "downvote":
-                        if apiModel.selectedAccount == nil {
-                            apiModel.getAuth()
-                        } else {
-                            commentModel.vote(direction: false, apiModel: apiModel)
-                        }
-                    case "reply":
-                        if apiModel.selectedAccount == nil {
-                            apiModel.getAuth()
-                        } else {
-                            showingReply = true
-                        }
-                    case "read":
-                        if apiModel.selectedAccount == nil {
-                            apiModel.getAuth()
-                        } else {
-                            commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
-                                read!()
-                            }
-                        }
-                    case "collapse":
-                        withAnimation {
-                            if collapseParent != nil {
-                                collapseParent!()
-                            } else {
-                                self.collapsed = true
-                            }
-                        }
-                        return
-                    default:
-                        break
+                switch swiped {
+                case "upvote":
+                    if apiModel.selectedAccount == nil {
+                        apiModel.getAuth()
+                    } else {
+                        commentModel.vote(direction: true, apiModel: apiModel)
                     }
+                case "downvote":
+                    if apiModel.selectedAccount == nil {
+                        apiModel.getAuth()
+                    } else {
+                        commentModel.vote(direction: false, apiModel: apiModel)
+                    }
+                case "reply":
+                    if apiModel.selectedAccount == nil {
+                        apiModel.getAuth()
+                    } else {
+                        showingReply = true
+                    }
+                case "read":
+                    if apiModel.selectedAccount == nil {
+                        apiModel.getAuth()
+                    } else {
+                        commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
+                            read!()
+                        }
+                    }
+                case "collapse":
+                    withAnimation {
+                        if collapseParent != nil {
+                            collapseParent!()
+                        } else {
+                            self.collapsed = true
+                        }
+                    }
+                    return
+                default:
+                    break
+                }
             }
+            .contextMenu { menuButtons }
             .overlay {
                 Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)
                     .allowsHitTesting(false)

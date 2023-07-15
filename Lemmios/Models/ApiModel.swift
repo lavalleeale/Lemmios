@@ -169,10 +169,7 @@ class ApiModel: ObservableObject {
             timer!.fire()
         }
         if account.notificationsEnabled == true {
-            #if !DEBUG
-            UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
-            UIApplication.shared.registerForRemoteNotifications()
-            #endif
+            enablePush(account: account)
         }
         lemmyHttp?.getSiteInfo { siteInfo, error in
             if let siteInfo = siteInfo {

@@ -1,7 +1,7 @@
+import LemmyApi
 import LinkPreview
 import SwiftUI
 import SwiftUIKit
-import LemmyApi
 
 struct PostPreviewComponent: View {
     @AppStorage("compact") var compact = false
@@ -113,6 +113,9 @@ struct PostPreviewComponent: View {
                     }
                 }
             }
+        }
+        .contextMenu {
+            PostButtons(postModel: postModel, showViewComments: true, menu: false)
         }
         .overlay(alignment: .bottom) {
             GeometryReader { geo in
