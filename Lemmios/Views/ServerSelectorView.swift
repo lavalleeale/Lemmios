@@ -1,10 +1,11 @@
 import SwiftUI
+import LemmyApi
 
 struct ServerSelectorView: View {
     @State var serverUrl = ""
     @State var selected = ""
     @State var errorString: String?
-    @State var siteInfo: LemmyHttp.SiteInfo?
+    @State var siteInfo: LemmyApi.SiteInfo?
     @EnvironmentObject var apiModel: ApiModel
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("serverUrl") public var url = ""

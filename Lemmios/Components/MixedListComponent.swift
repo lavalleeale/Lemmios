@@ -1,4 +1,5 @@
 import SwiftUI
+import LemmyApi
 
 struct MixedListComponent: View {
     let withCounts: [any WithCounts]
@@ -15,10 +16,10 @@ struct MixedListComponent: View {
     var body: some View {
         ForEach(withCounts.sorted { $0.counts.published > $1.counts.published }, id: \.id) { item in
             VStack(spacing: 0) {
-                if let post = item as? LemmyHttp.ApiPost {
+                if let post = item as? LemmyApi.ApiPost {
                     PostPreviewComponent(post: post, showCommunity: true, showUser: false)
                 }
-                if let comment = item as? LemmyHttp.ApiComment {
+                if let comment = item as? LemmyApi.ApiComment {
                     CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: 0, collapseParent: nil)
                 }
                 Rectangle()

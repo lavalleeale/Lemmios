@@ -1,13 +1,14 @@
 import SwiftUI
+import LemmyApi
 
 struct SortSelectorComponent: View {
-    var function: (LemmyHttp.Sort, LemmyHttp.TopTime) -> Void
-    @Binding var currentSort: LemmyHttp.Sort
-    @Binding var currentTime: LemmyHttp.TopTime
+    var function: (LemmyApi.Sort, LemmyApi.TopTime) -> Void
+    @Binding var currentSort: LemmyApi.Sort
+    @Binding var currentTime: LemmyApi.TopTime
     
     let sortType: SortType
 
-    init(sortType: SortType, currentSort: Binding<LemmyHttp.Sort>, currentTime: Binding<LemmyHttp.TopTime>, function: @escaping (LemmyHttp.Sort, LemmyHttp.TopTime) -> Void) {
+    init(sortType: SortType, currentSort: Binding<LemmyApi.Sort>, currentTime: Binding<LemmyApi.TopTime>, function: @escaping (LemmyApi.Sort, LemmyApi.TopTime) -> Void) {
         self.function =
             { sort, time in
                 function(sort, time)
@@ -17,7 +18,7 @@ struct SortSelectorComponent: View {
         self.sortType = sortType
     }
 
-    init(currentSort: Binding<LemmyHttp.Sort>, function: @escaping (LemmyHttp.Sort) -> Void) {
+    init(currentSort: Binding<LemmyApi.Sort>, function: @escaping (LemmyApi.Sort) -> Void) {
         self.function =
             { sort, _ in
                 function(sort)
@@ -29,7 +30,7 @@ struct SortSelectorComponent: View {
 
     var body: some View {
         Menu {
-            ForEach(LemmyHttp.Sort.allCases.filter { sortOption in
+            ForEach(LemmyApi.Sort.allCases.filter { sortOption in
                 switch sortType {
                 case .Comments:
                     return sortOption.comments
@@ -44,7 +45,7 @@ struct SortSelectorComponent: View {
                 } label: {
                     if sort.hasTime && sortType != .Comments {
                         Menu {
-                            ForEach(LemmyHttp.TopTime.allCases, id: \.rawValue) { time in
+                            ForEach(LemmyApi.TopTime.allCases, id: \.rawValue) { time in
                                 Button {
                                     function(sort, time)
                                 } label: {

@@ -1,9 +1,10 @@
 import SwiftUI
+import LemmyApi
 
 struct MessageComponent: View {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
-    @State var message: LemmyHttp.Message
+    @State var message: LemmyApi.Message
     @State var showingReply = false
     @ObservedObject var messageModel = MessageModel()
 

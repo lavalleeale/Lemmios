@@ -1,11 +1,12 @@
 import Foundation
 import Combine
+import LemmyApi
 
 class SearchModel: ObservableObject {
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var communities = [LemmyHttp.ApiCommunity]()
-    @Published var sort = LemmyHttp.Sort.Active
-    @Published var time = LemmyHttp.TopTime.All
+    @Published var communities = [LemmyApi.ApiCommunity]()
+    @Published var sort = LemmyApi.Sort.Active
+    @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = CommentsPageStatus.ready
     
     func fetchCommunties(apiModel: ApiModel) {

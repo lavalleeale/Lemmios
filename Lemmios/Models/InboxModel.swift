@@ -1,12 +1,13 @@
 import Combine
 import Foundation
+import LemmyApi
 
 class InboxModel: ObservableObject {
-    @Published var replies = [LemmyHttp.ApiComment]()
-    @Published var messages = [LemmyHttp.Message]()
+    @Published var replies = [LemmyApi.ApiComment]()
+    @Published var messages = [LemmyApi.Message]()
     @Published var repliesStatus = PostsPageStatus.ready(nextPage: 1)
     @Published var messagesStatus = PostsPageStatus.ready(nextPage: 1)
-    @Published var sort = LemmyHttp.Sort.New
+    @Published var sort = LemmyApi.Sort.New
     private var cancellable: Set<AnyCancellable> = Set()
     
     func getMessages(apiModel: ApiModel, onlyUnread: Bool) {

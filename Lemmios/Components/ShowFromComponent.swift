@@ -1,5 +1,6 @@
 import CachedAsyncImage
 import SwiftUI
+import LemmyApi
 
 struct ShowFromComponent<T: WithNameHost>: View {
     @EnvironmentObject var apiModel: ApiModel

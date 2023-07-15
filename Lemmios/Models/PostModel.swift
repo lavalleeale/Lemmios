@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import OSLog
 import SwiftUI
+import LemmyApi
 
 class PostModel: VotableModel, Hashable {
     private var id = UUID()
@@ -21,17 +22,17 @@ class PostModel: VotableModel, Hashable {
     @Published var pageStatus = CommentsPageStatus.ready
     @Published var parentStatus = CommentsPageStatus.ready
     @Published var detailsStatus: CommentsPageStatus
-    @Published var sort = LemmyHttp.Sort.Hot
-    @Published var comments = [LemmyHttp.ApiComment]()
+    @Published var sort = LemmyApi.Sort.Hot
+    @Published var comments = [LemmyApi.ApiComment]()
     
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var post: LemmyHttp.ApiPostData
-    @Published var creator: LemmyHttp.ApiUserData?
-    @Published var community: LemmyHttp.ApiCommunityData?
-    @Published var counts: LemmyHttp.ApiPostCounts?
-    @Published var selectedComment: LemmyHttp.ApiComment?
+    @Published var post: LemmyApi.ApiPostData
+    @Published var creator: LemmyApi.ApiUserData?
+    @Published var community: LemmyApi.ApiCommunityData?
+    @Published var counts: LemmyApi.ApiPostCounts?
+    @Published var selectedComment: LemmyApi.ApiComment?
     
-    init(post: LemmyHttp.ApiPost) {
+    init(post: LemmyApi.ApiPost) {
         self.read = DBModel.instance.isRead(postId: post.post.id)
         self.detailsStatus = .done
         self.post = post.post
@@ -42,11 +43,11 @@ class PostModel: VotableModel, Hashable {
         self.saved = post.saved ?? false
         self.likes = post.my_vote ?? 0
         if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
-            self.sort = LemmyHttp.Sort(rawValue: defaultCommentSort)!
+            self.sort = LemmyApi.Sort(rawValue: defaultCommentSort)!
         }
     }
     
-    init(post: LemmyHttp.ApiPostData, comment: LemmyHttp.ApiComment? = nil) {
+    init(post: LemmyApi.ApiPostData, comment: LemmyApi.ApiComment? = nil) {
         self.read = DBModel.instance.isRead(postId: post.id)
         if let comment = comment {
             self.selectedComment = comment
@@ -58,7 +59,7 @@ class PostModel: VotableModel, Hashable {
         self.saved = false
         self.likes = 0
         if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
-            self.sort = LemmyHttp.Sort(rawValue: defaultCommentSort)!
+            self.sort = LemmyApi.Sort(rawValue: defaultCommentSort)!
         }
     }
     
@@ -138,7 +139,7 @@ class PostModel: VotableModel, Hashable {
         }.store(in: &cancellable)
     }
     
-    func changeSort(sort: LemmyHttp.Sort, apiModel: ApiModel) {
+    func changeSort(sort: LemmyApi.Sort, apiModel: ApiModel) {
         self.sort = sort
         cancellable.removeAll()
         pageStatus = CommentsPageStatus.ready

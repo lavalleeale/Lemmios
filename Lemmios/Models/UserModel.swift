@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import OSLog
+import LemmyApi
 
 class UserModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -14,11 +15,11 @@ class UserModel: ObservableObject, Hashable {
     }
     
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
-    @Published var sort = LemmyHttp.Sort.Active
-    @Published var time = LemmyHttp.TopTime.All
-    @Published var userData: LemmyHttp.ApiUser?
-    @Published var comments = [LemmyHttp.ApiComment]()
-    @Published var posts = [LemmyHttp.ApiPost]()
+    @Published var sort = LemmyApi.Sort.Active
+    @Published var time = LemmyApi.TopTime.All
+    @Published var userData: LemmyApi.ApiUser?
+    @Published var comments = [LemmyApi.ApiComment]()
+    @Published var posts = [LemmyApi.ApiPost]()
     
     @Published var saved = [any WithCounts]()
     @Published var savedPageStatus = PostsPageStatus.ready(nextPage: 1)
@@ -30,7 +31,7 @@ class UserModel: ObservableObject, Hashable {
     
     private var cancellable: Set<AnyCancellable> = Set()
     
-    init(user: LemmyHttp.ApiUserData) {
+    init(user: LemmyApi.ApiUserData) {
         self.name = "\(user.name)"
         if !user.local {
             name.append("@\(user.actor_id.host()!)")

@@ -1,10 +1,11 @@
 import SwiftUI
+import LemmyApi
 
 struct SettingsView: View {
     @AppStorage("defaultStart") var defaultStart = DefaultStart.All
-    @AppStorage("defaultPostSort") var defaultPostSort = LemmyHttp.Sort.Active
-    @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyHttp.Sort.Hot
-    @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyHttp.TopTime.All
+    @AppStorage("defaultPostSort") var defaultPostSort = LemmyApi.Sort.Active
+    @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyApi.Sort.Hot
+    @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyApi.TopTime.All
     @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
@@ -48,10 +49,10 @@ struct SettingsView: View {
             Section("Posts") {
                 NavigationLink("Marking Read / Hiding", value: SettingsNav.Read)
                 Toggle("Compact Posts", isOn: $compactPosts)
-                SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyHttp.Sort.allCases)
+                SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyApi.Sort.allCases)
             }
             Section("Comments") {
-                SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyHttp.Sort.allCases.filter { $0.comments })
+                SettingViewComponent(selection: $defaultCommentSort, desciption: "Default Sort", options: LemmyApi.Sort.allCases.filter { $0.comments })
                 Toggle("Show Images in Comments", isOn: $commentImages)
             }
             Section("Other") {
@@ -120,14 +121,14 @@ protocol HasCustom {
     var customOptions: [T] { get }
 }
 
-extension LemmyHttp.Sort: HasCustom {
-    typealias T = LemmyHttp.TopTime
+extension LemmyApi.Sort: HasCustom {
+    typealias T = LemmyApi.TopTime
     var hasCustom: Bool {
         return self.hasTime
     }
 
-    var customOptions: [LemmyHttp.TopTime] {
-        return LemmyHttp.TopTime.allCases
+    var customOptions: [LemmyApi.TopTime] {
+        return LemmyApi.TopTime.allCases
     }
 }
 

@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import LemmyApi
 
 class CommentModel: VotableModel {
     @Published var likes: Int
@@ -8,10 +9,10 @@ class CommentModel: VotableModel {
     
     private var cancellable: Set<AnyCancellable> = Set()
 
-    @Published var comment: LemmyHttp.ApiComment
-    @Published var children: [LemmyHttp.ApiComment]
+    @Published var comment: LemmyApi.ApiComment
+    @Published var children: [LemmyApi.ApiComment]
     
-    init(comment: LemmyHttp.ApiComment, children: [LemmyHttp.ApiComment]) {
+    init(comment: LemmyApi.ApiComment, children: [LemmyApi.ApiComment]) {
         self.comment = comment
         self.children = children
         self.score = comment.counts.score
@@ -58,7 +59,7 @@ class CommentModel: VotableModel {
         }.store(in: &cancellable)
     }
     
-    func read(replyInfo: LemmyHttp.ReplyInfo, apiModel: ApiModel, completion: @escaping () -> Void) {
+    func read(replyInfo: LemmyApi.ReplyInfo, apiModel: ApiModel, completion: @escaping () -> Void) {
         apiModel.lemmyHttp?.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
             if commentView != nil {
                 completion()
@@ -83,7 +84,7 @@ class CommentModel: VotableModel {
     }
 }
 
-func isCommentParent(parentId: Int, possibleChild: LemmyHttp.ApiComment) -> Bool {
+func isCommentParent(parentId: Int, possibleChild: LemmyApi.ApiComment) -> Bool {
     let childParentId = possibleChild.comment.path.components(separatedBy: ".").dropLast().last
     return String(parentId) == childParentId
 }

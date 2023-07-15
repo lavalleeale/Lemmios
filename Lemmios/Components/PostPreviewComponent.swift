@@ -1,6 +1,7 @@
 import LinkPreview
 import SwiftUI
 import SwiftUIKit
+import LemmyApi
 
 struct PostPreviewComponent: View {
     @AppStorage("compact") var compact = false
@@ -15,7 +16,7 @@ struct PostPreviewComponent: View {
     let showCommunity: Bool
     let showUser: Bool
 
-    init(post: LemmyHttp.ApiPost, showCommunity: Bool, showUser: Bool) {
+    init(post: LemmyApi.ApiPost, showCommunity: Bool, showUser: Bool) {
         self.postModel = PostModel(post: post)
         self.showCommunity = showCommunity
         self.showUser = showUser

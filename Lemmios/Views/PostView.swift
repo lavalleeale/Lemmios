@@ -1,6 +1,7 @@
 import AlertToast
 import SwiftUI
 import WebKit
+import LemmyApi
 
 struct PostView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -133,7 +134,7 @@ struct PostView: View {
             .toast(isPresenting: .constant(postModel.selectedComment != nil && postModel.community != nil), duration: .infinity) {
                 AlertToast(displayMode: .banner(.pop), type: .regular, title: "View All Comments", subTitle: "This is a single comment thread from the post.", style: .style(backgroundColor: .blue, titleColor: .primary, subTitleColor: .secondary))
             } onTap: {
-                navModel.path.append(PostModel(post: LemmyHttp.ApiPost(post: postModel.post, creator: postModel.creator!, community: postModel.community!, counts: postModel.counts!, my_vote: postModel.likes, saved: postModel.saved)))
+                navModel.path.append(PostModel(post: LemmyApi.ApiPost(post: postModel.post, creator: postModel.creator!, community: postModel.community!, counts: postModel.counts!, my_vote: postModel.likes, saved: postModel.saved)))
             }
             .navigationBarTitle(postModel.counts?.comments == nil ? "Post" : "\(formatNum(num: postModel.counts!.comments)) Comments", displayMode: .inline)
             .toolbar(content: {

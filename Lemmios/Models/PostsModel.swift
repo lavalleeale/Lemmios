@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import SwiftUI
+import LemmyApi
 
 class PostsModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -14,13 +15,13 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var posts = [LemmyHttp.ApiPost]()
-    @Published var sort = LemmyHttp.Sort.Active
-    @Published var time = LemmyHttp.TopTime.All
+    @Published var posts = [LemmyApi.ApiPost]()
+    @Published var sort = LemmyApi.Sort.Active
+    @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
-    @Published var communityView: LemmyHttp.CommunityView?
+    @Published var communityView: LemmyApi.CommunityView?
     @Published var postCreated = false
-    @Published var createdPost: LemmyHttp.ApiPost?
+    @Published var createdPost: LemmyApi.ApiPost?
     @Published var notFound = false
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
@@ -29,10 +30,10 @@ class PostsModel: ObservableObject, Hashable {
     init(path: String) {
         self.path = path
         if let defaultPostSort = UserDefaults.standard.string(forKey: "defaultPostSort") {
-            self.sort = LemmyHttp.Sort(rawValue: defaultPostSort)!
+            self.sort = LemmyApi.Sort(rawValue: defaultPostSort)!
         }
         if let defaultPostSortTime = UserDefaults.standard.string(forKey: "defaultPostSortTime") {
-            self.time = LemmyHttp.TopTime(rawValue: defaultPostSortTime)!
+            self.time = LemmyApi.TopTime(rawValue: defaultPostSortTime)!
         }
     }
     
@@ -81,12 +82,12 @@ class PostsModel: ObservableObject, Hashable {
         fetchPosts(apiModel: apiModel)
     }
     
-    func changeSortAndTime(sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, apiModel: ApiModel) {
+    func changeSortAndTime(sort: LemmyApi.Sort, time: LemmyApi.TopTime, apiModel: ApiModel) {
         self.time = time
         changeSort(sort: sort, apiModel: apiModel)
     }
     
-    func changeSort(sort: LemmyHttp.Sort, apiModel: ApiModel) {
+    func changeSort(sort: LemmyApi.Sort, apiModel: ApiModel) {
         self.sort = sort
         cancellable.removeAll()
         pageStatus = PostsPageStatus.ready(nextPage: 1)

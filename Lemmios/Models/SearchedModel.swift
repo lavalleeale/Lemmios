@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import OSLog
+import LemmyApi
 
 class SearchedModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -13,11 +14,11 @@ class SearchedModel: ObservableObject, Hashable {
         hasher.combine(id)
     }
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var communities: [LemmyHttp.ApiCommunity]?
-    @Published var posts: [LemmyHttp.ApiPost]?
-    @Published var users: [LemmyHttp.ApiUser]?
-    @Published var sort = LemmyHttp.Sort.Top
-    @Published var time = LemmyHttp.TopTime.All
+    @Published var communities: [LemmyApi.ApiCommunity]?
+    @Published var posts: [LemmyApi.ApiPost]?
+    @Published var users: [LemmyApi.ApiUser]?
+    @Published var sort = LemmyApi.Sort.Top
+    @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     
     @Published var query: String
@@ -102,12 +103,12 @@ class SearchedModel: ObservableObject, Hashable {
         }.store(in: &cancellable)
     }
     
-    func changeSortAndTime(sort: LemmyHttp.Sort, time: LemmyHttp.TopTime, apiModel: ApiModel) {
+    func changeSortAndTime(sort: LemmyApi.Sort, time: LemmyApi.TopTime, apiModel: ApiModel) {
         self.time = time
         changeSort(sort: sort, apiModel: apiModel)
     }
     
-    func changeSort(sort: LemmyHttp.Sort, apiModel: ApiModel) {
+    func changeSort(sort: LemmyApi.Sort, apiModel: ApiModel) {
         self.sort = sort
         cancellable.removeAll()
         pageStatus = PostsPageStatus.ready(nextPage: 1)

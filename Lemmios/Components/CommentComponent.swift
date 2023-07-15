@@ -1,6 +1,7 @@
 import MarkdownUI
 import SwiftUI
 import SwiftUIKit
+import LemmyApi
 
 let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
@@ -12,7 +13,7 @@ struct CommentComponent: View {
     @State var showingEdit = false
     @State var showingReport = false
     @State var reportReason = ""
-    var replyInfo: LemmyHttp.ReplyInfo?
+    var replyInfo: LemmyApi.ReplyInfo?
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel

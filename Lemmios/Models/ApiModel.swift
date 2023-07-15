@@ -3,20 +3,21 @@ import Foundation
 import OSLog
 import SimpleKeychain
 import SwiftUI
+import LemmyApi
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl") public var url = ""
     @AppStorage("seen") var seen: [Int] = []
     
     @Published var selectedAccount: StoredAccount?
-    @Published var lemmyHttp: LemmyHttp?
+    @Published var lemmyHttp: LemmyApi?
     @Published var serverSelected = false
     @Published var accounts = [StoredAccount]()
-    @Published var subscribed: [String: [LemmyHttp.ApiCommunityData]]?
+    @Published var subscribed: [String: [LemmyApi.ApiCommunityData]]?
     @Published var showingAuth = false
     @Published var unreadCount = 0
     @Published var invalidUser: String?
-    @Published var siteInfo: LemmyHttp.SiteInfo?
+    @Published var siteInfo: LemmyApi.SiteInfo?
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
@@ -46,10 +47,10 @@ class ApiModel: ObservableObject {
         showingAuth = true
     }
     
-    func verifyServer(url: String, receiveValue: @escaping (String?, LemmyHttp.SiteInfo?)->Void) {
+    func verifyServer(url: String, receiveValue: @escaping (String?, LemmyApi.SiteInfo?)->Void) {
         siteInfo = nil
         do {
-            lemmyHttp = try LemmyHttp(baseUrl: url)
+            lemmyHttp = try LemmyApi(baseUrl: url)
             serverInfoCancellable = lemmyHttp?.getSiteInfo { siteInfo, error in
                 print(siteInfo, error)
                 if let siteInfo = siteInfo {
@@ -58,7 +59,7 @@ class ApiModel: ObservableObject {
                     receiveValue("Not a lemmy server", nil)
                 }
             }
-        } catch LemmyHttp.LemmyError.invalidUrl {
+        } catch LemmyApi.LemmyError.invalidUrl {
             receiveValue("Invalid URL", nil)
         } catch {
             receiveValue("Unknown Error", nil)
@@ -68,7 +69,7 @@ class ApiModel: ObservableObject {
     func selectServer(url: String) -> String {
         self.selectedAccount = nil
         do {
-            lemmyHttp = try LemmyHttp(baseUrl: url)
+            lemmyHttp = try LemmyApi(baseUrl: url)
             self.url = String(lemmyHttp!.baseUrl)
             if let storedAccount = UserDefaults.standard.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.host()!) {
                 UserDefaults.standard.removeObject(forKey: "account")
@@ -81,7 +82,7 @@ class ApiModel: ObservableObject {
                 try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
             }
             updateAuth()
-        } catch LemmyHttp.LemmyError.invalidUrl {
+        } catch LemmyApi.LemmyError.invalidUrl {
             return "Invalid URL"
         } catch {
             return "Unknown Error"
@@ -207,19 +208,19 @@ class ApiModel: ObservableObject {
     }
     
     struct StoredAccount: Codable, Identifiable, Equatable {
-        static func == (lhs: StoredAccount, rhs: LemmyHttp.ApiUserData) -> Bool {
+        static func == (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
             return rhs.actor_id.pathComponents.last! == lhs.username && rhs.actor_id.host() == lhs.instance
         }
         
-        static func == (lhs: LemmyHttp.ApiUserData, rhs: StoredAccount) -> Bool {
+        static func == (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
             return rhs == lhs
         }
         
-        static func != (lhs: StoredAccount, rhs: LemmyHttp.ApiUserData) -> Bool {
+        static func != (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
             return !(lhs == rhs)
         }
         
-        static func != (lhs: LemmyHttp.ApiUserData, rhs: StoredAccount) -> Bool {
+        static func != (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
             return !(lhs == rhs)
         }
         

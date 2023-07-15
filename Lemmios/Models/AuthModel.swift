@@ -1,8 +1,9 @@
 import Combine
 import Foundation
+import LemmyApi
 
 class AuthModel: ObservableObject {
-    @Published var captcha: LemmyHttp.CaptchaInfo?
+    @Published var captcha: LemmyApi.CaptchaInfo?
     @Published var error = ""
     @Published var verifySent = false
     @Published var needs2fa = false
@@ -10,7 +11,7 @@ class AuthModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     private let decoder = JSONDecoder()
 
-    func register(apiModel: ApiModel, info: LemmyHttp.RegisterPayload) {
+    func register(apiModel: ApiModel, info: LemmyApi.RegisterPayload) {
         apiModel.lemmyHttp?.register(info: info) { response, error in
             if let response = response {
                 if let jwt = response.jwt {
@@ -19,7 +20,7 @@ class AuthModel: ObservableObject {
                     self.verifySent = true
                 }
             } else if case let .network(code, description) = error {
-                if code == 400, let decoded = try? self.decoder.decode(LemmyHttp.ErrorResponse.self, from: Data(description.utf8)) {
+                if code == 400, let decoded = try? self.decoder.decode(LemmyApi.ErrorResponse.self, from: Data(description.utf8)) {
                     self.error = decoded.error
                     self.getCaptcha(apiModel: apiModel)
                 }
@@ -27,12 +28,12 @@ class AuthModel: ObservableObject {
         }.store(in: &cancellable)
     }
 
-    func login(apiModel: ApiModel, info: LemmyHttp.LoginPayload) {
+    func login(apiModel: ApiModel, info: LemmyApi.LoginPayload) {
         apiModel.lemmyHttp?.login(info: info) { response, error in
             if let jwt = response?.jwt {
                 apiModel.addAuth(username: info.username_or_email, jwt: jwt)
             } else if case let .network(code, description) = error {
-                if code == 400, let decoded = try? self.decoder.decode(LemmyHttp.ErrorResponse.self, from: Data(description.utf8)) {
+                if code == 400, let decoded = try? self.decoder.decode(LemmyApi.ErrorResponse.self, from: Data(description.utf8)) {
                     self.error = decoded.error
                     if decoded.error == "missing_totp_token" {
                         self.needs2fa = true

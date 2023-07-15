@@ -1,6 +1,7 @@
 import Foundation
 import PhotosUI
 import SwiftUI
+import LemmyApi
 
 #if canImport(AppKit)
     import AppKit
@@ -130,7 +131,7 @@ class ImageModel: ObservableObject {
             return false
         }
 
-        case empty, loading(_ progress: Progress), uploading(_ percentDone: Double, _ image: UIImage), success(_ url: LemmyHttp.File, _ image: UIImage), failure(_ error: ImageError, _ image: UIImage?)
+        case empty, loading(_ progress: Progress), uploading(_ percentDone: Double, _ image: UIImage), success(_ url: LemmyApi.File, _ image: UIImage), failure(_ error: ImageError, _ image: UIImage?)
     }
     
     enum TransferError: Error {

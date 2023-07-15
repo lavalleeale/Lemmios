@@ -1,7 +1,8 @@
 import SwiftUI
+import LemmyApi
 
 struct UserHeaderComponent: View {
-    let person_view: LemmyHttp.ApiUser?
+    let person_view: LemmyApi.ApiUser?
     var body: some View {
         HStack {
             if let person_view = person_view {

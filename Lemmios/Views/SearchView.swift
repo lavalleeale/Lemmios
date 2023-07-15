@@ -1,4 +1,5 @@
 import SwiftUI
+import LemmyApi
 
 struct SearchView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -74,13 +75,13 @@ struct SearchView: View {
     }
 }
 
-struct CommmunityListComponent<T: RandomAccessCollection<LemmyHttp.ApiCommunity>>: View {
+struct CommmunityListComponent<T: RandomAccessCollection<LemmyApi.ApiCommunity>>: View {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     let communities: T
     var rising = false
     
-    var callback: ((LemmyHttp.ApiCommunity)->Void)?
+    var callback: ((LemmyApi.ApiCommunity)->Void)?
     
     var body: some View {
         ForEach(communities) { community in
