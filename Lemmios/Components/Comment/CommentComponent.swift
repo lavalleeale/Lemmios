@@ -91,7 +91,6 @@ struct CommentComponent: View {
                         }
                     }
                     .redacted(reason: .privacy)
-                    .frame(maxHeight: .infinity, alignment: .bottom)
                     if !collapsed {
                         Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
                     }
@@ -117,53 +116,56 @@ struct CommentComponent: View {
                 }
             }
             .padding(.horizontal)
-            .addSwipe(leadingOptions: [
-                SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
-                SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
-            ],
-            trailingOptions: [
-                replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
-                SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
-            ]) { swiped in
-                switch swiped {
-                case "upvote":
-                    if apiModel.selectedAccount == nil {
-                        apiModel.getAuth()
-                    } else {
-                        commentModel.vote(direction: true, apiModel: apiModel)
-                    }
-                case "downvote":
-                    if apiModel.selectedAccount == nil {
-                        apiModel.getAuth()
-                    } else {
-                        commentModel.vote(direction: false, apiModel: apiModel)
-                    }
-                case "reply":
-                    if apiModel.selectedAccount == nil {
-                        apiModel.getAuth()
-                    } else {
-                        showingReply = true
-                    }
-                case "read":
-                    if apiModel.selectedAccount == nil {
-                        apiModel.getAuth()
-                    } else {
-                        commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
-                            read!()
-                        }
-                    }
-                case "collapse":
-                    withAnimation {
-                        if collapseParent != nil {
-                            collapseParent!()
-                        } else {
-                            self.collapsed = true
-                        }
-                    }
-                    return
-                default:
-                    break
-                }
+            .if(!reasons.contains(.screenshot)) { view in
+                view
+                    .addSwipe(leadingOptions: [
+                        SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
+                        SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
+                    ],
+                              trailingOptions: [
+                                replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
+                                SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
+                              ]) { swiped in
+                                  switch swiped {
+                                  case "upvote":
+                                      if apiModel.selectedAccount == nil {
+                                          apiModel.getAuth()
+                                      } else {
+                                          commentModel.vote(direction: true, apiModel: apiModel)
+                                      }
+                                  case "downvote":
+                                      if apiModel.selectedAccount == nil {
+                                          apiModel.getAuth()
+                                      } else {
+                                          commentModel.vote(direction: false, apiModel: apiModel)
+                                      }
+                                  case "reply":
+                                      if apiModel.selectedAccount == nil {
+                                          apiModel.getAuth()
+                                      } else {
+                                          showingReply = true
+                                      }
+                                  case "read":
+                                      if apiModel.selectedAccount == nil {
+                                          apiModel.getAuth()
+                                      } else {
+                                          commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
+                                              read!()
+                                          }
+                                      }
+                                  case "collapse":
+                                      withAnimation {
+                                          if collapseParent != nil {
+                                              collapseParent!()
+                                          } else {
+                                              self.collapsed = true
+                                          }
+                                      }
+                                      return
+                                  default:
+                                      break
+                                  }
+                              }
             }
             .contextMenu { menuButtons }
             .overlay {

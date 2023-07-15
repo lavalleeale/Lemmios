@@ -91,9 +91,8 @@ struct PostSharePreviewContent: View {
     @EnvironmentObject var apiModel: ApiModel
     let comments: [LemmyApi.ApiComment]
     var body: some View {
-        ZStack {
+//        VStack {
             let image = postModel.post.url != nil && imageExtensions.contains(postModel.post.url!.pathExtension)
-            selectedTheme.primaryColor
             VStack(alignment: .leading) {
                 if !image {
                     Text(postModel.post.name)
@@ -112,12 +111,15 @@ struct PostSharePreviewContent: View {
                     PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, rowButtons: false, preview: true)
                 }
                 .padding()
-                ForEach(comments) { comment in
-                    CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: comment.comment.path.components(separatedBy: ".").count - 2, collapseParent: nil)
+                VStack(spacing: 0) {
+                    ForEach(comments) { comment in
+                        CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: comment.comment.path.components(separatedBy: ".").count - 2, collapseParent: nil)
+                    }
                 }
             }
             .environmentObject(apiModel)
-        }
+//        }
+        .background(selectedTheme.primaryColor)
         .frame(width: UIScreen.main.bounds.width)
         .environment(\.colorScheme, systemColorScheme)
         .redacted(reason: .screenshot)
