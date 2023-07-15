@@ -15,8 +15,12 @@ struct ArrowsComponent<T: VotableModel>: View {
             .background(votableModel.likes == 1 ? .orange : .clear)
             .cornerRadius(5)
             .highPriorityGesture(TapGesture().onEnded {
-                try? haptics.fire()
-                votableModel.vote(direction: true, apiModel: apiModel)
+                if apiModel.selectedAccount == nil {
+                    apiModel.getAuth()
+                } else {
+                    try? haptics.fire()
+                    votableModel.vote(direction: true, apiModel: apiModel)
+                }
             })
         Image(systemName: "arrow.down")
             .resizable()
@@ -26,8 +30,12 @@ struct ArrowsComponent<T: VotableModel>: View {
             .background(votableModel.likes == -1 ? .purple : .clear)
             .cornerRadius(5)
             .highPriorityGesture(TapGesture().onEnded {
-                try? haptics.fire()
-                votableModel.vote(direction: false, apiModel: apiModel)
+                if apiModel.selectedAccount == nil {
+                    apiModel.getAuth()
+                } else {
+                    try? haptics.fire()
+                    votableModel.vote(direction: false, apiModel: apiModel)
+                }
             })
     }
 }

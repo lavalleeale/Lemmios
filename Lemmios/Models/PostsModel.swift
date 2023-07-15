@@ -106,9 +106,11 @@ class PostsModel: ObservableObject, Hashable {
     }
     
     func follow(apiModel: ApiModel) {
-        apiModel.lemmyHttp?.follow(communityId: communityView!.community_view.id, follow: communityView!.community_view.subscribed == "NotSubscribed") { communityView, _ in
-            self.communityView = communityView
-        }.store(in: &cancellable)
+        if let communityView = communityView?.community_view {
+            apiModel.lemmyHttp?.follow(communityId: communityView.id, follow: communityView.subscribed == "NotSubscribed") { communityView, _ in
+                self.communityView = communityView
+            }.store(in: &cancellable)
+        }
     }
     
     func block(apiModel: ApiModel, block: Bool) {
