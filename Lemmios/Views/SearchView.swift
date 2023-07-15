@@ -1,5 +1,5 @@
-import SwiftUI
 import LemmyApi
+import SwiftUI
 
 struct SearchView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -80,25 +80,22 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyApi.ApiCommunity>>
     @EnvironmentObject var navModel: NavModel
     let communities: T
     var rising = false
-    
-    var callback: ((LemmyApi.ApiCommunity)->Void)?
-    
+
+    var callback: ((LemmyApi.ApiCommunity) -> Void)?
+
     var body: some View {
         ForEach(communities) { community in
-            NavigationLink(
-            ) {} label: {
+            Group {
                 if rising {
-                    HStack {
+                    CommunityLink(community: community.community) {
                         Image(systemName: "chart.line.uptrend.xyaxis")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 24)
                         Spacer()
-                        ShowFromComponent(item: community.community)
-                    }
+                    } suffix: {}
                 } else {
-                    HStack {
-                        ShowFromComponent(item: community.community)
+                    CommunityLink(community: community.community, prefix: {}) {
                         Spacer()
                         Text("\(community.counts.subscribers) Subscribers")
                     }

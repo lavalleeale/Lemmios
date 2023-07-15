@@ -31,14 +31,7 @@ struct SearchedView: View {
             } else if let users = searchedModel.users {
                 ColoredListComponent {
                     ForEach(users) { user in
-                        NavigationLink(value: UserModel(user: user.person)) {
-                            ShowFromComponent(item: user.person)
-                                .onAppear {
-                                    if user.id == users.last!.id {
-                                        searchedModel.fetchUsers(apiModel: apiModel)
-                                    }
-                                }
-                        }
+                        UserLink(user: user.person)
                     }
                 }
                 .onFirstAppear {

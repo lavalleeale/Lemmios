@@ -11,10 +11,7 @@ struct MessageComponent: View {
     var body: some View {
         VStack {
             HStack {
-                ShowFromComponent(item: message.creator)
-                    .highPriorityGesture(TapGesture().onEnded {
-                        navModel.path.append(UserModel(user: message.creator))
-                    })
+                UserLink(user: message.creator)
                 Spacer()
                 HStack(spacing: 3) {
                     Image(systemName: "clock")

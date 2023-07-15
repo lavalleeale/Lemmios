@@ -42,16 +42,7 @@ struct HomeView: View {
                     ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
                         Section {
                             ForEach(subscribed[firstLetter]!) { community in
-                                if community.local {
-                                    NavigationLink(value: PostsModel(path: community.name)) {
-                                        ShowFromComponent(item: community, showPlaceholder: true)
-                                    }
-                                } else {
-                                    let communityHost = community.actor_id.host()!
-                                    NavigationLink(value: PostsModel(path: "\(community.name)@\(communityHost)")) {
-                                        ShowFromComponent(item: community, showPlaceholder: true)
-                                    }
-                                }
+                                CommunityLink(community: community, showPlaceholder: true, prefix: {}, suffix: {})
                             }
                         } header: {
                             Text(firstLetter)

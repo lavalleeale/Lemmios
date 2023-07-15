@@ -24,6 +24,6 @@ final class SearchTests: XCTestCase {
             + "alex\n")
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.buttons["Users with \"alex\""].tap()
-        XCTAssert(app.staticTexts["alex95712"].waitForExistence(timeout: 10))
+        XCTAssert(app.buttons["alex95712"].waitForExistence(timeout: 10))
     }
 }

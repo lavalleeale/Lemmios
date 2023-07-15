@@ -58,12 +58,7 @@ struct CommentComponent: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            Button {} label: {
-                                ShowFromComponent(item: commentModel.comment.creator)
-                            }
-                            .highPriorityGesture(TapGesture().onEnded {
-                                navModel.path.append(UserModel(user: commentModel.comment.creator))
-                            })
+                            UserLink(user: commentModel.comment.creator)
                             .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
                             .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                             ScoreComponent(votableModel: commentModel)

@@ -22,21 +22,10 @@ struct PostActionsComponent: View {
                     DynamicStack(vertical: !compact || !preview) {
                         HStack {
                             if showCommunity {
-                                ShowFromComponent(item: postModel.community!)
-                                    .highPriorityGesture(TapGesture().onEnded {
-                                        if postModel.community!.local {
-                                            navModel.path.append(PostsModel(path: postModel.community!.name))
-                                        } else {
-                                            let communityHost = postModel.community!.actor_id.host()!
-                                            navModel.path.append(PostsModel(path: "\(postModel.community!.name)@\(communityHost)"))
-                                        }
-                                    })
+                                CommunityLink(community: postModel.community!, prefix: {}, suffix: {})
                             }
                             if showUser {
-                                ShowFromComponent(item: postModel.creator!)
-                                    .highPriorityGesture(TapGesture().onEnded {
-                                        navModel.path.append(UserModel(user: postModel.creator!))
-                                    })
+                                UserLink(user: postModel.creator!)
                             }
                         }
                         HStack(spacing: 0) {
