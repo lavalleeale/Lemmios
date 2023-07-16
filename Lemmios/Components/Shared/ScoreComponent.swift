@@ -1,8 +1,6 @@
 import SwiftUI
-import SimpleHaptics
 
 struct ScoreComponent<T: VotableModel>: View {
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @ObservedObject var votableModel: T
     @EnvironmentObject var apiModel: ApiModel
 
@@ -15,7 +13,9 @@ struct ScoreComponent<T: VotableModel>: View {
         }
         .accessibility(addTraits: .isButton)
         .onTapGesture {
-            try? haptics.fire()
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.prepare()
+            impact.impactOccurred()
             votableModel.vote(direction: true, apiModel: apiModel)
         }
         .foregroundColor(votableModel.likes == 1 ? .orange : votableModel.likes == -1 ? .purple : .gray)

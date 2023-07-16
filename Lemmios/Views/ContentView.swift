@@ -27,6 +27,7 @@ struct ContentView: View {
 
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
+    let postRegex = /^lemmiosapp:\/\/(.+?)\/post\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
 
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab

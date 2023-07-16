@@ -1,5 +1,4 @@
 import Foundation
-import SimpleHaptics
 import SwiftUI
 
 struct SwipeOption: Hashable {
@@ -10,7 +9,6 @@ struct SwipeOption: Hashable {
 
 struct SwiperContainer: ViewModifier {
     @State private var offset: CGFloat = 0
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
     @State var compressable: Bool
     let minTrailingOffset: CGFloat
@@ -43,7 +41,9 @@ struct SwiperContainer: ViewModifier {
                 }
                 .onChange(of: offset) { [offset] newOffset in
                     if (!calcLeadingShowing(index: index, offset: offset) || offset <= 50) && (calcLeadingShowing(index: index, offset: newOffset) && newOffset > 50) {
-                        try? haptics.fire(intensity: 1, sharpness: 1)
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.prepare()
+                        impact.impactOccurred()
                     }
                 }
                 .frame(maxWidth: showing ? offset : 0)
@@ -71,7 +71,9 @@ struct SwiperContainer: ViewModifier {
                 }
                 .onChange(of: offset) { [offset] newOffset in
                     if (!calcTrailingShowing(index: index, offset: offset) || offset >= -50) && (calcTrailingShowing(index: index, offset: newOffset) && newOffset < -50) {
-                        try? haptics.fire(intensity: 1, sharpness: 1)
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.prepare()
+                        impact.impactOccurred()
                     }
                 }
                 .frame(maxWidth: showing ? -offset : 0)

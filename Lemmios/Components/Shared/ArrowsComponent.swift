@@ -1,9 +1,7 @@
-import SimpleHaptics
 import SwiftUI
 
 struct ArrowsComponent<T: VotableModel>: View {
     @ObservedObject var votableModel: T
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @EnvironmentObject var apiModel: ApiModel
 
     var body: some View {
@@ -18,7 +16,9 @@ struct ArrowsComponent<T: VotableModel>: View {
                 if apiModel.selectedAccount == nil {
                     apiModel.getAuth()
                 } else {
-                    try? haptics.fire()
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.prepare()
+                    impact.impactOccurred()
                     votableModel.vote(direction: true, apiModel: apiModel)
                 }
             })
@@ -33,7 +33,9 @@ struct ArrowsComponent<T: VotableModel>: View {
                 if apiModel.selectedAccount == nil {
                     apiModel.getAuth()
                 } else {
-                    try? haptics.fire()
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.prepare()
+                    impact.impactOccurred()
                     votableModel.vote(direction: false, apiModel: apiModel)
                 }
             })

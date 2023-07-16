@@ -1,4 +1,3 @@
-import SimpleHaptics
 import SwiftUI
 import SwiftUIKit
 
@@ -102,7 +101,6 @@ struct PostButtons: View {
     @ObservedObject var postModel: PostModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var navModel: NavModel
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @EnvironmentObject var apiModel: ApiModel
     @State var showingReply = false
     @State var showingReport = false
@@ -127,7 +125,9 @@ struct PostButtons: View {
                 }
             }
             PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.slash" : "bookmark") {
-                try? haptics.fire()
+                let impact = UIImpactFeedbackGenerator(style: .light)
+                impact.prepare()
+                impact.impactOccurred()
                 postModel.save(apiModel: apiModel)
             }
             PostButton(label: "Reply", image: "arrowshape.turn.up.left") {

@@ -1,10 +1,8 @@
 import AlertToast
 import PhotosUI
-import SimpleHaptics
 import SwiftUI
 
 struct PostCreateComponent: View {
-    @EnvironmentObject var haptics: SimpleHapticGenerator
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var apiModel: ApiModel
     @State var title = ""
@@ -100,7 +98,9 @@ struct PostCreateComponent: View {
                             showToast = true
                         } else {
                             if editingId == nil {
-                                try? haptics.fire()
+                                let impact = UIImpactFeedbackGenerator(style: .light)
+                                impact.prepare()
+                                impact.impactOccurred()
                                 postsModel.createPost(title: title, content: postData, url: postUrl, apiModel: apiModel)
                                 dismiss()
                             }

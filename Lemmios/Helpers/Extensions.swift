@@ -98,6 +98,7 @@ private struct WithNavigationModifier: ViewModifier {
 
     let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
+    let postRegex = /^https:\/\/(.+?)\/post\/([0-9]+)$/
 
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
@@ -115,6 +116,9 @@ private struct WithNavigationModifier: ViewModifier {
                 }
                 .navigationDestination(for: SearchedModel.self) { searchedModel in
                     SearchedView(searchedModel: searchedModel)
+                }
+                .navigationDestination(for: ResolveModel.self) { resolveModel in
+                    ResolveView(resolveModel: resolveModel)
                 }
                 .fullScreenCover(item: $url) { item in
                     PostUrlViewWrapper(url: item)
@@ -138,6 +142,8 @@ private struct WithNavigationModifier: ViewModifier {
                 } else {
                     navModel.path.append(UserModel(path: "\(match.2)@\(match.1)"))
                 }
+            } else if url.absoluteString.firstMatch(of: postRegex) != nil {
+                navModel.path.append(ResolveModel(thing: url))
             } else {
                 self.url = url
             }
@@ -328,4 +334,44 @@ extension EnvironmentValues {
         get { self[ShowCommunities.self] }
         set { self[ShowCommunities.self] = newValue }
     }
+}
+
+func withFeedback(
+  _ style: UIImpactFeedbackGenerator.FeedbackStyle,
+  _ action: @escaping () -> Void
+) -> () -> Void {
+  { () in
+    let impact = UIImpactFeedbackGenerator(style: style)
+    impact.prepare()
+    impact.impactOccurred()
+    action()
+  }
+}
+
+struct HapticTapGestureViewModifier: ViewModifier {
+  var style: UIImpactFeedbackGenerator.FeedbackStyle
+  var action: () -> Void
+
+  func body(content: Content) -> some View {
+    content.onTapGesture(perform: withFeedback(self.style, self.action))
+  }
+}
+
+extension View {
+  func onTapGesture(
+    _ style: UIImpactFeedbackGenerator.FeedbackStyle,
+    perform action: @escaping () -> Void
+  ) -> some View {
+    modifier(HapticTapGestureViewModifier(style: style, action: action))
+  }
+}
+
+extension Button {
+  init(
+    _ style: UIImpactFeedbackGenerator.FeedbackStyle,
+    action: @escaping () -> Void,
+    @ViewBuilder label: () -> Label
+  ) {
+    self.init(action: withFeedback(style, action), label: label)
+  }
 }

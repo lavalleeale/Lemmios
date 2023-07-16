@@ -6,7 +6,6 @@ struct LemmiosApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(selectedTab: startingTab)
-                .environmentObject(delegate.haptics)
         }
     }
 }

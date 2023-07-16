@@ -1,4 +1,3 @@
-import SimpleHaptics
 import SwiftUI
 import OSLog
 import SimpleKeychain
@@ -10,8 +9,6 @@ class StartingTab: ObservableObject {
 let startingTab = StartingTab()
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, ObservableObject {
-    let haptics = SimpleHapticGenerator()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         
@@ -48,14 +45,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         sceneConfiguration.delegateClass = SceneDelegate.self
 
         return sceneConfiguration
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        haptics.stop()
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        try? haptics.start()
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

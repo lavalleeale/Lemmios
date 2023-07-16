@@ -18,7 +18,6 @@
 		FA40E9B92A622FB50099D6A3 /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA40E9B82A622FB50099D6A3 /* LemmyApi */; };
 		FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */; };
 		FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */; };
-		FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */ = {isa = PBXBuildFile; productRef = FA44D6BA2A5394D70086AD56 /* SimpleHaptics */; };
 		FA4534AF2A5E4B7D00EA9EE8 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */; };
 		FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596242A59C5A500368DBB /* ThemeManger.swift */; };
 		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
@@ -198,7 +197,6 @@
 				FA5A46102A61C1E70041D11B /* SQLite in Frameworks */,
 				FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */,
 				FA40E9B92A622FB50099D6A3 /* LemmyApi in Frameworks */,
-				FA44D6BB2A5394D70086AD56 /* SimpleHaptics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,7 +452,6 @@
 				FAAAF8682A5288CB00C9BFD8 /* MarkdownUI */,
 				FAAAF86B2A528C6600C9BFD8 /* CachedAsyncImage */,
 				FAAAF8702A52929500C9BFD8 /* SimpleKeychain */,
-				FA44D6BA2A5394D70086AD56 /* SimpleHaptics */,
 				FA52397B2A56371D00C80CDD /* SwiftUIKit */,
 				FAF000AC2A5676D700F07E04 /* AlertToast */,
 				FA1A32FF2A5FC2BF000A99CB /* ImageViewer */,
@@ -498,7 +495,6 @@
 				FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				FAAAF86A2A528C6600C9BFD8 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				FAAAF86F2A52929500C9BFD8 /* XCRemoteSwiftPackageReference "SimpleKeychain" */,
-				FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */,
 				FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */,
 				FAF000AB2A5676D700F07E04 /* XCRemoteSwiftPackageReference "AlertToast" */,
 				FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */,
@@ -906,14 +902,6 @@
 				kind = branch;
 			};
 		};
-		FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hallee/simple-haptics";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.5;
-			};
-		};
 		FA52397A2A56371D00C80CDD /* XCRemoteSwiftPackageReference "SwiftUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielsaidi/SwiftUIKit.git";
@@ -982,11 +970,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA40E9B72A622FB50099D6A3 /* XCRemoteSwiftPackageReference "LemmyApi" */;
 			productName = LemmyApi;
-		};
-		FA44D6BA2A5394D70086AD56 /* SimpleHaptics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FA44D6B92A5394D70086AD56 /* XCRemoteSwiftPackageReference "simple-haptics" */;
-			productName = SimpleHaptics;
 		};
 		FA52397B2A56371D00C80CDD /* SwiftUIKit */ = {
 			isa = XCSwiftPackageProductDependency;
