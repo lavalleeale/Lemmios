@@ -117,10 +117,8 @@ class ApiModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.accounts[self.accounts.firstIndex(of: account)!].notificationsEnabled = true
                     try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts")
-                    #if !DEBUG
                     UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
                     UIApplication.shared.registerForRemoteNotifications()
-                    #endif
                 }
             }
         }
@@ -138,7 +136,7 @@ class ApiModel: ObservableObject {
             timer?.invalidate()
         }
         if account.notificationsEnabled == true {
-            let registerUrl = URL(string: "https://lemmios.lavallee.one/remove")!
+            let registerUrl = URL(string: baseApiUrl + "/user/remove")!
             
             var request = URLRequest(url: registerUrl)
             request.httpMethod = "POST"

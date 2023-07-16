@@ -23,6 +23,8 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>laptop.lan:8080</key>
+			<string></string>
 			<key>meepzee.lan</key>
 			<string></string>
 		</dict>

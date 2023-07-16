@@ -6,6 +6,12 @@ class StartingTab: ObservableObject {
     @Published var requestedTab: String?
 }
 
+#if DEBUG
+let baseApiUrl = "http://laptop.lan:8080"
+#else
+let baseApiUrl = "https://lemmios.lavallee.one"
+#endif
+
 let startingTab = StartingTab()
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, ObservableObject {
@@ -50,7 +56,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         if let jwt = UserDefaults.standard.string(forKey: "targetJwt"), let url = UserDefaults.standard.string(forKey: "serverUrl") {
             UserDefaults.standard.removeObject(forKey: "targetJwt")
-            let registerUrl = URL(string: "https://lemmios.lavallee.one/register")!
+            let registerUrl = URL(string: baseApiUrl + "/user/register")!
 
             var request = URLRequest(url: registerUrl)
             request.httpMethod = "POST"
