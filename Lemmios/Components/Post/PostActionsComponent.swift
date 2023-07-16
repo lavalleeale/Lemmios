@@ -134,7 +134,7 @@ struct PostButtons: View {
                 showingReply = true
             }
             if showAll {
-                Button() {showingShare = true} label: {
+                Button { showingShare = true } label: {
                     Label {
                         Text("Share as Image")
                     } icon: {
@@ -146,7 +146,9 @@ struct PostButtons: View {
                     }
                 }
             }
-            ShareLink(item: postModel.post.ap_id) {
+            Button {
+                alwaysShare(item: postModel.post.ap_id)
+            } label: {
                 Label {
                     Text("Share")
                 } icon: {

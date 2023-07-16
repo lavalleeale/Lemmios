@@ -358,6 +358,9 @@ extension View {
     ) -> some View {
         modifier(HapticTapGestureViewModifier(style: style, action: action))
     }
+    func alwaysShare(item: Any) {
+        UIApplication.shared.currentUIWindow()?.visibleViewController!.present(UIActivityViewController(activityItems: [item], applicationActivities: nil), animated: true)
+    }
 }
 
 extension Button {

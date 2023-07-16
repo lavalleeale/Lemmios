@@ -33,7 +33,7 @@ struct PostSharePreview: View {
                     Toggle("Show Usernames", isOn: $showUsernames)
                     Toggle("Show Communities", isOn: $showCommunities)
                     Button {
-                        UIApplication.shared.currentUIWindow()?.visibleViewController!.present(UIActivityViewController(activityItems: [ItemDetailSource(name: postModel.post.name, image: uiImage)], applicationActivities: nil), animated: true)
+                        alwaysShare(item: ItemDetailSource(name: postModel.post.name, image: uiImage))
                     } label: {
                         Label {
                             Text("Share")
@@ -91,7 +91,6 @@ struct PostSharePreviewContent: View {
     @EnvironmentObject var apiModel: ApiModel
     let comments: [LemmyApi.ApiComment]
     var body: some View {
-//        VStack {
             let image = postModel.post.url != nil && imageExtensions.contains(postModel.post.url!.pathExtension)
             VStack(alignment: .leading) {
                 if !image {
@@ -118,7 +117,6 @@ struct PostSharePreviewContent: View {
                 }
             }
             .environmentObject(apiModel)
-//        }
         .background(selectedTheme.primaryColor)
         .frame(width: UIScreen.main.bounds.width)
         .environment(\.colorScheme, systemColorScheme)
