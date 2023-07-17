@@ -75,6 +75,16 @@ class CommentModel: VotableModel {
         }.store(in: &cancellable)
     }
     
+    func delete(apiModel: ApiModel) {
+        apiModel.lemmyHttp?.deleteComment(id: comment.id, deleted: !comment.comment.deleted) { response, _ in
+            DispatchQueue.main.async {
+                if let response = response {
+                    self.comment = response.comment_view
+                }
+            }
+        }.store(in: &cancellable)
+    }
+    
     func report(reason: String, apiModel: ApiModel) {
         apiModel.lemmyHttp?.reportComment(commentId: comment.id, reason: reason) { response, _ in
             if let response = response {

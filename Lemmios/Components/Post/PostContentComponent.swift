@@ -22,7 +22,7 @@ struct PostContentComponent: View {
     var body: some View {
         let showCompact = compact && preview
         Group {
-            if let url = post.post.url, imageExtensions.contains(url.pathExtension) {
+            if !post.post.deleted, let url = post.post.url, imageExtensions.contains(url.pathExtension) {
                 CachedAsyncImage(url: preview ? post.post.thumbnail_url ?? url : url, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
@@ -71,7 +71,7 @@ struct PostContentComponent: View {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, image: true, preview: false)
                     }
                 }
-            } else if let url = post.post.url {
+            } else if !post.post.deleted, let url = post.post.url {
                 LinkPreview(url: url)
                     .type(showCompact ? .small : .large)
                     .disabled(true)
@@ -86,7 +86,8 @@ struct PostContentComponent: View {
                             showingNSFW = true
                         }
                     })
-            } else if preview, let body = post.post.body {
+            } else if preview {
+                let body = post.post.deleted ? "*deleted by creator*" : post.post.removed ? "*removed by mod*" : post.post.body ?? ""
                 if showCompact {
                     Image(systemName: "text.aligncenter")
                         .resizable()
@@ -110,7 +111,8 @@ struct PostContentComponent: View {
                     }
                 }
             }
-            if !preview, let body = post.post.body {
+            if !preview {
+                let body = post.post.deleted ? "*deleted by creator*" : post.post.removed ? "*removed by mod*" : post.post.body ?? ""
                 Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
             }
         }

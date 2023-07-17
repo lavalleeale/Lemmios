@@ -1,8 +1,8 @@
 import Combine
 import Foundation
+import LemmyApi
 import OSLog
 import SwiftUI
-import LemmyApi
 
 class PostModel: VotableModel, Hashable {
     private var id = UUID()
@@ -170,6 +170,16 @@ class PostModel: VotableModel, Hashable {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
+            }
+        }.store(in: &cancellable)
+    }
+    
+    func delete(apiModel: ApiModel) {
+        apiModel.lemmyHttp?.deletePost(id: post.id, deleted: !post.deleted) { response, _ in
+            DispatchQueue.main.async {
+                if let response = response {
+                    self.post = response.post_view.post
+                }
             }
         }.store(in: &cancellable)
     }

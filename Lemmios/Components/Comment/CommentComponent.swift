@@ -35,6 +35,9 @@ struct CommentComponent: View {
                 PostButton(label: "Edit", image: "pencil") {
                     showingEdit = true
                 }
+                PostButton(label: commentModel.comment.comment.deleted ? "Restore" : "Delete", image: commentModel.comment.comment.deleted ? "trash.slash" : "trash") {
+                    commentModel.delete(apiModel: apiModel)
+                }
             } else {
                 PostButton(label: "Report", image: "flag") {
                     showingReport = true
@@ -92,7 +95,15 @@ struct CommentComponent: View {
                     }
                     .redacted(reason: .privacy)
                     if !collapsed {
-                        Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
+                        if commentModel.comment.comment.deleted {
+                            Text("deleted by creator")
+                                .italic()
+                        } else if commentModel.comment.comment.removed {
+                            Text("removed by mod")
+                                .italic()
+                        } else {
+                            Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
+                        }
                     }
                 }
                 .contentShape(Rectangle())
@@ -122,50 +133,50 @@ struct CommentComponent: View {
                         SwipeOption(id: "upvote", image: "arrow.up", color: .orange),
                         SwipeOption(id: "downvote", image: "arrow.down", color: .purple)
                     ],
-                              trailingOptions: [
-                                replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
-                                SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
-                              ]) { swiped in
-                                  switch swiped {
-                                  case "upvote":
-                                      if apiModel.selectedAccount == nil {
-                                          apiModel.getAuth()
-                                      } else {
-                                          commentModel.vote(direction: true, apiModel: apiModel)
-                                      }
-                                  case "downvote":
-                                      if apiModel.selectedAccount == nil {
-                                          apiModel.getAuth()
-                                      } else {
-                                          commentModel.vote(direction: false, apiModel: apiModel)
-                                      }
-                                  case "reply":
-                                      if apiModel.selectedAccount == nil {
-                                          apiModel.getAuth()
-                                      } else {
-                                          showingReply = true
-                                      }
-                                  case "read":
-                                      if apiModel.selectedAccount == nil {
-                                          apiModel.getAuth()
-                                      } else {
-                                          commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
-                                              read!()
-                                          }
-                                      }
-                                  case "collapse":
-                                      withAnimation {
-                                          if collapseParent != nil {
-                                              collapseParent!()
-                                          } else {
-                                              self.collapsed = true
-                                          }
-                                      }
-                                      return
-                                  default:
-                                      break
-                                  }
-                              }
+                    trailingOptions: [
+                        replyInfo != nil ? SwipeOption(id: "read", image: replyInfo!.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!) : SwipeOption(id: "collapse", image: "arrow.up.to.line", color: Color(hex: "3880EF")!),
+                        SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)
+                    ]) { swiped in
+                        switch swiped {
+                        case "upvote":
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                commentModel.vote(direction: true, apiModel: apiModel)
+                            }
+                        case "downvote":
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                commentModel.vote(direction: false, apiModel: apiModel)
+                            }
+                        case "reply":
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                showingReply = true
+                            }
+                        case "read":
+                            if apiModel.selectedAccount == nil {
+                                apiModel.getAuth()
+                            } else {
+                                commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
+                                    read!()
+                                }
+                            }
+                        case "collapse":
+                            withAnimation {
+                                if collapseParent != nil {
+                                    collapseParent!()
+                                } else {
+                                    self.collapsed = true
+                                }
+                            }
+                            return
+                        default:
+                            break
+                        }
+                    }
             }
             .contextMenu { menuButtons }
             .overlay {

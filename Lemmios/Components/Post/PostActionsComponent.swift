@@ -121,11 +121,6 @@ struct PostButtons: View {
                     navModel.path.append(postModel)
                 }
             }
-            if showAll {
-                PostButton(label: "Report", image: "flag") {
-                    showingReport = true
-                }
-            }
             PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.fill" : "bookmark") {
                 let impact = UIImpactFeedbackGenerator(style: .light)
                 impact.prepare()
@@ -136,6 +131,15 @@ struct PostButtons: View {
                 showingReply = true
             }
             if showAll {
+                if let account = apiModel.selectedAccount, let user = postModel.creator, account == user {
+                    PostButton(label: postModel.post.deleted ? "Restore" : "Delete", image: postModel.post.deleted ? "trash.slash" : "trash") {
+                        postModel.delete(apiModel: apiModel)
+                    }
+                } else {
+                    PostButton(label: "Report", image: "flag") {
+                        showingReport = true
+                    }
+                }
                 Button { showingShare = true } label: {
                     Label {
                         Text("Share as Image")
