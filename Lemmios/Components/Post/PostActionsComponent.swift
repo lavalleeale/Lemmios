@@ -124,7 +124,7 @@ struct PostButtons: View {
                     showingReport = true
                 }
             }
-            PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.slash" : "bookmark") {
+            PostButton(label: postModel.saved ? "Unsave" : "Save", image: postModel.saved ? "bookmark.fill" : "bookmark") {
                 let impact = UIImpactFeedbackGenerator(style: .light)
                 impact.prepare()
                 impact.impactOccurred()
