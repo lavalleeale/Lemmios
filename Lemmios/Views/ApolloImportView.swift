@@ -26,7 +26,7 @@ struct ApolloImportView: View {
             }
         }
         .toast(isPresenting: $showingError) {
-            AlertToast(displayMode: .hud, type: .error(.red), title: "Wrong file picked")
+            AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Wrong file picked")
         }
         .navigationDestination(for: ApolloImportDestination.self) { value in
             switch value {

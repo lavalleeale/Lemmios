@@ -1,7 +1,7 @@
-import Foundation
 import Combine
-import OSLog
+import Foundation
 import LemmyApi
+import OSLog
 
 class SearchedModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -13,6 +13,7 @@ class SearchedModel: ObservableObject, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+
     private var cancellable: Set<AnyCancellable> = Set()
     @Published var communities: [LemmyApi.ApiCommunity]?
     @Published var posts: [LemmyApi.ApiPost]?
@@ -20,6 +21,7 @@ class SearchedModel: ObservableObject, Hashable {
     @Published var sort = LemmyApi.Sort.Top
     @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
+    @Published var rateLimited = false
     
     @Published var query: String
     
@@ -49,8 +51,8 @@ class SearchedModel: ObservableObject, Hashable {
                 users?.removeAll()
             }
         }
-        self.pageStatus = .ready(nextPage: 1)
-        self.cancellable.removeAll()
+        pageStatus = .ready(nextPage: 1)
+        cancellable.removeAll()
     }
     
     func fetchCommunties(apiModel: ApiModel, reset: Bool = false) {
@@ -66,7 +68,12 @@ class SearchedModel: ObservableObject, Hashable {
                     self.communities!.append(contentsOf: communities)
                 }
                 self.pageStatus = .ready(nextPage: page+1)
-            } else {
+            } else if let error = error {
+                if case let .lemmyError(message: message, code: _) = error {
+                    if message == "rate_limit_error" {
+                        self.rateLimited = true
+                    }
+                }
                 self.pageStatus = .failed
             }
         }.store(in: &cancellable)
@@ -81,7 +88,12 @@ class SearchedModel: ObservableObject, Hashable {
             if error == nil {
                 self.posts!.append(contentsOf: posts!.posts)
                 self.pageStatus = .ready(nextPage: page+1)
-            } else {
+            } else if let error = error {
+                if case let .lemmyError(message: message, code: _) = error {
+                    if message == "rate_limit_error" {
+                        self.rateLimited = true
+                    }
+                }
                 self.pageStatus = .failed
             }
         }.store(in: &cancellable)
@@ -96,8 +108,12 @@ class SearchedModel: ObservableObject, Hashable {
             if error == nil {
                 self.users!.append(contentsOf: users!.users)
                 self.pageStatus = .ready(nextPage: page+1)
-            } else {
-                os_log("\(error)")
+            } else if let error = error {
+                if case let .lemmyError(message: message, code: _) = error {
+                    if message == "rate_limit_error" {
+                        self.rateLimited = true
+                    }
+                }
                 self.pageStatus = .failed
             }
         }.store(in: &cancellable)

@@ -1,5 +1,6 @@
 import LemmyApi
 import SwiftUI
+import AlertToast
 
 struct SearchView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -35,6 +36,9 @@ struct SearchView: View {
                     self.searchedModel.query = newValue
                     self.searchedModel.fetchCommunties(apiModel: apiModel, reset: true)
                 }
+            }
+            .toast(isPresenting: $searchedModel.rateLimited) {
+                AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Search rate limit reached")
             }
             .frame(maxHeight: typing ? .infinity : 0)
             .clipped()
@@ -85,20 +89,18 @@ struct CommmunityListComponent<T: RandomAccessCollection<LemmyApi.ApiCommunity>>
 
     var body: some View {
         ForEach(communities) { community in
-            Group {
+            HStack {
                 if rising {
-                    CommunityLink(community: community.community) {
-                        Image(systemName: "chart.line.uptrend.xyaxis")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 24)
-                        Spacer()
-                    } suffix: {}
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 24)
+                    Spacer()
+                    ShowFromComponent(item: community.community, show: true)
                 } else {
-                    CommunityLink(community: community.community, prefix: {}) {
-                        Spacer()
-                        Text("\(community.counts.subscribers) Subscribers")
-                    }
+                    ShowFromComponent(item: community.community, show: true)
+                    Spacer()
+                    Text("\(community.counts.subscribers) Subscribers")
                 }
             }
             .contentShape(Rectangle())

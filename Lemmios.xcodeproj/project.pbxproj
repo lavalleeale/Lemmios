@@ -22,6 +22,8 @@
 		FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596242A59C5A500368DBB /* ThemeManger.swift */; };
 		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
+		FA4CDA8E2A64D4AA001D38F7 /* WatchersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */; };
+		FA4CEC5C2A64B03B002AEB75 /* AddWatcherComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
 		FA5A46102A61C1E70041D11B /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = FA5A460F2A61C1E70041D11B /* SQLite */; };
 		FA5A46122A61C2B30041D11B /* DBModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A46112A61C2B30041D11B /* DBModel.swift */; };
@@ -53,6 +55,8 @@
 		FAB93E5F2A533FE800DE15BB /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E5E2A533FE800DE15BB /* CommentModel.swift */; };
 		FAB93E612A5345CA00DE15BB /* VotableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E602A5345CA00DE15BB /* VotableModel.swift */; };
 		FAB93E632A5346E400DE15BB /* ScoreComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB93E622A5346E400DE15BB /* ScoreComponent.swift */; };
+		FABB71312A6447D900D39592 /* ResolveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB71302A6447D900D39592 /* ResolveView.swift */; };
+		FABB71332A6447E400D39592 /* ResolveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB71322A6447E400D39592 /* ResolveModel.swift */; };
 		FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28352A5916A900243C7F /* ApolloImportView.swift */; };
 		FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28372A59175C00243C7F /* ApolloImportModel.swift */; };
 		FABC28462A5932E700243C7F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28452A5932E700243C7F /* AboutView.swift */; };
@@ -62,6 +66,7 @@
 		FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284D2A593D8100243C7F /* ImportSubsView.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
+		FACA76EE2A64A6C300D96136 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA76ED2A64A6C300D96136 /* NotificationsView.swift */; };
 		FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */; };
 		FAD0930C2A5D0BF600CFEC3E /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
@@ -119,6 +124,8 @@
 		FA4596242A59C5A500368DBB /* ThemeManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManger.swift; sourceTree = "<group>"; };
 		FA4596262A59C83700368DBB /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
+		FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchersModel.swift; sourceTree = "<group>"; };
+		FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWatcherComponent.swift; sourceTree = "<group>"; };
 		FA5A46112A61C2B30041D11B /* DBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBModel.swift; sourceTree = "<group>"; };
 		FA5A461A2A61E2670041D11B /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		FA5A461C2A61E26F0041D11B /* AuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTests.swift; sourceTree = "<group>"; };
@@ -148,6 +155,8 @@
 		FAB93E5E2A533FE800DE15BB /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		FAB93E602A5345CA00DE15BB /* VotableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotableModel.swift; sourceTree = "<group>"; };
 		FAB93E622A5346E400DE15BB /* ScoreComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreComponent.swift; sourceTree = "<group>"; };
+		FABB71302A6447D900D39592 /* ResolveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveView.swift; sourceTree = "<group>"; };
+		FABB71322A6447E400D39592 /* ResolveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveModel.swift; sourceTree = "<group>"; };
 		FABC28352A5916A900243C7F /* ApolloImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportView.swift; sourceTree = "<group>"; };
 		FABC28372A59175C00243C7F /* ApolloImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloImportModel.swift; sourceTree = "<group>"; };
 		FABC28452A5932E700243C7F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -157,6 +166,7 @@
 		FABC284D2A593D8100243C7F /* ImportSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSubsView.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FACA76ED2A64A6C300D96136 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -317,6 +327,8 @@
 				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
 				FAEE08D12A5A06A100B54142 /* InboxView.swift */,
 				FA2214922A5B57D80023C696 /* SplashView.swift */,
+				FABB71302A6447D900D39592 /* ResolveView.swift */,
+				FACA76ED2A64A6C300D96136 /* NotificationsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -340,6 +352,8 @@
 				FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */,
 				FA5A46112A61C2B30041D11B /* DBModel.swift */,
 				FAF5D06D2A63262D002BD1AD /* PostShareModel.swift */,
+				FABB71322A6447E400D39592 /* ResolveModel.swift */,
+				FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -409,6 +423,7 @@
 				FABC28472A59338D00243C7F /* SettingViewComponent.swift */,
 				FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */,
 				FABC284B2A5933C100243C7F /* DefaultStartComponent.swift */,
+				FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -553,7 +568,9 @@
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
 				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,
+				FABB71332A6447E400D39592 /* ResolveModel.swift in Sources */,
 				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
+				FA4CEC5C2A64B03B002AEB75 /* AddWatcherComponent.swift in Sources */,
 				FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */,
 				FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */,
 				FADD20452A5204B3002CE443 /* ContentView.swift in Sources */,
@@ -579,6 +596,7 @@
 				FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */,
 				FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */,
 				FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */,
+				FACA76EE2A64A6C300D96136 /* NotificationsView.swift in Sources */,
 				FADD205B2A520D8E002CE443 /* ServerSelectorView.swift in Sources */,
 				FAAAF8632A5260E300C9BFD8 /* PostContentComponent.swift in Sources */,
 				FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */,
@@ -601,8 +619,10 @@
 				FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
+				FABB71312A6447D900D39592 /* ResolveView.swift in Sources */,
 				FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */,
 				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,
+				FA4CDA8E2A64D4AA001D38F7 /* WatchersModel.swift in Sources */,
 				FA4534AF2A5E4B7D00EA9EE8 /* ImageModel.swift in Sources */,
 				FAF5D06E2A63262D002BD1AD /* PostShareModel.swift in Sources */,
 			);

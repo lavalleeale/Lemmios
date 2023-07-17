@@ -3,6 +3,7 @@ import ImageViewer
 import SwiftUI
 import SwiftUIKit
 import WebKit
+import LemmyApi
 
 extension Date {
     func relativeDateAsString() -> String {
@@ -98,6 +99,7 @@ private struct WithNavigationModifier: ViewModifier {
 
     let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
+    let postRegex = /^https:\/\/(.+?)\/post\/([0-9]+)$/
 
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
@@ -115,6 +117,9 @@ private struct WithNavigationModifier: ViewModifier {
                 }
                 .navigationDestination(for: SearchedModel.self) { searchedModel in
                     SearchedView(searchedModel: searchedModel)
+                }
+                .navigationDestination(for: ResolveModel<LemmyApi.PostResolveResponse>.self) { resolveModel in
+                    ResolveView(resolveModel: resolveModel)
                 }
                 .fullScreenCover(item: $url) { item in
                     PostUrlViewWrapper(url: item)
@@ -138,6 +143,8 @@ private struct WithNavigationModifier: ViewModifier {
                 } else {
                     navModel.path.append(UserModel(path: "\(match.2)@\(match.1)"))
                 }
+            } else if url.absoluteString.firstMatch(of: postRegex) != nil {
+                navModel.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: url))
             } else {
                 self.url = url
             }
@@ -358,6 +365,7 @@ extension View {
     ) -> some View {
         modifier(HapticTapGestureViewModifier(style: style, action: action))
     }
+
     func alwaysShare(item: Any) {
         UIApplication.shared.currentUIWindow()?.visibleViewController!.present(UIActivityViewController(activityItems: [item], applicationActivities: nil), animated: true)
     }

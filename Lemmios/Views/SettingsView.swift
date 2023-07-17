@@ -56,11 +56,7 @@ struct SettingsView: View {
                 Toggle("Show Images in Comments", isOn: $commentImages)
             }
             Section("Other") {
-                if apiModel.selectedAccount?.notificationsEnabled == false {
-                    Button("Enable push notifications for current account") {
-                        apiModel.enablePush(account: apiModel.selectedAccount!)
-                    }
-                }
+                NavigationLink("Notifications", value: SettingsNav.Notifications)
                 Toggle("Blur NSFW", isOn: $blurNsfw)
                 DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
@@ -93,6 +89,8 @@ struct SettingsView: View {
                 ServerSelectorView {
                     navModel.clear()
                 }
+            case .Notifications:
+                NotificationsView()
             case .Read:
                 ColoredListComponent {
                     Toggle("Disable Marking Posts Read", isOn: Binding(get: { !enableRead }, set: { enableRead = !$0 }))
@@ -112,7 +110,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector, Read
+    case About, ServerSelector, Read, Notifications
 }
 
 protocol HasCustom {

@@ -1,4 +1,5 @@
 import SwiftUI
+import AlertToast
 
 struct DefaultStartComponent: View {
     @State private var showingCustom = false
@@ -20,7 +21,7 @@ struct DefaultStartComponent: View {
                             self.selection = .Community(name: custom)
                             showingCustom = false
                         }
-                        if let communities = searchedModel.communities?.filter({ $0.community.name.contains(custom.lowercased()) }).prefix(5), communities.count != 0 {
+                        if let communities = searchedModel.communities?.filter({ $0.community.name.lowercased().contains(custom.lowercased()) }).prefix(5), communities.count != 0 {
                             CommmunityListComponent(communities: communities) { community in
                                 self.selection = .Community(name: "\(community.community.name)@\(community.community.actor_id.host()!)")
                                 showingCustom = false
@@ -45,6 +46,9 @@ struct DefaultStartComponent: View {
                     self.showingCustom = true
                     UserDefaults.standard.set(selection.rawValue, forKey: "defaultStart")
                 }
+            }
+            .toast(isPresenting: $searchedModel.rateLimited) {
+                AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Search rate limit reached")
             }
     }
 }

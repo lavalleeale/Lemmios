@@ -125,13 +125,13 @@ struct PostCreateComponent: View {
             }
         }
         .toast(isPresenting: $showToast) {
-            AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid URL")
+            AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Invalid URL")
         }
         .toast(isPresenting: $showError) {
             if case let .failure(error, _) = imageModel.imageState {
-                return AlertToast(displayMode: .alert, type: .error(.red), title: error.rawValue)
+                return AlertToast(displayMode: .banner(.pop), type: .error(.red), title: error.rawValue)
             } else {
-                return AlertToast(displayMode: .alert, type: .error(.red), title: "Error loading image")
+                return AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Error loading image")
             }
         } onTap: {
             if case let .failure(error, _) = imageModel.imageState {

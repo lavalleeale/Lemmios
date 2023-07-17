@@ -18,6 +18,8 @@ final class ScreenshotTests: XCTestCase {
         welcomeAttachment.lifetime = .keepAlways
         add(welcomeAttachment)
         app.selectServer()
+        app.buttons["Sort"].tapUnhittable()
+        app.buttons["Old"].tap()
         XCTAssert(app.staticTexts["Comment Depth"].waitForExistence(timeout: 10))
         let normalScreenshot = app.windows.firstMatch.screenshot()
         let normalAttachment = XCTAttachment(screenshot: normalScreenshot)

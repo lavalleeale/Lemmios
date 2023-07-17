@@ -10,6 +10,8 @@ final class AuthTests: XCTestCase {
         app.launchArguments.append("test")
         app.launch()
         app.selectServer()
+        app.buttons["Sort"].tapUnhittable()
+        app.buttons["Old"].tap()
         XCTAssert(app.staticTexts["Comment Depth"].waitForExistence(timeout: 10))
         app.buttons["Accounts"].tap()
         let username = app.textFields["Username"]

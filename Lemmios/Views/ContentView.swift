@@ -2,6 +2,7 @@ import AlertToast
 import SafariServices
 import SwiftUI
 import ImageViewer
+import LemmyApi
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
@@ -27,7 +28,7 @@ struct ContentView: View {
 
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-    let postRegex = /^lemmiosapp:\/\/(.+?)\/post\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
+    let postRegex = /^lemmiosapp:\/\/(.+?)\/post\/([0-9]+)$/
 
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab
@@ -153,15 +154,32 @@ struct ContentView: View {
                     .toolbar(.visible, for: .tabBar)
                 }
                 .onAppear {
+                    print(456, selectedTab)
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
                         selectedTab.requestedTab = nil
+                    }
+                    if let requestedUrl = selectedTab.requestedUrl {
+                        if requestedUrl.absoluteString.contains("post") {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                selectedNavModel!.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: requestedUrl))
+                            }
+                        }
+                        selectedTab.requestedUrl = nil
                     }
                 }
                 .onChange(of: selectedTab.requestedTab) { newValue in
                     if let requestedTab = newValue, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
                         selectedTab.requestedTab = nil
+                    }
+                }
+                .onChange(of: selectedTab.requestedUrl) { newValue in
+                    if let requestedUrl = newValue {
+                        if requestedUrl.absoluteString.contains("post") {
+                            selectedNavModel!.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: requestedUrl))
+                        }
+                        selectedTab.requestedUrl = nil
                     }
                 }
                 .onOpenURL { incomingUrl in
@@ -185,10 +203,14 @@ struct ContentView: View {
                         } else {
                             selectedNavModel!.path.append(UserModel(path: "\(match.2)@\(match.1)"))
                         }
+                    } else if incomingUrl.absoluteString.firstMatch(of: postRegex) != nil {
+                        var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
+                        urlComponents.scheme = "https"
+                        selectedNavModel!.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: urlComponents.url!))
                     }
                 }
                 .toast(isPresenting: $showInvalidUser) {
-                    AlertToast(displayMode: .alert, type: .error(.red), title: "Invalid token, please relogin.")
+                    AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Invalid token, please relogin.")
                 } completion: {
                     apiModel.invalidUser = nil
                 }

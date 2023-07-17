@@ -93,10 +93,10 @@ struct AuthFormComponent: View {
             }
         }
         .toast(isPresenting: $authModel.verifySent, duration: 5) {
-            AlertToast(displayMode: .banner(.slide), type: .complete(.green), title: "Verification Email Sent.")
+            AlertToast(displayMode: .banner(.pop), type: .complete(.green), title: "Verification Email Sent.")
         }
         .toast(isPresenting: $showingError, duration: 5) {
-            AlertToast(displayMode: .banner(.slide), type: .error(.red), title: authModel.error.replacingOccurrences(of: "_", with: " ").localizedCapitalized)
+            AlertToast(displayMode: .banner(.pop), type: .error(.red), title: authModel.error.replacingOccurrences(of: "_", with: " ").localizedCapitalized)
         } completion: {
             authModel.error = ""
         }

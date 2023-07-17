@@ -7,7 +7,6 @@ let specialPostPathList = ["All", "Subscribed", "Local"]
 struct PostsView: View {
     @ObservedObject var postsModel: PostsModel
     @StateObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
-    @State var newPath: String = ""
     @State var showingCreate = false
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var apiModel: ApiModel
@@ -66,22 +65,25 @@ struct PostsView: View {
             postsModel.fetchPosts(apiModel: apiModel)
         }
         .overlay {
-            if let communities = searchedModel.communities?.filter({ $0.community.name.contains(newPath.lowercased()) }).prefix(5), communities.count != 0 {
+            if let communities = searchedModel.communities?.filter({ $0.community.name.lowercased().contains(searchedModel.query.lowercased()) }).prefix(5), communities.count != 0 {
                 ColoredListComponent(customBackground: .black.opacity(0.25)) {
                     CommmunityListComponent(communities: communities)
                 }
                 .onTapGesture {
                     withAnimation(.linear(duration: 0.1)) {
-                        newPath = ""
+                        searchedModel.query = ""
                     }
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             }
         }
+        .toast(isPresenting: $searchedModel.rateLimited) {
+            AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Search rate limit reached")
+        }
         .onChange(of: apiModel.selectedAccount) { _ in
             postsModel.refresh(apiModel: apiModel)
         }
-        .onChange(of: newPath) { newValue in
+        .onReceive(searchedModel.$query.throttle(for: 1, scheduler: RunLoop.main, latest: true)) { newValue in
             self.searchedModel.reset(removeResults: false)
             if newValue != "" {
                 self.searchedModel.query = newValue
@@ -89,10 +91,10 @@ struct PostsView: View {
             }
         }
         .onAppear {
-            newPath = ""
+            searchedModel.query = ""
         }
         .toast(isPresenting: $postsModel.postCreated, duration: 3) {
-            AlertToast(displayMode: .alert, type: .complete(.green), title: "Posted! Tap to view.")
+            AlertToast(displayMode: .banner(.pop), type: .complete(.green), title: "Posted! Tap to view.")
         } onTap: {
             navModel.path.append(PostModel(post: postsModel.createdPost!))
         }
@@ -107,8 +109,8 @@ struct PostsView: View {
         Group {
             let isSpecialPath = specialPostPathList.contains(postsModel.path)
             ToolbarItem(placement: .principal) {
-                TextField((postsModel.path == "") ? "All" : postsModel.path, text: $newPath, onCommit: {
-                    navModel.path.append(PostsModel(path: newPath))
+                TextField((postsModel.path == "") ? "All" : postsModel.path, text: $searchedModel.query, onCommit: {
+                    navModel.path.append(PostsModel(path: searchedModel.query))
                 })
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)

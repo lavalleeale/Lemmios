@@ -58,7 +58,7 @@ struct CommunityLink<Prefix: View, Suffix: View>: View {
     }
 }
 
-private struct ShowFromComponent<T: WithNameHost>: View {
+struct ShowFromComponent<T: WithNameHost>: View {
     @EnvironmentObject var apiModel: ApiModel
     @State var item: T
     var showPlaceholder = false

@@ -4,6 +4,7 @@ import SimpleKeychain
 
 class StartingTab: ObservableObject {
     @Published var requestedTab: String?
+    @Published var requestedUrl: URL?
 }
 
 #if DEBUG
@@ -14,7 +15,15 @@ let baseApiUrl = "https://lemmios.lavallee.one"
 
 let startingTab = StartingTab()
 
+extension UserDefaults {
+    @objc dynamic var deviceToken: String? {
+        get { string(forKey: "deviceToken") }
+        set { setValue(newValue, forKey: "deviceToken") }
+    }
+}
+
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, ObservableObject {
+    private let keychain = SimpleKeychain()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         
@@ -32,18 +41,23 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
             try! SimpleKeychain().deleteAll()
         }
-
-        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
-            startingTab.requestedTab = "Inbox"
-        }
+        
         return true
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-
-        startingTab.requestedTab = "Inbox"
+        
+        if let url = URL(string: response.notification.request.content.body) {
+            startingTab.requestedUrl = url
+        } else {
+            startingTab.requestedTab = "Inbox"
+        }
 
         completionHandler()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        return .banner
     }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -54,28 +68,22 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        if let jwt = UserDefaults.standard.string(forKey: "targetJwt"), let url = UserDefaults.standard.string(forKey: "serverUrl") {
-            UserDefaults.standard.removeObject(forKey: "targetJwt")
-            let registerUrl = URL(string: baseApiUrl + "/user/register")!
-
-            var request = URLRequest(url: registerUrl)
-            request.httpMethod = "POST"
-            request.httpBody = try! JSONEncoder().encode(["jwt": jwt, "instance": url, "deviceToken": deviceToken.reduce("") { $0 + String(format: "%02X", $1) }])
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-            let task = URLSession.shared.dataTask(with: request) { data, _, _ in
-                guard let data = data else { return }
-                os_log("\(String(data: data, encoding: .utf8)!)")
-            }
-
-            task.resume()
-        }
+        let deviceToken = deviceToken.reduce("") { $0 + String(format: "%02X", $1) }
+        UserDefaults.standard.deviceToken = deviceToken
     }
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, ObservableObject {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        startingTab.requestedTab = connectionOptions.shortcutItem?.type
+        if let shortcutItem = connectionOptions.shortcutItem {
+            startingTab.requestedTab = shortcutItem.type
+        } else if let response = connectionOptions.notificationResponse {
+            if let url = URL(string: response.notification.request.content.body) {
+                startingTab.requestedUrl = url
+            } else {
+                startingTab.requestedTab = "Inbox"
+            }
+        }
     }
 
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {

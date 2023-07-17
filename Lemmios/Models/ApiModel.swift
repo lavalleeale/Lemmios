@@ -1,9 +1,9 @@
 import Combine
 import Foundation
+import LemmyApi
 import OSLog
 import SimpleKeychain
 import SwiftUI
-import LemmyApi
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl") public var url = ""
@@ -24,12 +24,11 @@ class ApiModel: ObservableObject {
     private var decoder = JSONDecoder()
     private var cancellable = Set<AnyCancellable>()
     private var serverInfoCancellable: AnyCancellable?
+    private var deviceTokenCancellable: AnyCancellable?
     
     private var timer: Timer?
     
-    init(doNothing: Bool) {
-        
-    }
+    init(doNothing: Bool) {}
     
     init() {
         if try! simpleKeychain.hasItem(forKey: "accounts") {
@@ -51,7 +50,7 @@ class ApiModel: ObservableObject {
         showingAuth = true
     }
     
-    func verifyServer(url: String, receiveValue: @escaping (String?, LemmyApi.SiteInfo?)->Void) {
+    func verifyServer(url: String, receiveValue: @escaping (String?, LemmyApi.SiteInfo?) -> Void) {
         siteInfo = nil
         do {
             lemmyHttp = try LemmyApi(baseUrl: url)
@@ -71,13 +70,13 @@ class ApiModel: ObservableObject {
     }
     
     func selectServer(url: String) -> String {
-        self.selectedAccount = nil
+        selectedAccount = nil
         do {
             lemmyHttp = try LemmyApi(baseUrl: url)
-            self.url = String(lemmyHttp!.baseUrl)
             if let storedAccount = UserDefaults.standard.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.host()!) {
                 UserDefaults.standard.removeObject(forKey: "account")
             }
+            self.url = String(lemmyHttp!.baseUrl)
             serverSelected = true
             if try! simpleKeychain.hasItem(forKey: "accounts for \(url)") {
                 let data = try! simpleKeychain.data(forKey: "accounts for \(url)")
@@ -117,7 +116,23 @@ class ApiModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.accounts[self.accounts.firstIndex(of: account)!].notificationsEnabled = true
                     try! self.simpleKeychain.set(try! self.encoder.encode(self.accounts), forKey: "accounts")
-                    UserDefaults.standard.set(account.jwt, forKey: "targetJwt")
+                    self.deviceTokenCancellable = UserDefaults.standard.publisher(for: \.deviceToken)
+                        .sink { newValue in
+                            self.deviceTokenCancellable = nil
+                            let registerUrl = URL(string: baseApiUrl + "/user/register")!
+                           
+                            var request = URLRequest(url: registerUrl)
+                            request.httpMethod = "POST"
+                            request.httpBody = try! JSONEncoder().encode(["jwt": account.jwt, "instance": account.instance, "deviceToken": newValue])
+                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                           
+                            let task = URLSession.shared.dataTask(with: request) { data, _, _ in
+                                guard let data = data else { return }
+                                os_log("\(String(data: data, encoding: .utf8)!)")
+                            }
+                           
+                            task.resume()
+                        }
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
@@ -136,20 +151,28 @@ class ApiModel: ObservableObject {
             timer?.invalidate()
         }
         if account.notificationsEnabled == true {
-            let registerUrl = URL(string: baseApiUrl + "/user/remove")!
-            
-            var request = URLRequest(url: registerUrl)
-            request.httpMethod = "POST"
-            request.httpBody = try! encoder.encode(["jwt": account.jwt])
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let task = URLSession.shared.dataTask(with: request) { data, _, _ in
-                guard let data = data else { return }
-                os_log("\(String(data: data, encoding: .utf8)!)")
-            }
-            
-            task.resume()
+            disablePush(account: account)
         }
+    }
+    
+    func disablePush(account: StoredAccount) {
+        let registerUrl = URL(string: baseApiUrl + "/user/remove")!
+        
+        var request = URLRequest(url: registerUrl)
+        request.httpMethod = "POST"
+        request.httpBody = try! encoder.encode(["jwt": account.jwt])
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data else { return }
+            os_log("\(String(data: data, encoding: .utf8)!)")
+        }
+        
+        if let index = accounts.firstIndex(of: account) {
+            accounts[index].notificationsEnabled = false
+        }
+        
+        task.resume()
     }
     
     func selectAuth(account: StoredAccount) {
@@ -173,7 +196,7 @@ class ApiModel: ObservableObject {
         if account.notificationsEnabled == true {
             enablePush(account: account)
         }
-        lemmyHttp?.getSiteInfo { siteInfo, error in
+        lemmyHttp?.getSiteInfo { siteInfo, _ in
             if let siteInfo = siteInfo {
                 if let user = siteInfo.my_user {
                     self.subscribed = [:]
