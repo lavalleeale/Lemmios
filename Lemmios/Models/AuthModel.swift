@@ -19,9 +19,9 @@ class AuthModel: ObservableObject {
                 } else if response.verify_email_sent == true {
                     self.verifySent = true
                 }
-            } else if case let .network(code, description) = error {
-                if code == 400, let decoded = try? self.decoder.decode(LemmyApi.ErrorResponse.self, from: Data(description.utf8)) {
-                    self.error = decoded.error
+            } else if case let .lemmyError(message, code) = error {
+                if code == 400 {
+                    self.error = message
                     self.getCaptcha(apiModel: apiModel)
                 }
             }
@@ -32,12 +32,10 @@ class AuthModel: ObservableObject {
         apiModel.lemmyHttp?.login(info: info) { response, error in
             if let jwt = response?.jwt {
                 apiModel.addAuth(username: info.username_or_email, jwt: jwt)
-            } else if case let .network(code, description) = error {
-                if code == 400, let decoded = try? self.decoder.decode(LemmyApi.ErrorResponse.self, from: Data(description.utf8)) {
-                    self.error = decoded.error
-                    if decoded.error == "missing_totp_token" {
-                        self.needs2fa = true
-                    }
+            } else if case let .lemmyError(message, code) = error {
+                self.error = message
+                if message == "missing_totp_token" {
+                    self.needs2fa = true
                 }
             }
         }.store(in: &cancellable)
