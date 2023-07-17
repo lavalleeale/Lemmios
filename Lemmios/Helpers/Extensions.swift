@@ -1,9 +1,9 @@
 import Foundation
 import ImageViewer
+import LemmyApi
 import SwiftUI
 import SwiftUIKit
 import WebKit
-import LemmyApi
 
 extension Date {
     func relativeDateAsString() -> String {
@@ -367,7 +367,16 @@ extension View {
     }
 
     func alwaysShare(item: Any) {
-        UIApplication.shared.currentUIWindow()?.visibleViewController!.present(UIActivityViewController(activityItems: [item], applicationActivities: nil), animated: true)
+        let avc = UIActivityViewController(activityItems: [item], applicationActivities: nil)
+        let sender = UIApplication.shared.currentUIWindow()!.visibleViewController!
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if avc.responds(to: #selector(getter: UIViewController.popoverPresentationController)) {
+                avc.popoverPresentationController?.sourceView = UIApplication.shared.windows.first
+                avc.popoverPresentationController?.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height, width: 0, height: 0)
+                avc.popoverPresentationController?.permittedArrowDirections = [.left]
+            }
+        }
+        sender.present(avc, animated: true)
     }
 }
 
