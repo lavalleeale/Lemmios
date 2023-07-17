@@ -53,8 +53,8 @@ class ApiModel: ObservableObject {
     func verifyServer(url: String, receiveValue: @escaping (String?, LemmyApi.SiteInfo?) -> Void) {
         siteInfo = nil
         do {
-            lemmyHttp = try LemmyApi(baseUrl: url)
-            serverInfoCancellable = lemmyHttp?.getSiteInfo { siteInfo, error in
+            let lemmyHttp = try LemmyApi(baseUrl: url)
+            serverInfoCancellable = lemmyHttp.getSiteInfo { siteInfo, error in
                 print(siteInfo, error)
                 if let siteInfo = siteInfo {
                     receiveValue(nil, siteInfo)

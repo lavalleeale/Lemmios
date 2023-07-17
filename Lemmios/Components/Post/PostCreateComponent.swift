@@ -115,19 +115,19 @@ struct PostCreateComponent: View {
                 formatter.numberStyle = .decimal
                 return formatter
             }()
-            TextField("Target Size", value: $size, formatter: formatter)
+            TextField("Target Size (kB)", value: $size, formatter: formatter)
                 .keyboardType(.numberPad)
             Button("Cancel", role: .cancel) {}
             Button("Resize") {
                 if case let .failure(_, image) = imageModel.imageState, let image = image {
-                    imageModel.loadImage(image, targetSize: size, apiModel: apiModel)
+                    imageModel.loadImage(image, targetSize: size * 1024, apiModel: apiModel)
                 }
             }
         }
         .toast(isPresenting: $showToast) {
             AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Invalid URL")
         }
-        .toast(isPresenting: $showError) {
+        .toast(isPresenting: $showError, duration: 10) {
             if case let .failure(error, _) = imageModel.imageState {
                 return AlertToast(displayMode: .banner(.pop), type: .error(.red), title: error.rawValue)
             } else {
