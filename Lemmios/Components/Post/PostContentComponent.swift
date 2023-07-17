@@ -68,7 +68,7 @@ struct PostContentComponent: View {
                         .padding(3)
                     }
                     ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
-                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, preview: false)
+                        PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, image: true, preview: false)
                     }
                 }
             } else if let url = post.post.url {

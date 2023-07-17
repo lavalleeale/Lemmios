@@ -13,6 +13,7 @@ struct PostActionsComponent: View {
     let rowButtons: Bool
     var showInfo = true
     var showArrows = true
+    var image = false
     let preview: Bool
     
     var body: some View {
@@ -35,13 +36,13 @@ struct PostActionsComponent: View {
                                     Image(systemName: "bubble.left.and.bubble.right")
                                         .scaleEffect(compact && preview ? 0.5 : 0.8)
                                     Text(formatNum(num: postModel.counts!.comments))
-                                        .font(compact && preview ? .caption: nil)
+                                        .font(compact && preview ? .caption : nil)
                                 }
                                 HStack(spacing: compact && preview ? 0 : 3) {
                                     Image(systemName: "clock")
                                         .scaleEffect(compact && preview ? 0.5 : 0.8)
                                     Text(postModel.counts!.published.relativeDateAsString())
-                                        .font(compact && preview ? .caption: nil)
+                                        .font(compact && preview ? .caption : nil)
                                 }
                             }
                             .foregroundStyle(.secondary)
@@ -53,7 +54,7 @@ struct PostActionsComponent: View {
                 }
                 if collapsedButtons {
                     HStack {
-                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true, showAll: true)
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: true, showAll: true, image: image)
                             .foregroundStyle(.secondary)
                         if showArrows {
                             ArrowsComponent(votableModel: postModel)
@@ -71,7 +72,7 @@ struct PostActionsComponent: View {
                         if showArrows {
                             ArrowsComponent(votableModel: postModel)
                         }
-                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false, showAll: false)
+                        PostButtons(postModel: postModel, showViewComments: !showInfo, menu: false, showAll: false, image: image)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -110,6 +111,7 @@ struct PostButtons: View {
     var showViewComments: Bool
     var menu: Bool
     var showAll: Bool
+    var image = false
     
     var buttons: some View {
         Group {
@@ -147,7 +149,19 @@ struct PostButtons: View {
                 }
             }
             Button {
-                alwaysShare(item: postModel.post.ap_id)
+                if image {
+                    URLSession.shared.dataTask(with: postModel.post.url!) { data, _, _ in
+                        guard let data = data,
+                              let image = UIImage(data: data)
+                        else { return }
+                        
+                        DispatchQueue.main.async {
+                            alwaysShare(item: ItemDetailSource(name: postModel.post.name, image: image))
+                        }
+                    }.resume()
+                } else {
+                    alwaysShare(item: postModel.post.ap_id)
+                }
             } label: {
                 Label {
                     Text("Share")
