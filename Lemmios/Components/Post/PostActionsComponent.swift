@@ -28,20 +28,20 @@ struct PostActionsComponent: View {
                                 UserLink(user: postModel.creator!)
                             }
                         }
-                        HStack(spacing: 0) {
-                            ScoreComponent(votableModel: postModel)
+                        HStack(spacing: compact && preview ? 0 : nil) {
+                            ScoreComponent(votableModel: postModel, preview: preview)
                             Group {
-                                HStack(spacing: 0) {
+                                HStack(spacing: compact && preview ? 0 : 3) {
                                     Image(systemName: "bubble.left.and.bubble.right")
-                                        .scaleEffect(0.5)
+                                        .scaleEffect(compact && preview ? 0.5 : 0.8)
                                     Text(formatNum(num: postModel.counts!.comments))
-                                        .font(.caption)
+                                        .font(compact && preview ? .caption: nil)
                                 }
-                                HStack(spacing: 0) {
+                                HStack(spacing: compact && preview ? 0 : 3) {
                                     Image(systemName: "clock")
-                                        .scaleEffect(0.5)
+                                        .scaleEffect(compact && preview ? 0.5 : 0.8)
                                     Text(postModel.counts!.published.relativeDateAsString())
-                                        .font(.caption)
+                                        .font(compact && preview ? .caption: nil)
                                 }
                             }
                             .foregroundStyle(.secondary)
