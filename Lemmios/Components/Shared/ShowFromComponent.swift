@@ -55,6 +55,7 @@ struct CommunityLink<Prefix: View, Suffix: View>: View {
             PostsView(postsModel: model)
                 .environmentObject(apiModel)
         }
+        .contentShape(Rectangle())
     }
 }
 
