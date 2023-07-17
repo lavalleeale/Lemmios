@@ -3,7 +3,7 @@ import Foundation
 import SwiftUI
 import LemmyApi
 
-class PostsModel: ObservableObject, Hashable {
+class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     private var id = UUID()
     
     static func == (lhs: PostsModel, rhs: PostsModel) -> Bool {
@@ -100,7 +100,7 @@ class PostsModel: ObservableObject, Hashable {
         fetchPosts(apiModel: apiModel)
     }
     
-    func createPost(title: String, content: String, url: String, apiModel: ApiModel) {
+    func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
         apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView!.community_view.community.id) { post, _ in
             if let postView = post?.post_view {
                 self.posts.insert(postView, at: 0)

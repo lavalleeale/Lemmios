@@ -37,6 +37,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 .forEach { $0.perform(setHardwareLayout, with: nil) }
             #endif
             UIView.setAnimationsEnabled(false)
+        }
+        if ProcessInfo().arguments.contains("delete") {
             try? FileManager.default.removeItem(at: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("read.db"))
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
             try! SimpleKeychain().deleteAll()

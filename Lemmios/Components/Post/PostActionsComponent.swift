@@ -107,6 +107,7 @@ struct PostButtons: View {
     @State var showingReport = false
     @State var reportReason = ""
     @State var showingShare = false
+    @State var showingEdit = false
     
     var showViewComments: Bool
     var menu: Bool
@@ -134,6 +135,9 @@ struct PostButtons: View {
                 if let account = apiModel.selectedAccount, let user = postModel.creator, account == user {
                     PostButton(label: postModel.post.deleted ? "Restore" : "Delete", image: postModel.post.deleted ? "trash.slash" : "trash") {
                         postModel.delete(apiModel: apiModel)
+                    }
+                    PostButton(label: "Edit", image: "pencil") {
+                        showingEdit = true
                     }
                 } else {
                     PostButton(label: "Report", image: "flag") {
@@ -199,6 +203,9 @@ struct PostButtons: View {
         }
         .overlay {
             PostSharePreview(postModel: postModel, isPresented: $showingShare, comments: [])
+        }
+        .sheet(isPresented: $showingEdit) {
+            PostCreateComponent(title: postModel.post.name, postData: postModel.post.body ?? "", postUrl: postModel.post.url?.absoluteString ?? "", dataModel: postModel)
         }
         .sheet(isPresented: $showingReply) {
             CommentSheet(title: "Add Comment") { commentBody in

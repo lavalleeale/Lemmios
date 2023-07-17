@@ -4,7 +4,7 @@ import LemmyApi
 import OSLog
 import SwiftUI
 
-class PostModel: VotableModel, Hashable {
+class PostModel: VotableModel, Hashable, PostDataReceiver {
     private var id = UUID()
     
     static func == (lhs: PostModel, rhs: PostModel) -> Bool {
@@ -188,6 +188,14 @@ class PostModel: VotableModel, Hashable {
         apiModel.lemmyHttp?.reportPost(postId: post.id, reason: reason) { response, _ in
             if let response = response?.post_report_view {
                 self.score = response.counts.score
+            }
+        }.store(in: &cancellable)
+    }
+    
+    func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.editPost(title: title, content: content, url: url, postId: post.id) { newValue, error in
+            if let newValue = newValue {
+                self.post = newValue.post_view.post
             }
         }.store(in: &cancellable)
     }

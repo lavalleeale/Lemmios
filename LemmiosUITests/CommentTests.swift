@@ -7,11 +7,9 @@ final class CommentTests: XCTestCase {
     
     func testComments() throws {
         let app = XCUIApplication()
-        app.launchArguments.append("test")
+        app.launchArguments.append(contentsOf: ["test", "delete"])
         app.launch()
         app.selectServer()
-        app.textFields["All"].tap()
-        app.textFields["All"].typeText("artemistesting\n")
         app.buttons["Sort"].tapUnhittable()
         app.buttons["Old"].tap()
         let postPredicate = NSPredicate(format: "label CONTAINS[c] %@", "Comment Depth")
@@ -51,10 +49,15 @@ extension XCUIApplication {
         let relativeTouchPoint = coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let relativeOffset = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: -1))
         while !element.exists {
-            relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset)
+            relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset, withVelocity: .fast, thenHoldForDuration: 0)
             XCTAssert(count < 10)
             count += 1
         }
-        relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset)
+        relativeTouchPoint.press(forDuration: 0, thenDragTo: relativeOffset, withVelocity: .fast, thenHoldForDuration: 0)
+    }
+    func type(_ element: XCUIElement, text: any StringProtocol) {
+        scrollTo(element)
+        element.tap()
+        element.typeText(text + "\n")
     }
 }

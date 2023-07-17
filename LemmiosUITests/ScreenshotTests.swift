@@ -11,7 +11,7 @@ final class ScreenshotTests: XCTestCase {
 
     func testPosts() throws {
         let app = XCUIApplication()
-        app.launchArguments.append("test")
+        app.launchArguments.append(contentsOf: ["test", "delete"])
         app.launch()
         let welcomeScreenshot = app.windows.firstMatch.screenshot()
         let welcomeAttachment = XCTAttachment(screenshot: welcomeScreenshot)

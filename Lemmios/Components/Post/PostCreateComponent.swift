@@ -2,7 +2,7 @@ import AlertToast
 import PhotosUI
 import SwiftUI
 
-struct PostCreateComponent: View {
+struct PostCreateComponent<T: PostDataReceiver>: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var apiModel: ApiModel
     @State var title = ""
@@ -14,8 +14,7 @@ struct PostCreateComponent: View {
     @State var size = 5000
 
     @StateObject var imageModel = ImageModel()
-    @ObservedObject var postsModel: PostsModel
-    var editingId: Int?
+    @ObservedObject var dataModel: T
 
     var body: some View {
         NavigationView {
@@ -97,13 +96,11 @@ struct PostCreateComponent: View {
                         if postUrl != "" && (url == nil || !UIApplication.shared.canOpenURL(url!)) {
                             showToast = true
                         } else {
-                            if editingId == nil {
-                                let impact = UIImpactFeedbackGenerator(style: .light)
-                                impact.prepare()
-                                impact.impactOccurred()
-                                postsModel.createPost(title: title, content: postData, url: postUrl, apiModel: apiModel)
-                                dismiss()
-                            }
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.prepare()
+                            impact.impactOccurred()
+                            dataModel.receivePostData(title: title, content: postData, url: postUrl, apiModel: apiModel)
+                            dismiss()
                         }
                     }
                 }
@@ -135,7 +132,7 @@ struct PostCreateComponent: View {
             }
         } onTap: {
             if case let .failure(error, _) = imageModel.imageState {
-                if (.tooLarge == error || .resize == error) {
+                if error == .tooLarge || error == .resize {
                     self.showResize = true
                 }
             }
@@ -146,4 +143,8 @@ struct PostCreateComponent: View {
             }
         }
     }
+}
+
+protocol PostDataReceiver: ObservableObject {
+    func receivePostData(title: String, content: String, url: String, apiModel: ApiModel)
 }

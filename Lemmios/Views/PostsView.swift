@@ -101,7 +101,7 @@ struct PostsView: View {
         .navigationBarTitle((postsModel.path != "") ? postsModel.path : "All", displayMode: .inline)
         .toolbar(content: { navigationBar })
         .sheet(isPresented: $showingCreate) {
-            PostCreateComponent(postsModel: postsModel)
+            PostCreateComponent(dataModel: postsModel)
         }
     }
 

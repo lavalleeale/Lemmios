@@ -20,10 +20,8 @@ class AuthModel: ObservableObject {
                     self.verifySent = true
                 }
             } else if case let .lemmyError(message, code) = error {
-                if code == 400 {
-                    self.error = message
-                    self.getCaptcha(apiModel: apiModel)
-                }
+                self.error = message
+                self.getCaptcha(apiModel: apiModel)
             }
         }.store(in: &cancellable)
     }
@@ -32,7 +30,7 @@ class AuthModel: ObservableObject {
         apiModel.lemmyHttp?.login(info: info) { response, error in
             if let jwt = response?.jwt {
                 apiModel.addAuth(username: info.username_or_email, jwt: jwt)
-            } else if case let .lemmyError(message, code) = error {
+            } else if case let .lemmyError(message, _) = error {
                 self.error = message
                 if message == "missing_totp_token" {
                     self.needs2fa = true

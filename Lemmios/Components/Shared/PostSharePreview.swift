@@ -22,30 +22,38 @@ struct PostSharePreview: View {
         self._isPresented = isPresented
         self.comments = comments
     }
+    
+    var sheet: some View {
+        VStack {
+            if let imageRenderer = postShareModel.imageRenderer, let uiImage = imageRenderer.uiImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                Toggle("Show Usernames", isOn: $showUsernames)
+                Toggle("Show Communities", isOn: $showCommunities)
+                Button {
+                    alwaysShare(item: ItemDetailSource(name: postModel.post.name, image: uiImage))
+                } label: {
+                    Label {
+                        Text("Share")
+                    } icon: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+                .buttonStyle(ImageShareButtonStyle())
+            }
+        }
+        .padding()
+        .presentationDetents([.medium])
+    }
 
     var body: some View {
         Rectangle().frame(width: 0, height: 0).clipped().sheet(isPresented: $isPresented) {
-            VStack {
-                if let imageRenderer = postShareModel.imageRenderer, let uiImage = imageRenderer.uiImage {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                    Toggle("Show Usernames", isOn: $showUsernames)
-                    Toggle("Show Communities", isOn: $showCommunities)
-                    Button {
-                        alwaysShare(item: ItemDetailSource(name: postModel.post.name, image: uiImage))
-                    } label: {
-                        Label {
-                            Text("Share")
-                        } icon: {
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                    }
-                    .buttonStyle(ImageShareButtonStyle())
-                }
+            if #available(iOS 16.4, *) {
+                sheet.presentationBackground(selectedTheme.secondaryColor)
+            } else {
+                sheet
             }
-            .padding()
-            .presentationDetents([.medium])
         }
         .onChange(of: comments) { _ in
             update()
