@@ -29,6 +29,7 @@ struct ContentView: View {
     let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
     let postRegex = /^lemmiosapp:\/\/(.+?)\/post\/([0-9]+)$/
+    let commentRegex = /^lemmiosapp:\/\/(.+?)\/comment\/([0-9]+)$/
 
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab
@@ -154,7 +155,6 @@ struct ContentView: View {
                     .toolbar(.visible, for: .tabBar)
                 }
                 .onAppear {
-                    print(456, selectedTab)
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
                         selectedTab.requestedTab = nil
@@ -207,6 +207,10 @@ struct ContentView: View {
                         var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
                         urlComponents.scheme = "https"
                         selectedNavModel!.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: urlComponents.url!))
+                    } else if incomingUrl.absoluteString.firstMatch(of: commentRegex) != nil {
+                        var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
+                        urlComponents.scheme = "https"
+                        selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentResolveResponse>(thing: urlComponents.url!))
                     }
                 }
                 .toast(isPresenting: $showInvalidUser) {

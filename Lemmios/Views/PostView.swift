@@ -20,6 +20,8 @@ struct PostView: View {
 
     var body: some View {
         ZStack {
+            let minDepth = postModel.comments.min { $0.comment.path.split(separator: ".").count < $1.comment.path.split(separator: ".").count }?.comment.path.split(separator: ".").count
+            let topLevels = postModel.comments.filter { $0.comment.path.split(separator: ".").count == minDepth }
             if let sharingComments = sharingComments {
                 PostSharePreview(postModel: postModel, isPresented: Binding(get: { self.sharingComments != nil }, set: { _ in self.sharingComments = nil }), comments: sharingComments)                
             }
@@ -72,8 +74,6 @@ struct PostView: View {
                                 }
                             }
                     }
-                    let minDepth = postModel.comments.min { $0.comment.path.split(separator: ".").count < $1.comment.path.split(separator: ".").count }?.comment.path.split(separator: ".").count
-                    let topLevels = postModel.comments.filter { $0.comment.path.split(separator: ".").count == minDepth }
                     LazyVStack(spacing: 0) {
                         if let minDepth = minDepth, minDepth > 2 {
                             HStack {
@@ -89,10 +89,7 @@ struct PostView: View {
                         }
                         ForEach(topLevels) { comment in
                             CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil, share: share)
-                                .if(comment.id == topLevels.first!.id) { view in
-                                    view
-                                        .id("Comments")
-                                }
+                                .id(comment.id)
                             Divider()
                         }
                         .environmentObject(postModel)
@@ -120,10 +117,10 @@ struct PostView: View {
                         .frame(height: 100)
                 }
                 .overlay(alignment: .bottomTrailing) {
-                    if showingPost {
+                    if showingPost, postModel.selectedComment == nil {
                         Button {
                             withAnimation {
-                                value.scrollTo("Comments", anchor: .top)
+                                value.scrollTo(topLevels.first?.id, anchor: .top)
                             }
                         } label: {
                             Label("Scroll to Comments", systemImage: "chevron.down")

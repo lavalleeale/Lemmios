@@ -70,11 +70,13 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         parentStatus = .loading
         let split = selectedComment!.comment.path.split(separator: ".")
         apiModel.lemmyHttp?.getComment(id: Int(split.dropFirst(currentDepth - 2).first!, radix: 10)!) { comment, error in
-            if let comment = comment {
-                self.parentStatus = .ready
-                self.comments.append(comment.comment_view)
-            } else {
-                print(error)
+            DispatchQueue.main.async {
+                if let comment = comment {
+                    self.parentStatus = .ready
+                    self.comments.append(comment.comment_view)
+                } else {
+                    print(error)
+                }
             }
         }.store(in: &cancellable)
     }

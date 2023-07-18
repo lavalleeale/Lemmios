@@ -18,6 +18,9 @@ struct ResolveView<T: ResolveResponse>: View {
                 case let postResponse as LemmyApi.ApiPost:
                     navModel.path.removeLast()
                     navModel.path.append(PostModel(post: postResponse.post))
+                case let postResponse as LemmyApi.ApiComment:
+                    navModel.path.removeLast()
+                    navModel.path.append(PostModel(post: postResponse.post, comment: postResponse))
                 default:
                     navModel.path.removeLast()
                 }

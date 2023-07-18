@@ -100,6 +100,7 @@ private struct WithNavigationModifier: ViewModifier {
     let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
     let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
     let postRegex = /^https:\/\/(.+?)\/post\/([0-9]+)$/
+    let commentRegex = /^https:\/\/(.+?)\/comment\/([0-9]+)$/
 
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
@@ -119,6 +120,9 @@ private struct WithNavigationModifier: ViewModifier {
                     SearchedView(searchedModel: searchedModel)
                 }
                 .navigationDestination(for: ResolveModel<LemmyApi.PostResolveResponse>.self) { resolveModel in
+                    ResolveView(resolveModel: resolveModel)
+                }
+                .navigationDestination(for: ResolveModel<LemmyApi.CommentResolveResponse>.self) { resolveModel in
                     ResolveView(resolveModel: resolveModel)
                 }
                 .fullScreenCover(item: $url) { item in
@@ -145,6 +149,8 @@ private struct WithNavigationModifier: ViewModifier {
                 }
             } else if url.absoluteString.firstMatch(of: postRegex) != nil {
                 navModel.path.append(ResolveModel<LemmyApi.PostResolveResponse>(thing: url))
+            } else if url.absoluteString.firstMatch(of: commentRegex) != nil {
+                navModel.path.append(ResolveModel<LemmyApi.CommentResolveResponse>(thing: url))
             } else {
                 self.url = url
             }
