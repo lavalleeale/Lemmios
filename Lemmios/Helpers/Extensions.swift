@@ -97,11 +97,6 @@ private struct WithNavigationModifier: ViewModifier {
     @State var url: URL?
     @State var imageUrl: URL?
 
-    let communityRegex = /^https:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
-    let userRegex = /^https:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-    let postRegex = /^https:\/\/(.+?)\/post\/([0-9]+)$/
-    let commentRegex = /^https:\/\/(.+?)\/comment\/([0-9]+)$/
-
     func body(content: Content) -> some View {
         NavigationStack(path: $navModel.path) {
             content

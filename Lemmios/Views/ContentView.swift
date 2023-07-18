@@ -4,6 +4,11 @@ import SwiftUI
 import ImageViewer
 import LemmyApi
 
+let communityRegex = /^.+:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
+let userRegex = /^.+:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
+let postRegex = /^.+:\/\/(.+?)\/post\/([0-9]+)$/
+let commentRegex = /^.+:\/\/(.+?)\/comment\/([0-9]+)$/
+
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
@@ -25,11 +30,6 @@ struct ContentView: View {
     @State var showingAuth = false
     @State var selected = Tab.Posts
     @State var showInvalidUser = false
-
-    let communityRegex = /^lemmiosapp:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
-    let userRegex = /^lemmiosapp:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-    let postRegex = /^lemmiosapp:\/\/(.+?)\/post\/([0-9]+)$/
-    let commentRegex = /^lemmiosapp:\/\/(.+?)\/comment\/([0-9]+)$/
 
     init(selectedTab: StartingTab) {
         self.selectedTab = selectedTab
@@ -183,6 +183,10 @@ struct ContentView: View {
                     }
                 }
                 .onOpenURL { incomingUrl in
+                    var incomingUrl = incomingUrl
+                    if let components = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, let first = queryItems.first, first.name == "url", let firstValue = first.value, let url = URL(string: firstValue) {
+                        incomingUrl = url
+                    }
                     if let host = incomingUrl.host(), let tab = Tab(rawValue: host) {
                         selected = tab
                     }
