@@ -144,6 +144,19 @@ struct PostButtons: View {
                         showingReport = true
                     }
                 }
+                if let community = postModel.community, let communityHost = community.actor_id.host() {
+                    let localCommunity = community.local
+                    let communityName = community.name
+                    let path = localCommunity ? communityName : "\(communityName)@\(communityHost)"
+                    NavigationLink(value: PostsModel(path: path)) {
+                        ShowFromComponent(item: community, show: true)
+                    }
+                }
+                if let user = postModel.creator {
+                    NavigationLink(value: UserModel(user: user)) {
+                        ShowFromComponent(item: user, show: true)
+                    }
+                }
                 Button { showingShare = true } label: {
                     Label {
                         Text("Share as Image")

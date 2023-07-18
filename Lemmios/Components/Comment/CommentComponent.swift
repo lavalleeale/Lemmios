@@ -43,6 +43,10 @@ struct CommentComponent: View {
                     showingReport = true
                 }
             }
+            let user = commentModel.comment.creator
+            NavigationLink(value: UserModel(user: commentModel.comment.creator)) {
+                ShowFromComponent(item: user, show: true)
+            }
             PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
                 share?(commentModel.comment.id)
             }
