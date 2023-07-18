@@ -76,24 +76,24 @@ struct UserView: View {
                 .navigationTitle(userModel.userData?.person.local == true ? String(name) : userModel.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    if let userData = userModel.userData, let account = apiModel.selectedAccount {
-                        if userData.person != account {
+                    if let userData = userModel.userData {
+                        if let account = apiModel.selectedAccount, userData.person == account {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Accounts") {
+                                    showingAccounts = true
+                                }
+                                .popupNavigationView(isPresented: $showingAccounts, heightRatio: 1.5, widthRatio: 1.1) {
+                                    AuthenticationView()
+                                }
+                            }
+                        } else {
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Menu {
-                                    Button {
+                                    PostButton(label: "Message", image: "arrowshape.turn.up.left") {
                                         showMessage = true
-                                    } label: {
-                                        Label("Message", systemImage: "arrowshape.turn.up.left")
                                     }
-                                    let blocked = userModel.blocked
-                                    Button {
-                                        if apiModel.selectedAccount == nil {
-                                            apiModel.getAuth()
-                                        } else {
-                                            userModel.block(apiModel: apiModel, block: !blocked)
-                                        }
-                                    } label: {
-                                        Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
+                                    PostButton(label: userModel.blocked ? "Unblock" : "Block", image: "x.circle") {
+                                        userModel.block(apiModel: apiModel, block: !userModel.blocked)
                                     }
                                 } label: {
                                     VStack {
@@ -102,15 +102,6 @@ struct UserView: View {
                                             .labelStyle(.iconOnly)
                                         Spacer()
                                     }
-                                }
-                            }
-                        } else {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Accounts") {
-                                    showingAccounts = true
-                                }
-                                .popupNavigationView(isPresented: $showingAccounts, heightRatio: 1.5, widthRatio: 1.1) {
-                                    AuthenticationView()
                                 }
                             }
                         }
