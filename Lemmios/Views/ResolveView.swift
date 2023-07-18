@@ -15,7 +15,7 @@ struct ResolveView<T: ResolveResponse>: View {
         .onChange(of: resolveModel.value) { newValue in
             if let newValue = newValue {
                 switch newValue {
-                case let postResponse as LemmyApi.PostResolveResponse:
+                case let postResponse as LemmyApi.ApiPost:
                     navModel.path.removeLast()
                     navModel.path.append(PostModel(post: postResponse.post))
                 default:
@@ -26,6 +26,8 @@ struct ResolveView<T: ResolveResponse>: View {
         .alert("Login", isPresented: $showingConfirm) {
             Button("Cancel", role: .cancel) { navModel.path.removeLast() }
             Button("Log in") { apiModel.getAuth() }
+        } message: {
+            Text("Lemmy requires authentication for resolving data from remote instances")
         }
         .onChange(of: apiModel.selectedAccount) { newValue in
             if newValue != nil {
@@ -33,7 +35,7 @@ struct ResolveView<T: ResolveResponse>: View {
             }
         }
         .onAppear {
-            if apiModel.selectedAccount == nil {
+            if resolveModel.thing.host() != apiModel.lemmyHttp?.apiUrl.host(), apiModel.selectedAccount == nil {
                 showingConfirm = true
             } else {
                 resolveModel.resolve(apiModel: apiModel)
