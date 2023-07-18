@@ -7,7 +7,7 @@ let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
 struct CommentComponent: View {
     @Environment(\.redactionReasons) private var reasons
-    @ObservedObject var commentModel: CommentModel
+    @StateObject var commentModel: CommentModel
     @State var collapsed = false
     @State var preview = false
     @State var showingReply = false
