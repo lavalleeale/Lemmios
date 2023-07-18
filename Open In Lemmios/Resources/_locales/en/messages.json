@@ -1,0 +1,10 @@
+{
+    "extension_name": {
+        "message": "Open In Lemmios",
+        "description": "The display name for the extension."
+    },
+    "extension_description": {
+        "message": "Opens Lemmy links in Lemmios",
+        "description": "Description of what the extension does."
+    }
+}

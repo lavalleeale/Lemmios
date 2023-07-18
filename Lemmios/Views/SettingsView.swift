@@ -27,6 +27,7 @@ struct SettingsView: View {
     var body: some View {
         ColoredListComponent {
             Section("General") {
+                NavigationLink("Open Lemmy Links in Lemmios", value: SettingsNav.OpenInLemmios)
                 Toggle("Show community names", isOn: $showCommuntiies)
             }
             Section("Appearance") {
@@ -102,6 +103,8 @@ struct SettingsView: View {
                         DBModel.instance.clear()
                     }
                 }
+            case .OpenInLemmios:
+                OpenInLemmiosView()
             }
         }
         .navigationTitle("Settings")
@@ -110,7 +113,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector, Read, Notifications
+    case About, ServerSelector, Read, Notifications, OpenInLemmios
 }
 
 protocol HasCustom {

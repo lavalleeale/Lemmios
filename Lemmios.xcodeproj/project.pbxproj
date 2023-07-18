@@ -36,6 +36,9 @@
 		FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6912A5729AE001AFA61 /* SearchedModel.swift */; };
 		FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */; };
 		FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A6972A573DAD001AFA61 /* Extensions.swift */; };
+		FA77D93D2A674D98005C0555 /* output.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = FA77D93C2A674D98005C0555 /* output.mp4 */; };
+		FA77D93F2A674DB5005C0555 /* OpenInLemmiosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77D93E2A674DB5005C0555 /* OpenInLemmiosView.swift */; };
+		FA77D9412A67531D005C0555 /* VideoLooper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77D9402A67531D005C0555 /* VideoLooper.swift */; };
 		FA96B4EB2A61105300053BBF /* CommentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96B4EA2A61105300053BBF /* CommentTests.swift */; };
 		FA96B4F22A612E2900053BBF /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */; };
 		FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA145052A581E88009DDA23 /* UserHeaderComponent.swift */; };
@@ -69,6 +72,14 @@
 		FACA76EE2A64A6C300D96136 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA76ED2A64A6C300D96136 /* NotificationsView.swift */; };
 		FAD0930A2A5D0B9600CFEC3E /* MessageComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */; };
 		FAD0930C2A5D0BF600CFEC3E /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */; };
+		FADAD1B12A671F9E00108A9C /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADAD1B02A671F9E00108A9C /* SafariWebExtensionHandler.swift */; };
+		FADAD1B42A671F9E00108A9C /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1B32A671F9E00108A9C /* _locales */; };
+		FADAD1B62A671F9E00108A9C /* images in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1B52A671F9E00108A9C /* images */; };
+		FADAD1B82A671F9E00108A9C /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1B72A671F9E00108A9C /* manifest.json */; };
+		FADAD1BC2A671F9E00108A9C /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1BB2A671F9E00108A9C /* content.js */; };
+		FADAD1BE2A671F9E00108A9C /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1BD2A671F9E00108A9C /* popup.html */; };
+		FADAD1C02A671F9E00108A9C /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = FADAD1BF2A671F9E00108A9C /* popup.css */; };
+		FADAD1C62A671F9E00108A9C /* Open In Lemmios.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FADAD1AE2A671F9E00108A9C /* Open In Lemmios.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20422A5204B3002CE443 /* ArtemisApp.swift */; };
 		FADD20452A5204B3002CE443 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADD20442A5204B3002CE443 /* ContentView.swift */; };
 		FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FADD20462A5204B4002CE443 /* Assets.xcassets */; };
@@ -95,6 +106,13 @@
 			remoteGlobalIDString = FADD203E2A5204B3002CE443;
 			remoteInfo = Lemmios;
 		};
+		FADAD1C42A671F9E00108A9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FADD20372A5204B3002CE443 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FADAD1AD2A671F9E00108A9C;
+			remoteInfo = "Open In Lemmios";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,6 +122,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				FADAD1C62A671F9E00108A9C /* Open In Lemmios.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +157,9 @@
 		FA72A6952A573C99001AFA61 /* ShowFromComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowFromComponent.swift; sourceTree = "<group>"; };
 		FA72A6972A573DAD001AFA61 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lemmios.entitlements; sourceTree = "<group>"; };
+		FA77D93C2A674D98005C0555 /* output.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.mp4; sourceTree = "<group>"; };
+		FA77D93E2A674DB5005C0555 /* OpenInLemmiosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInLemmiosView.swift; sourceTree = "<group>"; };
+		FA77D9402A67531D005C0555 /* VideoLooper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoLooper.swift; sourceTree = "<group>"; };
 		FA96B4E62A61105300053BBF /* LemmiosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LemmiosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA96B4EA2A61105300053BBF /* CommentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTests.swift; sourceTree = "<group>"; };
 		FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
@@ -169,6 +191,15 @@
 		FACA76ED2A64A6C300D96136 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		FAD093092A5D0B9600CFEC3E /* MessageComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComponent.swift; sourceTree = "<group>"; };
 		FAD0930B2A5D0BF600CFEC3E /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		FADAD1AE2A671F9E00108A9C /* Open In Lemmios.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Open In Lemmios.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FADAD1B02A671F9E00108A9C /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		FADAD1B32A671F9E00108A9C /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
+		FADAD1B52A671F9E00108A9C /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		FADAD1B72A671F9E00108A9C /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		FADAD1BB2A671F9E00108A9C /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		FADAD1BD2A671F9E00108A9C /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		FADAD1BF2A671F9E00108A9C /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		FADAD1C32A671F9E00108A9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FADD203F2A5204B3002CE443 /* Lemmios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemmios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FADD20422A5204B3002CE443 /* ArtemisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtemisApp.swift; sourceTree = "<group>"; };
 		FADD20442A5204B3002CE443 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -188,6 +219,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		FA96B4E32A61105300053BBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FADAD1AB2A671F9E00108A9C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -238,6 +276,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FA77D93B2A674D7E005C0555 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FA77D93C2A674D98005C0555 /* output.mp4 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FA96B4E72A61105300053BBF /* LemmiosUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,11 +309,35 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		FADAD1AF2A671F9E00108A9C /* Open In Lemmios */ = {
+			isa = PBXGroup;
+			children = (
+				FADAD1B02A671F9E00108A9C /* SafariWebExtensionHandler.swift */,
+				FADAD1C32A671F9E00108A9C /* Info.plist */,
+				FADAD1B22A671F9E00108A9C /* Resources */,
+			);
+			path = "Open In Lemmios";
+			sourceTree = "<group>";
+		};
+		FADAD1B22A671F9E00108A9C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FADAD1B32A671F9E00108A9C /* _locales */,
+				FADAD1B52A671F9E00108A9C /* images */,
+				FADAD1B72A671F9E00108A9C /* manifest.json */,
+				FADAD1BB2A671F9E00108A9C /* content.js */,
+				FADAD1BD2A671F9E00108A9C /* popup.html */,
+				FADAD1BF2A671F9E00108A9C /* popup.css */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FADD20362A5204B3002CE443 = {
 			isa = PBXGroup;
 			children = (
 				FADD20412A5204B3002CE443 /* Lemmios */,
 				FA96B4E72A61105300053BBF /* LemmiosUITests */,
+				FADAD1AF2A671F9E00108A9C /* Open In Lemmios */,
 				FADD20402A5204B3002CE443 /* Products */,
 				FA60B9C02A5FB9E3002A87A4 /* Frameworks */,
 			);
@@ -278,6 +348,7 @@
 			children = (
 				FADD203F2A5204B3002CE443 /* Lemmios.app */,
 				FA96B4E62A61105300053BBF /* LemmiosUITests.xctest */,
+				FADAD1AE2A671F9E00108A9C /* Open In Lemmios.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -285,6 +356,7 @@
 		FADD20412A5204B3002CE443 /* Lemmios */ = {
 			isa = PBXGroup;
 			children = (
+				FA77D93B2A674D7E005C0555 /* Resources */,
 				FA45961F2A59C3FE00368DBB /* Theme */,
 				FA68BDEA2A58C45700F2FE3D /* Info.plist */,
 				FA72A69C2A57F837001AFA61 /* Lemmios.entitlements */,
@@ -329,6 +401,7 @@
 				FA2214922A5B57D80023C696 /* SplashView.swift */,
 				FABB71302A6447D900D39592 /* ResolveView.swift */,
 				FACA76ED2A64A6C300D96136 /* NotificationsView.swift */,
+				FA77D93E2A674DB5005C0555 /* OpenInLemmiosView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -424,6 +497,7 @@
 				FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */,
 				FABC284B2A5933C100243C7F /* DefaultStartComponent.swift */,
 				FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */,
+				FA77D9402A67531D005C0555 /* VideoLooper.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -449,6 +523,23 @@
 			productReference = FA96B4E62A61105300053BBF /* LemmiosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		FADAD1AD2A671F9E00108A9C /* Open In Lemmios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FADAD1C92A671F9E00108A9C /* Build configuration list for PBXNativeTarget "Open In Lemmios" */;
+			buildPhases = (
+				FADAD1AA2A671F9E00108A9C /* Sources */,
+				FADAD1AB2A671F9E00108A9C /* Frameworks */,
+				FADAD1AC2A671F9E00108A9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Open In Lemmios";
+			productName = "Open In Lemmios";
+			productReference = FADAD1AE2A671F9E00108A9C /* Open In Lemmios.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		FADD203E2A5204B3002CE443 /* Lemmios */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FADD204E2A5204B4002CE443 /* Build configuration list for PBXNativeTarget "Lemmios" */;
@@ -461,6 +552,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FADAD1C52A671F9E00108A9C /* PBXTargetDependency */,
 			);
 			name = Lemmios;
 			packageProductDependencies = (
@@ -491,6 +583,9 @@
 					FA96B4E52A61105300053BBF = {
 						CreatedOnToolsVersion = 14.3.1;
 						TestTargetID = FADD203E2A5204B3002CE443;
+					};
+					FADAD1AD2A671F9E00108A9C = {
+						CreatedOnToolsVersion = 14.3.1;
 					};
 					FADD203E2A5204B3002CE443 = {
 						CreatedOnToolsVersion = 14.1;
@@ -523,6 +618,7 @@
 			targets = (
 				FADD203E2A5204B3002CE443 /* Lemmios */,
 				FA96B4E52A61105300053BBF /* LemmiosUITests */,
+				FADAD1AD2A671F9E00108A9C /* Open In Lemmios */,
 			);
 		};
 /* End PBXProject section */
@@ -535,11 +631,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FADAD1AC2A671F9E00108A9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FADAD1C02A671F9E00108A9C /* popup.css in Resources */,
+				FADAD1BE2A671F9E00108A9C /* popup.html in Resources */,
+				FADAD1B62A671F9E00108A9C /* images in Resources */,
+				FADAD1B82A671F9E00108A9C /* manifest.json in Resources */,
+				FADAD1B42A671F9E00108A9C /* _locales in Resources */,
+				FADAD1BC2A671F9E00108A9C /* content.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FADD203D2A5204B3002CE443 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FADD204B2A5204B4002CE443 /* Preview Assets.xcassets in Resources */,
+				FA77D93D2A674D98005C0555 /* output.mp4 in Resources */,
 				FADD20472A5204B4002CE443 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -558,11 +668,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FADAD1AA2A671F9E00108A9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FADAD1B12A671F9E00108A9C /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FADD203B2A5204B3002CE443 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */,
+				FA77D9412A67531D005C0555 /* VideoLooper.swift in Sources */,
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
@@ -606,6 +725,7 @@
 				FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */,
 				FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */,
 				FAAAF85C2A524F0F00C9BFD8 /* PostView.swift in Sources */,
+				FA77D93F2A674DB5005C0555 /* OpenInLemmiosView.swift in Sources */,
 				FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */,
 				FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */,
 				FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */,
@@ -635,6 +755,11 @@
 			isa = PBXTargetDependency;
 			target = FADD203E2A5204B3002CE443 /* Lemmios */;
 			targetProxy = FA96B4EC2A61105300053BBF /* PBXContainerItemProxy */;
+		};
+		FADAD1C52A671F9E00108A9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FADAD1AD2A671F9E00108A9C /* Open In Lemmios */;
+			targetProxy = FADAD1C42A671F9E00108A9C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -674,6 +799,69 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Lemmios;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FADAD1C72A671F9E00108A9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Open In Lemmios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Open In Lemmios";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axlav.lemmios.Open-In-Lemmios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FADAD1C82A671F9E00108A9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Open In Lemmios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Open In Lemmios";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axlav.lemmios.Open-In-Lemmios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -881,6 +1069,15 @@
 			buildConfigurations = (
 				FA96B4EE2A61105300053BBF /* Debug */,
 				FA96B4EF2A61105300053BBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FADAD1C92A671F9E00108A9C /* Build configuration list for PBXNativeTarget "Open In Lemmios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FADAD1C72A671F9E00108A9C /* Debug */,
+				FADAD1C82A671F9E00108A9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

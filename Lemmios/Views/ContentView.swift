@@ -4,10 +4,10 @@ import SwiftUI
 import ImageViewer
 import LemmyApi
 
-let communityRegex = /^.+:\/\/(.+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
-let userRegex = /^.+:\/\/(.+?)\/u\/([a-zA-Z_]+)(@[a-z\-.]+)?$/
-let postRegex = /^.+:\/\/(.+?)\/post\/([0-9]+)$/
-let commentRegex = /^.+:\/\/(.+?)\/comment\/([0-9]+)$/
+let communityRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
+let userRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/u\/([0-9a-zA-Z_]+)(@[a-z\-.]+)?$/
+let postRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/post\/([0-9]+)$/
+let commentRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/comment\/([0-9]+)$/
 
 struct ContentView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
