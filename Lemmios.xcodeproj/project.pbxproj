@@ -67,6 +67,8 @@
 		FABC284A2A5933AC00243C7F /* SettingSuboptionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */; };
 		FABC284C2A5933C100243C7F /* DefaultStartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284B2A5933C100243C7F /* DefaultStartComponent.swift */; };
 		FABC284E2A593D8100243C7F /* ImportSubsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABC284D2A593D8100243C7F /* ImportSubsView.swift */; };
+		FABCFA662A67656300FF98B9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABCFA652A67656300FF98B9 /* FiltersView.swift */; };
+		FABCFA682A6768D200FF98B9 /* FilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABCFA672A6768D200FF98B9 /* FilterTest.swift */; };
 		FABEC3062A54064E00620E9A /* NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3052A54064E00620E9A /* NavModel.swift */; };
 		FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEC3072A540D3500620E9A /* SettingsView.swift */; };
 		FACA76EE2A64A6C300D96136 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA76ED2A64A6C300D96136 /* NotificationsView.swift */; };
@@ -186,6 +188,8 @@
 		FABC28492A5933AC00243C7F /* SettingSuboptionComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingSuboptionComponent.swift; sourceTree = "<group>"; };
 		FABC284B2A5933C100243C7F /* DefaultStartComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultStartComponent.swift; sourceTree = "<group>"; };
 		FABC284D2A593D8100243C7F /* ImportSubsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSubsView.swift; sourceTree = "<group>"; };
+		FABCFA652A67656300FF98B9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		FABCFA672A6768D200FF98B9 /* FilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTest.swift; sourceTree = "<group>"; };
 		FABEC3052A54064E00620E9A /* NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavModel.swift; sourceTree = "<group>"; };
 		FABEC3072A540D3500620E9A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FACA76ED2A64A6C300D96136 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
@@ -291,6 +295,7 @@
 				FA96B4F12A612E2900053BBF /* ScreenshotTests.swift */,
 				FA5A461A2A61E2670041D11B /* SearchTests.swift */,
 				FA5A461C2A61E26F0041D11B /* AuthTests.swift */,
+				FABCFA672A6768D200FF98B9 /* FilterTest.swift */,
 			);
 			path = LemmiosUITests;
 			sourceTree = "<group>";
@@ -307,6 +312,21 @@
 				FAF5D0642A630059002BD1AD /* Post */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		FABCFA642A67652000FF98B9 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FACA76ED2A64A6C300D96136 /* NotificationsView.swift */,
+				FA77D93E2A674DB5005C0555 /* OpenInLemmiosView.swift */,
+				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
+				FABC28452A5932E700243C7F /* AboutView.swift */,
+				FABC28352A5916A900243C7F /* ApolloImportView.swift */,
+				FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */,
+				FABEC3072A540D3500620E9A /* SettingsView.swift */,
+				FABCFA652A67656300FF98B9 /* FiltersView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		FADAD1AF2A671F9E00108A9C /* Open In Lemmios */ = {
@@ -383,25 +403,19 @@
 		FADD20542A5209D5002CE443 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FABCFA642A67652000FF98B9 /* Settings */,
 				FADD20442A5204B3002CE443 /* ContentView.swift */,
 				FADD20552A5209E7002CE443 /* PostsView.swift */,
-				FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */,
 				FAAAF85B2A524F0F00C9BFD8 /* PostView.swift */,
 				FAAAF86D2A528D0100C9BFD8 /* AuthenticationView.swift */,
 				FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */,
 				FAF5D5432A53FAEF00FDA8D9 /* HomeView.swift */,
-				FABEC3072A540D3500620E9A /* SettingsView.swift */,
 				FA2EE90E2A5478EA00546BFF /* UserView.swift */,
 				FA72A68B2A572151001AFA61 /* SearchView.swift */,
 				FA72A68F2A57299C001AFA61 /* SearchedView.swift */,
-				FABC28352A5916A900243C7F /* ApolloImportView.swift */,
-				FABC28452A5932E700243C7F /* AboutView.swift */,
-				FABC284D2A593D8100243C7F /* ImportSubsView.swift */,
 				FAEE08D12A5A06A100B54142 /* InboxView.swift */,
 				FA2214922A5B57D80023C696 /* SplashView.swift */,
 				FABB71302A6447D900D39592 /* ResolveView.swift */,
-				FACA76ED2A64A6C300D96136 /* NotificationsView.swift */,
-				FA77D93E2A674DB5005C0555 /* OpenInLemmiosView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -663,6 +677,7 @@
 			files = (
 				FA5A461B2A61E2670041D11B /* SearchTests.swift in Sources */,
 				FA96B4EB2A61105300053BBF /* CommentTests.swift in Sources */,
+				FABCFA682A6768D200FF98B9 /* FilterTest.swift in Sources */,
 				FA96B4F22A612E2900053BBF /* ScreenshotTests.swift in Sources */,
 				FA5A461D2A61E26F0041D11B /* AuthTests.swift in Sources */,
 			);
@@ -684,6 +699,7 @@
 				FA77D9412A67531D005C0555 /* VideoLooper.swift in Sources */,
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
+				FABCFA662A67656300FF98B9 /* FiltersView.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
 				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,

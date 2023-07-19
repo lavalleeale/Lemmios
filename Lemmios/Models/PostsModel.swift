@@ -1,7 +1,7 @@
 import Combine
 import Foundation
-import SwiftUI
 import LemmyApi
+import SwiftUI
 
 class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     private var id = UUID()
@@ -26,6 +26,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     @Published var notFound = false
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
+    @AppStorage("filters") var filters = [String]()
     var path: String
     
     init(path: String) {
@@ -56,11 +57,11 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                     self.pageStatus = .done
                 } else {
                     let posts = posts.posts.filter { post in
-                        let shouldShow = !(self.hideRead && self.enableRead) || !DBModel.instance.isRead(postId: post.id)
-                        if !shouldShow {
+                        let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true)
+                        if shouldHide {
                             self.skipped += 1
                         }
-                        return shouldShow
+                        return !shouldHide
                     }
                     self.posts.append(contentsOf: posts)
                     self.pageStatus = .ready(nextPage: page + 1)
@@ -82,7 +83,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     func refresh(apiModel: ApiModel) {
         cancellable.removeAll()
         pageStatus = PostsPageStatus.ready(nextPage: 1)
-        self.notFound = false
+        notFound = false
         posts.removeAll()
         fetchPosts(apiModel: apiModel)
     }
@@ -120,7 +121,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     
     func block(apiModel: ApiModel, block: Bool) {
         if let id = communityView?.community_view.id {
-            apiModel.lemmyHttp?.blockCommunity(id: id, block: block) { communityView, error in
+            apiModel.lemmyHttp?.blockCommunity(id: id, block: block) { communityView, _ in
                 if let communityView = communityView {
                     self.communityView = communityView
                 }

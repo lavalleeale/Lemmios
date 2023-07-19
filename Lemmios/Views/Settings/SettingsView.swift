@@ -29,6 +29,7 @@ struct SettingsView: View {
             Section("General") {
                 NavigationLink("Open Lemmy Links in Lemmios", value: SettingsNav.OpenInLemmios)
                 Toggle("Show community names", isOn: $showCommuntiies)
+                NavigationLink("Filters", value: SettingsNav.Filters)
             }
             Section("Appearance") {
                 SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
@@ -105,6 +106,8 @@ struct SettingsView: View {
                 }
             case .OpenInLemmios:
                 OpenInLemmiosView()
+            case .Filters:
+                FiltersView()
             }
         }
         .navigationTitle("Settings")
@@ -113,7 +116,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector, Read, Notifications, OpenInLemmios
+    case About, ServerSelector, Read, Notifications, OpenInLemmios, Filters
 }
 
 protocol HasCustom {
