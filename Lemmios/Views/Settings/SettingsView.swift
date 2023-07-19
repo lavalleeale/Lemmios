@@ -74,7 +74,7 @@ struct SettingsView: View {
         }
         .alert("Delete Account", isPresented: $showingDelete) {
             Button("OK", role: .cancel) {}
-            Link("Vist Instance", destination: URL(string: "\(apiModel.lemmyHttp!.baseUrl)/settings")!)
+            Link("Vist Instance", destination: URL(string: "\(apiModel.lemmyHttp?.baseUrl ?? "https://lemmy.world")/settings")!)
         } message: {
             Text("To delete your Lemmy account, you müst first visit \(apiModel.url) and sign in. Then navigate to the Profile tab. You may delete your account by pressing \"Delete Account\".")
         }
