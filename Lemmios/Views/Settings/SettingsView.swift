@@ -1,5 +1,7 @@
-import SwiftUI
+import AlertToast
+import Combine
 import LemmyApi
+import SwiftUI
 
 struct SettingsView: View {
     @AppStorage("defaultStart") var defaultStart = DefaultStart.All
@@ -22,6 +24,8 @@ struct SettingsView: View {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
+    @State var deletePassword = ""
+    @StateObject var settingsModel = SettingsModel()
     @Environment(\.dynamicTypeSize) var size: DynamicTypeSize
 
     var body: some View {
@@ -73,10 +77,17 @@ struct SettingsView: View {
             ApolloImportView()
         }
         .alert("Delete Account", isPresented: $showingDelete) {
-            Button("OK", role: .cancel) {}
-            Link("Vist Instance", destination: URL(string: "\(apiModel.lemmyHttp?.baseUrl ?? "https://lemmy.world")/settings")!)
-        } message: {
-            Text("To delete your Lemmy account, you müst first visit \(apiModel.url) and sign in. Then navigate to the Profile tab. You may delete your account by pressing \"Delete Account\".")
+            SecureField("Password", text: $deletePassword)
+            Button("Delete", role: .destructive) {
+                settingsModel.deleteAccount(password: deletePassword, apiModel: apiModel)
+            }
+            Button("Cancle", role: .cancel) {}
+        }
+        .toast(isPresenting: Binding(get: { settingsModel.deleteResponse != nil }, set: { _ in
+            settingsModel.deleteResponse = nil
+            settingsModel.deleteError = nil
+        })) {
+            AlertToast(displayMode: .banner(.pop), type: settingsModel.deleteResponse == true ? .complete(.green) : .error(.red), title: settingsModel.deleteResponse == true ? "Account deleted" : settingsModel.deleteError ?? "Unkown error deleting account")
         }
         .onAppear {
             if self.fontSize == -1 {
