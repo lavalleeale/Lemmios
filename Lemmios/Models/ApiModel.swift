@@ -101,6 +101,7 @@ class ApiModel: ObservableObject {
             lemmyHttp?.setJwt(jwt: jwt)
             selectAuth(account: account)
             enablePush(account: account)
+            self.selectedAccount = account
         }
     }
     
@@ -244,6 +245,10 @@ class ApiModel: ObservableObject {
         
         static func != (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
             return !(lhs == rhs)
+        }
+        
+        static func == (lhs: StoredAccount, rhs: StoredAccount) -> Bool {
+            lhs.jwt == rhs.jwt
         }
         
         var id: String { jwt }
