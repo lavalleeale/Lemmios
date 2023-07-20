@@ -44,14 +44,25 @@ struct RecentProvider: TimelineProvider {
         let maxIndex = getTargetNum(context.family)
         var widgetPostInfos: [WidgetInfo] = []
         for index in 0 ... min(maxIndex, posts.endIndex - 1) {
+            let post = posts[index]
             var image: UIImage?
-            if let url = posts[index].post.url, imageExtensions.contains(url.pathExtension) {
+            if let url = post.post.thumbnail_url, imageExtensions.contains(url.pathExtension) {
                 do {
                     let (data, _) = try await URLSession.shared.data(from: url)
                     image = UIImage(data: data)
                 } catch {}
             }
-            widgetPostInfos.append(WidgetInfo(post: posts[index], image: image))
+            widgetPostInfos.append(WidgetInfo(
+                postName: post.post.name,
+                postBody: post.post.body,
+                postUrl: URL(string: post.post.ap_id.absoluteString.replacingOccurrences(of: "$https", with: "lemmiosapp", options: .regularExpression))!,
+                postCommunity: post.community.name,
+                postCreator: post.creator.name,
+                score: post.counts.score,
+                numComments: post.counts.comments,
+                postId: post.id,
+                image: image
+            ))
         }
         let entry = SimpleEntry(date: .now, posts: widgetPostInfos)
         return entry

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FA0356CF2A68A19F0020CBCF /* PostComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356CD2A68A0ED0020CBCF /* PostComponent.swift */; };
-		FA0356D12A68AB600020CBCF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = FA0356D02A68AB600020CBCF /* MarkdownUI */; };
 		FA0356D32A68B0720020CBCF /* SelfWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356D22A68B0720020CBCF /* SelfWidget.swift */; };
 		FA0356D52A68B52E0020CBCF /* CommunityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356D42A68B52E0020CBCF /* CommunityWidget.swift */; };
 		FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */; };
@@ -286,7 +285,6 @@
 				FA43421D2A68815200B7213E /* SwiftUI.framework in Frameworks */,
 				FA4342302A6887B900B7213E /* LemmyApi in Frameworks */,
 				FA43421B2A68815200B7213E /* WidgetKit.framework in Frameworks */,
-				FA0356D12A68AB600020CBCF /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,7 +646,6 @@
 			packageProductDependencies = (
 				FA43422C2A6881CA00B7213E /* SimpleKeychain */,
 				FA43422F2A6887B900B7213E /* LemmyApi */,
-				FA0356D02A68AB600020CBCF /* MarkdownUI */,
 			);
 			productName = widgetsExtension;
 			productReference = FA4342192A68815200B7213E /* widgetsExtension.appex */;
@@ -1545,11 +1542,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FA0356D02A68AB600020CBCF /* MarkdownUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
-			productName = MarkdownUI;
-		};
 		FA1A32FF2A5FC2BF000A99CB /* ImageViewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */;

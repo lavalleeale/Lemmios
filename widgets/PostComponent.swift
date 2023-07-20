@@ -1,37 +1,32 @@
 import SwiftUI
 import LemmyApi
-import MarkdownUI
-
-let gradient = LinearGradient(gradient: Gradient(colors: [Color(red: 0.74, green: 0.5, blue: 0.97), Color(red: 0.4, green: 0.86, blue: 0.91)]), startPoint: .topLeading, endPoint: .bottomTrailing)
 
 struct PostComponent: View {
     @Environment(\.widgetFamily) var widgetFamily
     
-    let post: LemmyApi.ApiPost
-    let image: UIImage?
+    let info: WidgetInfo
     
     var body: some View {
-        let url = post.post.ap_id
-        Link(destination: URL(string: url.absoluteString.replacingOccurrences(of: "$https", with: "lemmiosapp", options: .regularExpression))!) {
+        Link(destination: info.postUrl) {
             ZStack(alignment: .topLeading) {
                 if widgetFamily != .accessoryRectangular {
-                    if let image = image {
-                        Image(uiImage: image.resized(toWidth: 800)!)
+                    if let image = info.image {
+                        Image(uiImage: image.resized(toWidth: 256))
                             .resizable()
                             .aspectRatio(1, contentMode: .fill)
                     } else {
-                        gradient
+                        LinearGradient(gradient: Gradient(colors: [Color(red: 0.74, green: 0.5, blue: 0.97), Color(red: 0.4, green: 0.86, blue: 0.91)]), startPoint: .topLeading, endPoint: .bottomTrailing)
                     }
                 }
                 Group {
                         VStack(alignment: .leading, spacing: widgetFamily != .accessoryRectangular ? nil : 0) {
-                            Text(post.post.name)
-                            Text(post.community.name)
+                            Text(info.postName)
+                            Text(info.postCommunity)
                                 .font(.caption2)
                             if widgetFamily != .accessoryRectangular {
-                                Text(post.creator.name)
+                                Text(info.postCreator)
                                     .font(.caption2)
-                                if image == nil, let body = post.post.body {
+                                if info.image == nil, let body = info.postBody {
                                     Text(body)
                                         .font(.caption)
                                 }
@@ -41,11 +36,11 @@ struct PostComponent: View {
                                 HStack(spacing: 3) {
                                     Image(systemName: "arrow.up")
                                         .scaleEffect(0.8)
-                                    Text(formatNum(num: post.counts.score))
+                                    Text(formatNum(num: info.score))
                                     HStack(spacing: 3) {
                                         Image(systemName: "bubble.left.and.bubble.right")
                                             .scaleEffect(0.8)
-                                        Text(formatNum(num: post.counts.comments))
+                                        Text(formatNum(num: info.numComments))
                                     }
                                 }
                             }
@@ -54,13 +49,13 @@ struct PostComponent: View {
                 }
             }
         }.if(getTargetNum(widgetFamily) == 0) { view in
-            view.widgetURL(URL(string: url.absoluteString.replacingOccurrences(of: "$https", with: "lemmiosapp", options: .regularExpression))!)
+            view.widgetURL(info.postUrl)
         }
     }
 }
 
 extension UIImage {
-  func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
+  func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage {
     let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
     let format = imageRendererFormat
     format.opaque = isOpaque

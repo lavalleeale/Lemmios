@@ -11,10 +11,17 @@ struct SimpleEntry: TimelineEntry {
 
 struct WidgetInfo: Identifiable {
     var id: Int {
-        post.id
+        postId
     }
 
-    let post: LemmyApi.ApiPost
+    let postName: String
+    let postBody: String?
+    let postUrl: URL
+    let postCommunity: String
+    let postCreator: String
+    let score: Int
+    let numComments: Int
+    let postId: Int
     let image: UIImage?
 }
 
@@ -53,11 +60,11 @@ struct PostIndex: View {
     let index: Int
     var body: some View {
         if let post = posts[safe: index] {
-            PostComponent(post: post.post, image: post.image)
+            PostComponent(info: post)
         } else {
             ZStack {
                 Rectangle()
-                    .fill(gradient)
+                    .fill(LinearGradient(gradient: Gradient(colors: [Color(red: 0.74, green: 0.5, blue: 0.97), Color(red: 0.4, green: 0.86, blue: 0.91)]), startPoint: .topLeading, endPoint: .bottomTrailing))
                 Text("No Posts Found")
             }
         }
