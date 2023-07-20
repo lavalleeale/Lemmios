@@ -41,6 +41,7 @@
 		FA4909332A690097000BB6A4 /* CommunityIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FA4909192A690097000BB6A4 /* CommunityIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FA49093A2A6900F0000BB6A4 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */; };
 		FA49093C2A690471000BB6A4 /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA49093B2A690471000BB6A4 /* LemmyApi */; };
+		FA4909412A691CDE000BB6A4 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = FA4909402A691CDE000BB6A4 /* SimpleKeychain */; };
 		FA4CDA8E2A64D4AA001D38F7 /* WatchersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */; };
 		FA4CEC5C2A64B03B002AEB75 /* AddWatcherComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
@@ -293,6 +294,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA4909412A691CDE000BB6A4 /* SimpleKeychain in Frameworks */,
 				FA49093C2A690471000BB6A4 /* LemmyApi in Frameworks */,
 				FA49091B2A690097000BB6A4 /* Intents.framework in Frameworks */,
 			);
@@ -667,6 +669,7 @@
 			name = CommunityIntent;
 			packageProductDependencies = (
 				FA49093B2A690471000BB6A4 /* LemmyApi */,
+				FA4909402A691CDE000BB6A4 /* SimpleKeychain */,
 			);
 			productName = CommunityIntent;
 			productReference = FA4909192A690097000BB6A4 /* CommunityIntent.appex */;
@@ -1571,6 +1574,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA40E9B72A622FB50099D6A3 /* XCRemoteSwiftPackageReference "LemmyApi" */;
 			productName = LemmyApi;
+		};
+		FA4909402A691CDE000BB6A4 /* SimpleKeychain */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAAAF86F2A52929500C9BFD8 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
+			productName = SimpleKeychain;
 		};
 		FA52397B2A56371D00C80CDD /* SwiftUIKit */ = {
 			isa = XCSwiftPackageProductDependency;

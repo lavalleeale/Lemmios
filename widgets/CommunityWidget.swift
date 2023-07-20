@@ -17,8 +17,8 @@ struct CommunityProvider: IntentTimelineProvider {
         let account = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "account")
         if let account = account,
            try! keychain.hasItem(forKey: "accounts"),
-           let accounts = Optional(try! keychain.data(forKey: "accounts")),
-           let decoded = Optional(try! decoder.decode([StoredAccount].self, from: accounts)),
+           let accounts = try? keychain.data(forKey: "accounts"),
+           let decoded = try? decoder.decode([StoredAccount].self, from: accounts),
            let selectedAccount = decoded.first(where: { account.contains($0.username) && account.contains($0.instance) })
         {
             Task {
@@ -74,6 +74,7 @@ struct CommunityWidget: Widget {
         }
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular])
         .configurationDisplayName("Latest Subscribed Widget")
-        .description("This shows the hottest post(s) from your subscribed feed")
+        .description("This shows the hottest post(s) from a community Note: Some servers (eg. lemmy.world) require login before search")
     }
 }
+

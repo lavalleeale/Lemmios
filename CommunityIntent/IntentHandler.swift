@@ -1,8 +1,10 @@
 import Combine
 import Intents
 import LemmyApi
+import SimpleKeychain
 
 class IntentHandler: INExtension, CommunityIntentIntentHandling {
+    private var decoder = JSONDecoder()
     func resolveCommunity(for intent: CommunityIntentIntent) async -> CommunityResolutionResult {
         if let community = intent.Community {
             return .success(with: community)
@@ -12,8 +14,18 @@ class IntentHandler: INExtension, CommunityIntentIntentHandling {
     }
 
     func provideCommunityOptionsCollection(for intent: CommunityIntentIntent, searchTerm: String?) async throws -> INObjectCollection<Community> {
-        if let serverUrl = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "serverUrl") {
-            let lemmyApi = try LemmyApi(baseUrl: serverUrl)
+        let keychain = SimpleKeychain(service: "com.axlav.lemmios")
+        let account = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "account")
+        if let url = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "serverUrl") {
+            let lemmyApi = try LemmyApi(baseUrl: url)
+            if let account = account,
+               try! keychain.hasItem(forKey: "accounts"),
+               let accounts = try? keychain.data(forKey: "accounts"),
+               let decoded = try? decoder.decode([StoredAccount].self, from: accounts),
+               let selectedAccount = decoded.first(where: { account.contains($0.username) && account.contains($0.instance) })
+            {
+                lemmyApi.setJwt(jwt: selectedAccount.jwt)
+            }
             var cancellable: AnyCancellable?
             let (response, _) = await withCheckedContinuation { continuation in
                 cancellable = lemmyApi.searchCommunities(query: searchTerm ?? "", page: 1, sort: .Hot, time: .All) { communities, error in
@@ -32,12 +44,10 @@ class IntentHandler: INExtension, CommunityIntentIntentHandling {
                 }
                 return .init(items: communities)
             } else {
-                return .init(items: [])
-//                throw CommunitiesIntentError.lemmyError
+                throw CommunitiesIntentError.lemmyError
             }
         } else {
-            return .init(items: [])
-//            throw CommunitiesIntentError.noSelectedServer
+            throw CommunitiesIntentError.noSelectedServer
         }
     }
 
@@ -51,4 +61,33 @@ class IntentHandler: INExtension, CommunityIntentIntentHandling {
 
 enum CommunitiesIntentError: String, Error {
     case noSelectedServer, lemmyError
+}
+
+struct StoredAccount: Codable, Identifiable, Equatable {
+    static func == (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+        return rhs.actor_id.pathComponents.last! == lhs.username && rhs.actor_id.host() == lhs.instance
+    }
+
+    static func == (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+        return rhs == lhs
+    }
+
+    static func != (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+        return !(lhs == rhs)
+    }
+
+    static func != (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+        return !(lhs == rhs)
+    }
+
+    static func == (lhs: StoredAccount, rhs: StoredAccount) -> Bool {
+        lhs.jwt == rhs.jwt
+    }
+
+    var id: String { jwt }
+
+    let username: String
+    let jwt: String
+    let instance: String
+    var notificationsEnabled: Bool
 }

@@ -73,6 +73,6 @@ struct RecentWidget: Widget {
         }
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular])
         .configurationDisplayName("Latest Post Widget")
-        .description("This shows your latest post(s)")
+        .description("This shows your latest post(s) NOTE: Requires login")
     }
 }
