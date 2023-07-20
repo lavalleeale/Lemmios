@@ -28,9 +28,9 @@ struct PostComponent: View {
                             Text(post.post.name)
                             Text(post.community.name)
                                 .font(.caption2)
-                            Text(post.creator.name)
-                                .font(.caption2)
                             if widgetFamily != .accessoryRectangular {
+                                Text(post.creator.name)
+                                    .font(.caption2)
                                 if image == nil, let body = post.post.body {
                                     Text(body)
                                         .font(.caption)
