@@ -28,6 +28,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("filters") var filters = [String]()
+    @AppStorage("hideNsfw") var hideNsfw = false
     var path: String
     
     init(path: String) {
@@ -53,30 +54,32 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
         }
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp?.getPosts(path: path, page: page, sort: sort, time: time) { posts, error in
-            if let posts = posts {
-                if posts.posts.isEmpty {
-                    self.pageStatus = .done
-                } else {
-                    let posts = posts.posts.filter { post in
-                        let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true)
-                        if shouldHide {
-                            self.skipped += 1
+            DispatchQueue.main.async {
+                if let posts = posts {
+                    if posts.posts.isEmpty {
+                        self.pageStatus = .done
+                    } else {
+                        let posts = posts.posts.filter { post in
+                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true) || (post.post.nsfw && self.hideNsfw)
+                            if shouldHide {
+                                self.skipped += 1
+                            }
+                            return !shouldHide
                         }
-                        return !shouldHide
+                        self.posts.append(contentsOf: posts)
+                        self.pageStatus = .ready(nextPage: page + 1)
+                        if posts.isEmpty {
+                            self.fetchPosts(apiModel: apiModel)
+                        }
                     }
-                    self.posts.append(contentsOf: posts)
-                    self.pageStatus = .ready(nextPage: page + 1)
-                    if posts.isEmpty {
-                        self.fetchPosts(apiModel: apiModel)
+                } else {
+                    if case let .network(code, _) = error! {
+                        if code == 404 {
+                            self.notFound = true
+                        }
                     }
+                    self.pageStatus = .failed
                 }
-            } else {
-                if case let .network(code, _) = error! {
-                    if code == 404 {
-                        self.notFound = true
-                    }
-                }
-                self.pageStatus = .failed
             }
         }.store(in: &cancellable)
     }

@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import OSLog
 import LemmyApi
+import SwiftUI
 
 class UserModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -26,6 +27,8 @@ class UserModel: ObservableObject, Hashable {
     
     @Published var name: String
     @Published var blocked = false
+    
+    @AppStorage("hideNsfw") var hideNsfw = false
     
     private var userId: Int?
     
@@ -70,7 +73,7 @@ class UserModel: ObservableObject, Hashable {
                             self.savedPageStatus = .done
                         } else {
                             self.saved.append(contentsOf: user.comments!)
-                            self.saved.append(contentsOf: user.posts!)
+                            self.saved.append(contentsOf: user.posts!.filter {!$0.post.nsfw || !self.hideNsfw })
                             self.savedPageStatus = .ready(nextPage: page + 1)
                         }
                     } else {
@@ -78,7 +81,7 @@ class UserModel: ObservableObject, Hashable {
                             self.pageStatus = .done
                         } else {
                             self.comments.append(contentsOf: user.comments!)
-                            self.posts.append(contentsOf: user.posts!)
+                            self.posts.append(contentsOf: user.posts!.filter {!$0.post.nsfw || !self.hideNsfw })
                             self.pageStatus = .ready(nextPage: page + 1)
                         }
                     }

@@ -21,6 +21,7 @@ struct SettingsView: View {
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("readOnScroll") var readOnScroll = false
+    @AppStorage("hideNsfw") var hideNsfw = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -64,6 +65,13 @@ struct SettingsView: View {
             Section("Other") {
                 NavigationLink("Notifications", value: SettingsNav.Notifications)
                 Toggle("Blur NSFW", isOn: $blurNsfw)
+                VStack {
+                    Toggle("Hide NSFW", isOn: $hideNsfw)
+                    Text("Seperate from Lemmy settings, even if this is off NSFW still needs to be enabled in Lemmy Settings")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
                 DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 NavigationLink("Change Instance", value: SettingsNav.ServerSelector)

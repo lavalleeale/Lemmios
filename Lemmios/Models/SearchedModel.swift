@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import LemmyApi
 import OSLog
+import SwiftUI
 
 class SearchedModel: ObservableObject, Hashable {
     private var id = UUID()
@@ -22,6 +23,7 @@ class SearchedModel: ObservableObject, Hashable {
     @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     @Published var rateLimited = false
+    @AppStorage("hideNsfw") var hideNsfw = false
     
     @Published var query: String
     
@@ -62,6 +64,10 @@ class SearchedModel: ObservableObject, Hashable {
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp?.searchCommunities(query: query, page: page, sort: sort, time: time) { communities, error in
             if let communities = communities?.communities {
+                if communities.isEmpty {
+                    self.pageStatus = .done
+                    return
+                }
                 if reset {
                     self.communities = communities
                 } else {
@@ -85,16 +91,22 @@ class SearchedModel: ObservableObject, Hashable {
         }
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp?.searchPosts(query: query, page: page, sort: sort, time: time) { posts, error in
-            if error == nil {
-                self.posts!.append(contentsOf: posts!.posts)
-                self.pageStatus = .ready(nextPage: page+1)
-            } else if let error = error {
-                if case let .lemmyError(message: message, code: _) = error {
-                    if message == "rate_limit_error" {
-                        self.rateLimited = true
+            DispatchQueue.main.async {
+                if error == nil {
+                    if posts!.posts.isEmpty {
+                        self.pageStatus = .done
+                        return
                     }
+                    self.posts!.append(contentsOf: posts!.posts.filter {!$0.post.nsfw || !self.hideNsfw })
+                    self.pageStatus = .ready(nextPage: page+1)
+                } else if let error = error {
+                    if case let .lemmyError(message: message, code: _) = error {
+                        if message == "rate_limit_error" {
+                            self.rateLimited = true
+                        }
+                    }
+                    self.pageStatus = .failed
                 }
-                self.pageStatus = .failed
             }
         }.store(in: &cancellable)
     }
@@ -106,6 +118,10 @@ class SearchedModel: ObservableObject, Hashable {
         pageStatus = .loading(page: page)
         apiModel.lemmyHttp?.searchUsers(query: query, page: page, sort: sort, time: time) { users, error in
             if error == nil {
+                if users!.users.isEmpty {
+                    self.pageStatus = .done
+                    return
+                }
                 self.users!.append(contentsOf: users!.users)
                 self.pageStatus = .ready(nextPage: page+1)
             } else if let error = error {
