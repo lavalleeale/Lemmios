@@ -8,7 +8,7 @@ struct ServerSelectorView: View {
     @State var siteInfo: LemmyApi.SiteInfo?
     @EnvironmentObject var apiModel: ApiModel
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
-    @AppStorage("serverUrl") public var url = ""
+    @AppStorage("serverUrl", store: .init(suiteName: "group.com.axlav.lemmios")) public var url = ""
     @AppStorage("servers") var defaultServers = ["https://lemmy.world", "https://lemmy.ml", "https://sh.itjust.works", "custom"]
 
     @State var needsForm = true

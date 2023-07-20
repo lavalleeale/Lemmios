@@ -29,6 +29,10 @@
 			<string></string>
 		</dict>
 	</dict>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>CommunityIntentIntent</string>
+	</array>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Requires sending auth token (revoked on password change) to Lemmios servers</string>
 	<key>UIApplicationShortcutItems</key>

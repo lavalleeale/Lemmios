@@ -1,4 +1,5 @@
 import Combine
+import WidgetKit
 import Foundation
 import LemmyApi
 import OSLog
@@ -6,7 +7,7 @@ import SimpleKeychain
 import SwiftUI
 
 class ApiModel: ObservableObject {
-    @AppStorage("serverUrl") public var url = ""
+    @AppStorage("serverUrl", store: .init(suiteName: "group.com.axlav.lemmios")) public var url = ""
     @AppStorage("seen") var seen: [Int] = []
     
     @Published var selectedAccount: StoredAccount?
@@ -31,6 +32,10 @@ class ApiModel: ObservableObject {
     init(doNothing: Bool) {}
     
     init() {
+        if let url = UserDefaults.standard.string(forKey: "serverUrl") {
+            self.url = url
+            UserDefaults.standard.removeObject(forKey: "serverUrl")
+        }
         if try! simpleKeychain.hasItem(forKey: "accounts") {
             let data = try! simpleKeychain.data(forKey: "accounts")
             if let decoded = try? decoder.decode([StoredAccount].self, from: data) {
@@ -40,7 +45,11 @@ class ApiModel: ObservableObject {
         if url != "" {
             _ = selectServer(url: url)
         }
-        if let selectedAccount = UserDefaults.standard.string(forKey: "account"), let account = accounts.first(where: { selectedAccount.contains($0.instance) && selectedAccount.contains($0.username) }) {
+        if let oldSelected = UserDefaults.standard.string(forKey: "account") {
+            UserDefaults(suiteName: "group.com.axlav.lemmios")!.set(oldSelected, forKey: "account")
+            UserDefaults.standard.removeObject(forKey: "account")
+        }
+        if let selectedAccount = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "account"), let account = accounts.first(where: { selectedAccount.contains($0.instance) && selectedAccount.contains($0.username) }) {
             selectAuth(account: account)
             enablePush(account: account)
         }
@@ -73,8 +82,8 @@ class ApiModel: ObservableObject {
         selectedAccount = nil
         do {
             lemmyHttp = try LemmyApi(baseUrl: url)
-            if let storedAccount = UserDefaults.standard.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.host()!) {
-                UserDefaults.standard.removeObject(forKey: "account")
+            if let storedAccount = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "account"), !storedAccount.contains(lemmyHttp!.apiUrl.host()!) {
+                UserDefaults(suiteName: "group.com.axlav.lemmios")!.removeObject(forKey: "account")
             }
             self.url = String(lemmyHttp!.baseUrl)
             serverSelected = true
@@ -146,7 +155,7 @@ class ApiModel: ObservableObject {
         try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
         if selectedAccount == account {
             selectedAccount = nil
-            UserDefaults.standard.removeObject(forKey: "account")
+            UserDefaults(suiteName: "group.com.axlav.lemmios")!.removeObject(forKey: "account")
             lemmyHttp?.setJwt(jwt: nil)
             unreadCount = 0
             timer?.invalidate()
@@ -181,7 +190,9 @@ class ApiModel: ObservableObject {
         selectedAccount = account
         unreadCount = 0
         lemmyHttp?.setJwt(jwt: account.jwt)
-        UserDefaults.standard.set("\(account.username)@\(account.instance)", forKey: "account")
+        UserDefaults(suiteName: "group.com.axlav.lemmios")!.set("\(account.username)@\(account.instance)", forKey: "account")
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
+        WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentCommunity")
         if let timer = timer {
             timer.fire()
         } else {

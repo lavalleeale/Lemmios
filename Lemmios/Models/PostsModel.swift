@@ -1,4 +1,5 @@
 import Combine
+import WidgetKit
 import Foundation
 import LemmyApi
 import SwiftUI
@@ -107,6 +108,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                 self.posts.insert(postView, at: 0)
                 self.postCreated = true
                 self.createdPost = postView
+                WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
             }
         }.store(in: &cancellable)
     }

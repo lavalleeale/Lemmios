@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA0356CF2A68A19F0020CBCF /* PostComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356CD2A68A0ED0020CBCF /* PostComponent.swift */; };
+		FA0356D12A68AB600020CBCF /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = FA0356D02A68AB600020CBCF /* MarkdownUI */; };
+		FA0356D32A68B0720020CBCF /* SelfWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356D22A68B0720020CBCF /* SelfWidget.swift */; };
+		FA0356D52A68B52E0020CBCF /* CommunityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0356D42A68B52E0020CBCF /* CommunityWidget.swift */; };
 		FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */; };
 		FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */; };
 		FA1A33002A5FC2BF000A99CB /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = FA1A32FF2A5FC2BF000A99CB /* ImageViewer */; };
@@ -16,12 +20,27 @@
 		FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE90E2A5478EA00546BFF /* UserView.swift */; };
 		FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE9122A547BE800546BFF /* UserModel.swift */; };
 		FA40E9B92A622FB50099D6A3 /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA40E9B82A622FB50099D6A3 /* LemmyApi */; };
+		FA43421B2A68815200B7213E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA43421A2A68815200B7213E /* WidgetKit.framework */; };
+		FA43421D2A68815200B7213E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA43421C2A68815200B7213E /* SwiftUI.framework */; };
+		FA4342202A68815200B7213E /* widgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA43421F2A68815200B7213E /* widgetsBundle.swift */; };
+		FA4342222A68815200B7213E /* widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4342212A68815200B7213E /* widgets.swift */; };
+		FA4342242A68815300B7213E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA4342232A68815300B7213E /* Assets.xcassets */; };
+		FA4342282A68815300B7213E /* widgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FA4342192A68815200B7213E /* widgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FA43422D2A6881CA00B7213E /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = FA43422C2A6881CA00B7213E /* SimpleKeychain */; };
+		FA4342302A6887B900B7213E /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA43422F2A6887B900B7213E /* LemmyApi */; };
 		FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */; };
 		FA44D6B82A5394BA0086AD56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */; };
 		FA4534AF2A5E4B7D00EA9EE8 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */; };
 		FA4596252A59C5A500368DBB /* ThemeManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596242A59C5A500368DBB /* ThemeManger.swift */; };
 		FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596262A59C83700368DBB /* ThemeModifiers.swift */; };
 		FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4596282A59D1C800368DBB /* ColoredListComponent.swift */; };
+		FA4909132A68FF5F000BB6A4 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */; };
+		FA4909142A68FF5F000BB6A4 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */; };
+		FA49091B2A690097000BB6A4 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA49091A2A690097000BB6A4 /* Intents.framework */; };
+		FA49091E2A690097000BB6A4 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA49091D2A690097000BB6A4 /* IntentHandler.swift */; };
+		FA4909332A690097000BB6A4 /* CommunityIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FA4909192A690097000BB6A4 /* CommunityIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FA49093A2A6900F0000BB6A4 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */; };
+		FA49093C2A690471000BB6A4 /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA49093B2A690471000BB6A4 /* LemmyApi */; };
 		FA4CDA8E2A64D4AA001D38F7 /* WatchersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */; };
 		FA4CEC5C2A64B03B002AEB75 /* AddWatcherComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */; };
 		FA52397C2A56371D00C80CDD /* SwiftUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = FA52397B2A56371D00C80CDD /* SwiftUIKit */; };
@@ -102,6 +121,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		FA4342262A68815300B7213E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FADD20372A5204B3002CE443 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA4342182A68815200B7213E;
+			remoteInfo = widgetsExtension;
+		};
+		FA4909312A690097000BB6A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FADD20372A5204B3002CE443 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA4909182A690097000BB6A4;
+			remoteInfo = CommunityIntent;
+		};
 		FA96B4EC2A61105300053BBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FADD20372A5204B3002CE443 /* Project object */;
@@ -125,6 +158,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				FA4909332A690097000BB6A4 /* CommunityIntent.appex in Embed Foundation Extensions */,
+				FA4342282A68815300B7213E /* widgetsExtension.appex in Embed Foundation Extensions */,
 				FADAD1C62A671F9E00108A9C /* Open In Lemmios.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -133,6 +168,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA0356CD2A68A0ED0020CBCF /* PostComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComponent.swift; sourceTree = "<group>"; };
+		FA0356D22A68B0720020CBCF /* SelfWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfWidget.swift; sourceTree = "<group>"; };
+		FA0356D42A68B52E0020CBCF /* CommunityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityWidget.swift; sourceTree = "<group>"; };
 		FA03BEE52A53CFBA00FC2878 /* NumberComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberComponent.swift; sourceTree = "<group>"; };
 		FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowsComponent.swift; sourceTree = "<group>"; };
 		FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
@@ -140,12 +178,27 @@
 		FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreateComponent.swift; sourceTree = "<group>"; };
 		FA2EE90E2A5478EA00546BFF /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		FA2EE9122A547BE800546BFF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		FA4342192A68815200B7213E /* widgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = widgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA43421A2A68815200B7213E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		FA43421C2A68815200B7213E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		FA43421F2A68815200B7213E /* widgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = widgetsBundle.swift; sourceTree = "<group>"; };
+		FA4342212A68815200B7213E /* widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = widgets.swift; sourceTree = "<group>"; };
+		FA4342232A68815300B7213E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FA4342252A68815300B7213E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA43422E2A68837500B7213E /* widgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = widgetsExtension.entitlements; sourceTree = "<group>"; };
 		FA44D6B02A538E710086AD56 /* SwipeActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionsModifier.swift; sourceTree = "<group>"; };
 		FA44D6B72A5394BA0086AD56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA4534AE2A5E4B7D00EA9EE8 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		FA4596242A59C5A500368DBB /* ThemeManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManger.swift; sourceTree = "<group>"; };
 		FA4596262A59C83700368DBB /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
 		FA4596282A59D1C800368DBB /* ColoredListComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListComponent.swift; sourceTree = "<group>"; };
+		FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
+		FA4909192A690097000BB6A4 /* CommunityIntent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CommunityIntent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA49091A2A690097000BB6A4 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
+		FA49091D2A690097000BB6A4 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		FA49091F2A690097000BB6A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA4909252A690097000BB6A4 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		FA49093D2A690645000BB6A4 /* CommunityIntent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CommunityIntent.entitlements; sourceTree = "<group>"; };
 		FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchersModel.swift; sourceTree = "<group>"; };
 		FA4CEC5B2A64B03B002AEB75 /* AddWatcherComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWatcherComponent.swift; sourceTree = "<group>"; };
 		FA5A46112A61C2B30041D11B /* DBModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBModel.swift; sourceTree = "<group>"; };
@@ -224,6 +277,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FA4342162A68815200B7213E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA43422D2A6881CA00B7213E /* SimpleKeychain in Frameworks */,
+				FA43421D2A68815200B7213E /* SwiftUI.framework in Frameworks */,
+				FA4342302A6887B900B7213E /* LemmyApi in Frameworks */,
+				FA43421B2A68815200B7213E /* WidgetKit.framework in Frameworks */,
+				FA0356D12A68AB600020CBCF /* MarkdownUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA4909162A690097000BB6A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA49093C2A690471000BB6A4 /* LemmyApi in Frameworks */,
+				FA49091B2A690097000BB6A4 /* Intents.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA96B4E32A61105300053BBF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -266,6 +340,21 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		FA43421E2A68815200B7213E /* widgets */ = {
+			isa = PBXGroup;
+			children = (
+				FA43421F2A68815200B7213E /* widgetsBundle.swift */,
+				FA4342212A68815200B7213E /* widgets.swift */,
+				FA4342232A68815300B7213E /* Assets.xcassets */,
+				FA4342252A68815300B7213E /* Info.plist */,
+				FA0356CD2A68A0ED0020CBCF /* PostComponent.swift */,
+				FA0356D22A68B0720020CBCF /* SelfWidget.swift */,
+				FA0356D42A68B52E0020CBCF /* CommunityWidget.swift */,
+				FA4909122A68FF5F000BB6A4 /* Intents.intentdefinition */,
+			);
+			path = widgets;
+			sourceTree = "<group>";
+		};
 		FA45961F2A59C3FE00368DBB /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,9 +364,23 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		FA49091C2A690097000BB6A4 /* CommunityIntent */ = {
+			isa = PBXGroup;
+			children = (
+				FA49093D2A690645000BB6A4 /* CommunityIntent.entitlements */,
+				FA49091D2A690097000BB6A4 /* IntentHandler.swift */,
+				FA49091F2A690097000BB6A4 /* Info.plist */,
+			);
+			path = CommunityIntent;
+			sourceTree = "<group>";
+		};
 		FA60B9C02A5FB9E3002A87A4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA43421A2A68815200B7213E /* WidgetKit.framework */,
+				FA43421C2A68815200B7213E /* SwiftUI.framework */,
+				FA49091A2A690097000BB6A4 /* Intents.framework */,
+				FA4909252A690097000BB6A4 /* IntentsUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -357,9 +460,12 @@
 		FADD20362A5204B3002CE443 = {
 			isa = PBXGroup;
 			children = (
+				FA43422E2A68837500B7213E /* widgetsExtension.entitlements */,
 				FADD20412A5204B3002CE443 /* Lemmios */,
 				FA96B4E72A61105300053BBF /* LemmiosUITests */,
 				FADAD1AF2A671F9E00108A9C /* Open In Lemmios */,
+				FA43421E2A68815200B7213E /* widgets */,
+				FA49091C2A690097000BB6A4 /* CommunityIntent */,
 				FADD20402A5204B3002CE443 /* Products */,
 				FA60B9C02A5FB9E3002A87A4 /* Frameworks */,
 			);
@@ -371,6 +477,8 @@
 				FADD203F2A5204B3002CE443 /* Lemmios.app */,
 				FA96B4E62A61105300053BBF /* LemmiosUITests.xctest */,
 				FADAD1AE2A671F9E00108A9C /* Open In Lemmios.appex */,
+				FA4342192A68815200B7213E /* widgetsExtension.appex */,
+				FA4909192A690097000BB6A4 /* CommunityIntent.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -522,6 +630,48 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		FA4342182A68815200B7213E /* widgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA43422B2A68815300B7213E /* Build configuration list for PBXNativeTarget "widgetsExtension" */;
+			buildPhases = (
+				FA4342152A68815200B7213E /* Sources */,
+				FA4342162A68815200B7213E /* Frameworks */,
+				FA4342172A68815200B7213E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = widgetsExtension;
+			packageProductDependencies = (
+				FA43422C2A6881CA00B7213E /* SimpleKeychain */,
+				FA43422F2A6887B900B7213E /* LemmyApi */,
+				FA0356D02A68AB600020CBCF /* MarkdownUI */,
+			);
+			productName = widgetsExtension;
+			productReference = FA4342192A68815200B7213E /* widgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FA4909182A690097000BB6A4 /* CommunityIntent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA4909372A690097000BB6A4 /* Build configuration list for PBXNativeTarget "CommunityIntent" */;
+			buildPhases = (
+				FA4909152A690097000BB6A4 /* Sources */,
+				FA4909162A690097000BB6A4 /* Frameworks */,
+				FA4909172A690097000BB6A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CommunityIntent;
+			packageProductDependencies = (
+				FA49093B2A690471000BB6A4 /* LemmyApi */,
+			);
+			productName = CommunityIntent;
+			productReference = FA4909192A690097000BB6A4 /* CommunityIntent.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		FA96B4E52A61105300053BBF /* LemmiosUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA96B4F02A61105300053BBF /* Build configuration list for PBXNativeTarget "LemmiosUITests" */;
@@ -570,6 +720,8 @@
 			);
 			dependencies = (
 				FADAD1C52A671F9E00108A9C /* PBXTargetDependency */,
+				FA4342272A68815300B7213E /* PBXTargetDependency */,
+				FA4909322A690097000BB6A4 /* PBXTargetDependency */,
 			);
 			name = Lemmios;
 			packageProductDependencies = (
@@ -597,6 +749,12 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					FA4342182A68815200B7213E = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					FA4909182A690097000BB6A4 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					FA96B4E52A61105300053BBF = {
 						CreatedOnToolsVersion = 14.3.1;
 						TestTargetID = FADD203E2A5204B3002CE443;
@@ -636,11 +794,28 @@
 				FADD203E2A5204B3002CE443 /* Lemmios */,
 				FA96B4E52A61105300053BBF /* LemmiosUITests */,
 				FADAD1AD2A671F9E00108A9C /* Open In Lemmios */,
+				FA4342182A68815200B7213E /* widgetsExtension */,
+				FA4909182A690097000BB6A4 /* CommunityIntent */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		FA4342172A68815200B7213E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA4342242A68815300B7213E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA4909172A690097000BB6A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA96B4E42A61105300053BBF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -674,6 +849,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		FA4342152A68815200B7213E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA4909142A68FF5F000BB6A4 /* Intents.intentdefinition in Sources */,
+				FA0356D52A68B52E0020CBCF /* CommunityWidget.swift in Sources */,
+				FA0356CF2A68A19F0020CBCF /* PostComponent.swift in Sources */,
+				FA0356D32A68B0720020CBCF /* SelfWidget.swift in Sources */,
+				FA4342202A68815200B7213E /* widgetsBundle.swift in Sources */,
+				FA4342222A68815200B7213E /* widgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA4909152A690097000BB6A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA49093A2A6900F0000BB6A4 /* Intents.intentdefinition in Sources */,
+				FA49091E2A690097000BB6A4 /* IntentHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA96B4E22A61105300053BBF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -700,6 +897,7 @@
 			files = (
 				FAA1450A2A5895D5009DDA23 /* NSFWBadgeComponent.swift in Sources */,
 				FA77D9412A67531D005C0555 /* VideoLooper.swift in Sources */,
+				FA4909132A68FF5F000BB6A4 /* Intents.intentdefinition in Sources */,
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FABCFA662A67656300FF98B9 /* FiltersView.swift in Sources */,
@@ -771,6 +969,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		FA4342272A68815300B7213E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA4342182A68815200B7213E /* widgetsExtension */;
+			targetProxy = FA4342262A68815300B7213E /* PBXContainerItemProxy */;
+		};
+		FA4909322A690097000BB6A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA4909182A690097000BB6A4 /* CommunityIntent */;
+			targetProxy = FA4909312A690097000BB6A4 /* PBXContainerItemProxy */;
+		};
 		FA96B4ED2A61105300053BBF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FADD203E2A5204B3002CE443 /* Lemmios */;
@@ -784,6 +992,124 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		FA4342292A68815300B7213E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = widgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = widgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FA43422A2A68815300B7213E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = widgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = widgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FA4909382A690097000BB6A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CommunityIntent/CommunityIntent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CommunityIntent/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CommunityIntent;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios.CommunityIntent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FA4909392A690097000BB6A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = CommunityIntent/CommunityIntent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CommunityIntent/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CommunityIntent;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.axlav.lemmios.CommunityIntent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		FA96B4EE2A61105300053BBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1084,6 +1410,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FA43422B2A68815300B7213E /* Build configuration list for PBXNativeTarget "widgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA4342292A68815300B7213E /* Debug */,
+				FA43422A2A68815300B7213E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FA4909372A690097000BB6A4 /* Build configuration list for PBXNativeTarget "CommunityIntent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA4909382A690097000BB6A4 /* Debug */,
+				FA4909392A690097000BB6A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FA96B4F02A61105300053BBF /* Build configuration list for PBXNativeTarget "LemmiosUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1198,12 +1542,32 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FA0356D02A68AB600020CBCF /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAAAF8672A5288CB00C9BFD8 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
 		FA1A32FF2A5FC2BF000A99CB /* ImageViewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FA1A32FE2A5FC2BF000A99CB /* XCRemoteSwiftPackageReference "ImageViewer" */;
 			productName = ImageViewer;
 		};
 		FA40E9B82A622FB50099D6A3 /* LemmyApi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA40E9B72A622FB50099D6A3 /* XCRemoteSwiftPackageReference "LemmyApi" */;
+			productName = LemmyApi;
+		};
+		FA43422C2A6881CA00B7213E /* SimpleKeychain */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAAAF86F2A52929500C9BFD8 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
+			productName = SimpleKeychain;
+		};
+		FA43422F2A6887B900B7213E /* LemmyApi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA40E9B72A622FB50099D6A3 /* XCRemoteSwiftPackageReference "LemmyApi" */;
+			productName = LemmyApi;
+		};
+		FA49093B2A690471000BB6A4 /* LemmyApi */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FA40E9B72A622FB50099D6A3 /* XCRemoteSwiftPackageReference "LemmyApi" */;
 			productName = LemmyApi;
