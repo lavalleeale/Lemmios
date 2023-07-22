@@ -216,7 +216,7 @@ struct CommentSheet: View {
 
     var body: some View {
         NavigationView {
-            TextEditor(text: $commentBody)
+            CustomTextEditorComponent(text: $commentBody)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)

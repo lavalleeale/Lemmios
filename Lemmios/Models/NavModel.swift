@@ -10,7 +10,12 @@ class NavModel: ObservableObject {
         self.path = NavigationPath()
         if startNavigated {
             DispatchQueue.main.async {
-                self.path.append(PostsModel(path: UserDefaults.standard.string(forKey: "defaultStart")?.replacing("c/", with: "") ?? "All"))
+                var defaultStart = UserDefaults.standard.string(forKey: "defaultStart")?.replacing("c/", with: "") ?? ""
+                if defaultStart == "" {
+                    defaultStart = DefaultStart.All.rawValue
+                    UserDefaults.standard.set(defaultStart, forKey: "defaultStart")
+                }
+                self.path.append(PostsModel(path: defaultStart))
             }
         }
     }

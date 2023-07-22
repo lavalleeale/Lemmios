@@ -19,7 +19,7 @@ class AuthModel: ObservableObject {
                 } else if response.verify_email_sent == true {
                     self.verifySent = true
                 }
-            } else if case let .lemmyError(message, code) = error {
+            } else if case let .lemmyError(message, _) = error {
                 self.error = message
                 self.getCaptcha(apiModel: apiModel)
             }

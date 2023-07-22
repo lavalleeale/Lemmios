@@ -126,34 +126,16 @@ struct PostsView: View {
             if !isSpecialPath {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button {
-                            if apiModel.selectedAccount == nil {
-                                apiModel.getAuth()
-                            } else {
-                                showingCreate.toggle()
-                            }
-                        } label: {
-                            Label("Submit Post", systemImage: "plus")
+                        PostButton(label: "Submit Post", image: "plus") {
+                            showingCreate.toggle()
                         }
-                        Button {
-                            if apiModel.selectedAccount == nil {
-                                apiModel.getAuth()
-                            } else {
-                                postsModel.follow(apiModel: apiModel)
-                            }
-                        } label: {
-                            let subscribed = postsModel.communityView?.community_view.subscribed != "NotSubscribed"
-                            Label(subscribed ? "Unfollow" : "Follow", systemImage: subscribed ? "heart.slash" : "heart")
+                        let subscribed = postsModel.communityView?.community_view.subscribed != "NotSubscribed"
+                        PostButton(label: subscribed ? "Unfollow" : "Follow", image: subscribed ? "heart.slash" : "heart") {
+                            postsModel.follow(apiModel: apiModel)
                         }
                         let blocked = postsModel.communityView?.community_view.blocked == true
-                        Button {
-                            if apiModel.selectedAccount == nil {
-                                apiModel.getAuth()
-                            } else {
-                                postsModel.block(apiModel: apiModel, block: !blocked)
-                            }
-                        } label: {
-                            Label(blocked ? "Unblock" : "Block", systemImage: "x.circle")
+                        PostButton(label:blocked ? "Unblock" : "Block", image: "x.circle") {
+                            postsModel.block(apiModel: apiModel, block: !blocked)
                         }
                     } label: {
                         VStack {

@@ -6,7 +6,6 @@ struct DefaultStartComponent: View {
     @EnvironmentObject var apiModel: ApiModel
     @StateObject var searchedModel = SearchedModel(query: "", searchType: .Communities)
     @Binding var selection: DefaultStart
-    @State var custom = ""
 
     let desciption: String
     let options: [DefaultStart]
@@ -15,29 +14,11 @@ struct DefaultStartComponent: View {
     var body: some View {
         SettingViewComponent(selection: $selection, desciption: desciption, options: options)
             .popupNavigationView(isPresented: $showingCustom) {
-                ColoredListComponent {
-                    Group {
-                        DefaultFocusView(custom: $custom, customDescription: customDescription) { custom in
-                            self.selection = .Community(name: custom)
-                            showingCustom = false
-                        }
-                        if let communities = searchedModel.communities?.filter({ $0.community.name.lowercased().contains(custom.lowercased()) }).prefix(5), communities.count != 0 {
-                            CommmunityListComponent(communities: communities) { community in
-                                self.selection = .Community(name: "\(community.community.name)@\(community.community.actor_id.host()!)")
-                                showingCustom = false
-                            }
-                        }
+                CommunitySelectorComponent(placeholder: customDescription) { text in
+                    if text != "" {
+                        self.selection = .Community(name: text)
                     }
-                    .onChange(of: custom) { newValue in
-                        self.searchedModel.reset(removeResults: false)
-                        if newValue != "" {
-                            self.searchedModel.query = newValue
-                            self.searchedModel.fetchCommunties(apiModel: apiModel, reset: true)
-                        }
-                    }
-                    .onAppear {
-                        custom = ""
-                    }
+                    showingCustom = false
                 }
                 .ignoresSafeArea(.keyboard)
             }

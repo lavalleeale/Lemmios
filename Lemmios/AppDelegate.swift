@@ -40,7 +40,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         if ProcessInfo().arguments.contains("delete") {
             try? FileManager.default.removeItem(at: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("read.db"))
-            UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+            UserDefaults.standard.removePersistentDomain(forName: "com.axlav.lemmios")
             UserDefaults.standard.removePersistentDomain(forName: "group.com.axlav.lemmios")
             try! SimpleKeychain().deleteAll()
         }

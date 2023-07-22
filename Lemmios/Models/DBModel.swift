@@ -10,7 +10,7 @@ class DBModel {
     init() {
         let dbUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("read.db")
         db = try! Connection(dbUrl.absoluteString)
-        try? db.run(readPosts.create { t in
+        _ = try? db.run(readPosts.create { t in
             t.column(id, primaryKey: true)
         })
     }

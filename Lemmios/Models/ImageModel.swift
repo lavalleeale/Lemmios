@@ -36,7 +36,7 @@ class ImageModel: ObservableObject {
                     self.loadImage(profileImage.image, targetSize: targetSize, apiModel: apiModel)
                 case .success(nil):
                     self.imageState = .empty
-                case .failure(let error):
+                case .failure:
                     self.imageState = .failure(.loadingImage, nil)
                 }
             }

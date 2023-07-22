@@ -69,7 +69,7 @@ struct PostCreateComponent<T: PostDataReceiver>: View {
                         }
                 }
                 NavigationLink(postData == "" ? "Text (optional)" : postData) {
-                    TextEditor(text: $postData)
+                    CustomTextEditorComponent(text: $postData)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .lineLimit(1)

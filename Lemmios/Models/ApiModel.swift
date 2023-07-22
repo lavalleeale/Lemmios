@@ -65,7 +65,6 @@ class ApiModel: ObservableObject {
         do {
             let lemmyHttp = try LemmyApi(baseUrl: url)
             serverInfoCancellable = lemmyHttp.getSiteInfo { siteInfo, error in
-                print(siteInfo, error)
                 if let siteInfo = siteInfo {
                     receiveValue(nil, siteInfo)
                 } else {
