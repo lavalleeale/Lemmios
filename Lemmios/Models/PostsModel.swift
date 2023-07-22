@@ -28,7 +28,6 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("filters") var filters = [String]()
-    @AppStorage("hideNsfw") var hideNsfw = false
     var path: String
     
     init(path: String) {
@@ -60,7 +59,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                         self.pageStatus = .done
                     } else {
                         let posts = posts.posts.filter { post in
-                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true) || (post.post.nsfw && self.hideNsfw)
+                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true)
                             if shouldHide {
                                 self.skipped += 1
                             }

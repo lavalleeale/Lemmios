@@ -23,7 +23,6 @@ class SearchedModel: ObservableObject, Hashable {
     @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     @Published var rateLimited = false
-    @AppStorage("hideNsfw") var hideNsfw = false
     
     @Published var query: String
     
@@ -97,7 +96,7 @@ class SearchedModel: ObservableObject, Hashable {
                         self.pageStatus = .done
                         return
                     }
-                    self.posts!.append(contentsOf: posts!.posts.filter {!$0.post.nsfw || !self.hideNsfw })
+                    self.posts!.append(contentsOf: posts!.posts.filter { _ in true })
                     self.pageStatus = .ready(nextPage: page+1)
                 } else if let error = error {
                     if case let .lemmyError(message: message, code: _) = error {
