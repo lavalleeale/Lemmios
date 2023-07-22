@@ -205,7 +205,6 @@
 		FA5A461A2A61E2670041D11B /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		FA5A461C2A61E26F0041D11B /* AuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTests.swift; sourceTree = "<group>"; };
 		FA6030112A68688B00E70C9F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
-		FA65AE682A6B98110011837A /* LemmyApi */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = LemmyApi; path = ../LemmyApi; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -461,7 +460,6 @@
 		FADD20362A5204B3002CE443 = {
 			isa = PBXGroup;
 			children = (
-				FA65AE682A6B98110011837A /* LemmyApi */,
 				FA43422E2A68837500B7213E /* widgetsExtension.entitlements */,
 				FADD20412A5204B3002CE443 /* Lemmios */,
 				FA96B4E72A61105300053BBF /* LemmiosUITests */,
