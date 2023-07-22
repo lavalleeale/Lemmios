@@ -54,7 +54,9 @@ final class AuthTests: XCTestCase {
         app.textViews.firstMatch.typeText("body for \(postTitle)")
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.buttons["Post"].tap()
-        app.staticTexts["Posted! Tap to view."].tap()
+        let posted = app.staticTexts["Posted! Tap to view."]
+        XCTAssert(posted.waitForExistence(timeout: 10))
+        posted.tap()
         app.buttons["More"].tapUnhittable()
         app.buttons["Delete"].tap()
         XCTAssert(app.staticTexts["deleted by creator"].waitForExistence(timeout: 10))

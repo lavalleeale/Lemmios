@@ -1,7 +1,7 @@
 import LemmyApi
 import SwiftUI
 
-struct ResolveView<T: ResolveResponse>: View {
+struct ResolveView<T: Codable>: View where T: Equatable {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel 
     @StateObject var resolveModel: ResolveModel<T>

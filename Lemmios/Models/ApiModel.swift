@@ -1,10 +1,10 @@
 import Combine
-import WidgetKit
 import Foundation
 import LemmyApi
 import OSLog
 import SimpleKeychain
 import SwiftUI
+import WidgetKit
 
 class ApiModel: ObservableObject {
     @AppStorage("serverUrl", store: .init(suiteName: "group.com.axlav.lemmios")) public var url = ""
@@ -15,6 +15,7 @@ class ApiModel: ObservableObject {
     @Published var serverSelected = false
     @Published var accounts = [StoredAccount]()
     @Published var subscribed: [String: [LemmyApi.ApiCommunityData]]?
+    @Published var moderates: [LemmyApi.ApiCommunityData]?
     @Published var showingAuth = false
     @Published var unreadCount = 0
     @Published var invalidUser: String?
@@ -110,7 +111,7 @@ class ApiModel: ObservableObject {
             lemmyHttp?.setJwt(jwt: jwt)
             selectAuth(account: account)
             enablePush(account: account)
-            self.selectedAccount = account
+            selectedAccount = account
         }
     }
     
@@ -211,6 +212,7 @@ class ApiModel: ObservableObject {
         lemmyHttp?.getSiteInfo { siteInfo, _ in
             if let siteInfo = siteInfo {
                 if let user = siteInfo.my_user {
+                    self.moderates = user.moderates.map { $0.community }
                     self.subscribed = [:]
                     user.follows.map { $0.community }.forEach { community in
                         let nameString = community.name

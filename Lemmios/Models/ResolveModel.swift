@@ -2,7 +2,7 @@ import Combine
 import Foundation
 import LemmyApi
 
-class ResolveModel<T: ResolveResponse>: ObservableObject, Hashable {
+class ResolveModel<T: Codable>: ObservableObject, Hashable {
     private var id = UUID()
     
     static func == (lhs: ResolveModel, rhs: ResolveModel) -> Bool {
@@ -15,7 +15,7 @@ class ResolveModel<T: ResolveResponse>: ObservableObject, Hashable {
     
     @Published var thing: URL
     
-    @Published var value: T.childType?
+    @Published var value: T?
     
     @Published var error: String?
     
@@ -24,12 +24,24 @@ class ResolveModel<T: ResolveResponse>: ObservableObject, Hashable {
     func resolve(apiModel: ApiModel) {
         if value == nil {
             if thing.host() == apiModel.lemmyHttp?.apiUrl.host() {
-                cancellable = T.getLocal(id: thing.lastPathComponent, lemmyApi: apiModel.lemmyHttp!) { (value: T.returnResponse?, error: LemmyApi.NetworkError?) in
-                    DispatchQueue.main.async {
-                        if let value = value {
-                            self.value = value.body
-                        } else {
-                            self.error = error?.localizedDescription
+                if T.self == LemmyApi.PostView.self {
+                    cancellable = apiModel.lemmyHttp?.getPost(id: Int(thing.lastPathComponent)!) { postView, error in
+                        DispatchQueue.main.async {
+                            if let postView = postView {
+                                self.value = postView as? T
+                            } else {
+                                self.error = error?.localizedDescription
+                            }
+                        }
+                    }
+                } else if T.self == LemmyApi.CommentView.self {
+                    cancellable = apiModel.lemmyHttp?.getComment(id: Int(thing.lastPathComponent)!) { postView, error in
+                        DispatchQueue.main.async {
+                            if let postView = postView {
+                                self.value = postView as? T
+                            } else {
+                                self.error = error?.localizedDescription
+                            }
                         }
                     }
                 }
@@ -37,7 +49,7 @@ class ResolveModel<T: ResolveResponse>: ObservableObject, Hashable {
                 cancellable = apiModel.lemmyHttp!.resolveObject(ap_id: thing) { (value: T?, error: LemmyApi.NetworkError?) in
                     DispatchQueue.main.async {
                         if let value = value {
-                            self.value = value.child
+                            self.value = value
                         } else {
                             self.error = error?.localizedDescription
                         }

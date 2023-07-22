@@ -22,7 +22,7 @@ struct PostContentComponent: View {
     var body: some View {
         let showCompact = compact && preview
         Group {
-            if !post.post.deleted, let url = post.post.url, imageExtensions.contains(url.pathExtension) {
+            if !post.post.deleted, let url = post.post.UrlData, imageExtensions.contains(url.pathExtension) {
                 CachedAsyncImage(url: preview ? post.post.thumbnail_url ?? url : url, urlCache: .imageCache, content: { image in
                     image
                         .resizable()
@@ -71,7 +71,7 @@ struct PostContentComponent: View {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, image: true, preview: false)
                     }
                 }
-            } else if !post.post.deleted, let url = post.post.url {
+            } else if !post.post.deleted, let url = post.post.UrlData {
                 LinkPreview(url: url)
                     .type(showCompact ? .small : .large)
                     .disabled(true)

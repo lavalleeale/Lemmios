@@ -37,15 +37,6 @@
       }
     },
     {
-      "identity" : "lemmyapi",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/lavalleeale/LemmyApi.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "ef31336aa834c099d318507746c769ecd52f6049"
-      }
-    },
-    {
       "identity" : "linkpreview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/lavalleeale-forks/LinkPreview.git",

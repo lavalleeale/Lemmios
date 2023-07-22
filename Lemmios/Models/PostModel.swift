@@ -186,6 +186,16 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         }.store(in: &cancellable)
     }
     
+    func remove(apiModel: ApiModel) {
+        apiModel.lemmyHttp?.removePost(id: post.id, removed: !post.removed) { response, _ in
+            DispatchQueue.main.async {
+                if let response = response {
+                    self.post = response.post_view.post
+                }
+            }
+        }.store(in: &cancellable)
+    }
+    
     func report(reason: String, apiModel: ApiModel) {
         apiModel.lemmyHttp?.reportPost(postId: post.id, reason: reason) { response, _ in
             if let response = response?.post_report_view {

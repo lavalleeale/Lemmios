@@ -101,7 +101,7 @@ struct PostPreviewComponent: View {
             ], trailingOptions: [
                 SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue),
                 SwipeOption(id: "save", image: postModel.saved ? "bookmark.fill" : "bookmark", color: .green)
-            ], compressable: postModel.post.url == nil) { swiped in
+            ], compressable: postModel.post.UrlData == nil) { swiped in
                 if apiModel.selectedAccount == nil {
                     apiModel.getAuth()
                 } else {

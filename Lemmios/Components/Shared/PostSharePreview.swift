@@ -99,7 +99,7 @@ struct PostSharePreviewContent: View {
     @EnvironmentObject var apiModel: ApiModel
     let comments: [LemmyApi.ApiComment]
     var body: some View {
-            let image = postModel.post.url != nil && imageExtensions.contains(postModel.post.url!.pathExtension)
+            let image = postModel.post.UrlData != nil && imageExtensions.contains(postModel.post.UrlData!.pathExtension)
             VStack(alignment: .leading) {
                 if !image {
                     Text(postModel.post.name)

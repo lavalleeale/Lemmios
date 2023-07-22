@@ -140,6 +140,12 @@ struct PostButtons: View {
                         showingEdit = true
                     }
                 } else {
+                    if apiModel.moderates?.contains(where: { $0.id == postModel.community?.id }) == true {
+                        let removed = postModel.post.removed
+                        PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
+                            postModel.remove(apiModel: apiModel)
+                        }
+                    }
                     PostButton(label: "Report", image: "flag") {
                         showingReport = true
                     }
@@ -171,7 +177,7 @@ struct PostButtons: View {
             }
             Button {
                 if image {
-                    URLSession.shared.dataTask(with: postModel.post.url!) { data, _, _ in
+                    URLSession.shared.dataTask(with: postModel.post.UrlData!) { data, _, _ in
                         guard let data = data,
                               let image = UIImage(data: data)
                         else { return }
@@ -218,7 +224,7 @@ struct PostButtons: View {
             PostSharePreview(postModel: postModel, isPresented: $showingShare, comments: [])
         }
         .sheet(isPresented: $showingEdit) {
-            PostCreateComponent(title: postModel.post.name, postData: postModel.post.body ?? "", postUrl: postModel.post.url?.absoluteString ?? "", dataModel: postModel)
+            PostCreateComponent(title: postModel.post.name, postData: postModel.post.body ?? "", postUrl: postModel.post.UrlData?.absoluteString ?? "", dataModel: postModel)
         }
         .sheet(isPresented: $showingReply) {
             CommentSheet(title: "Add Comment") { commentBody in

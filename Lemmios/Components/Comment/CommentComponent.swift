@@ -32,13 +32,26 @@ struct CommentComponent: View {
     var menuButtons: some View {
         Group {
             if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
+                if apiModel.moderates?.contains(where: { $0.id == commentModel.comment.community.id }) == true {
+                    let distinguished = commentModel.comment.comment.distinguished
+                    PostButton(label: distinguished ? "Undistinguish" : "Distinguish as Moderator", image: distinguished ? "shield.slash" : "shield") {
+                        commentModel.distinguish(apiModel: apiModel)
+                    }
+                }
                 PostButton(label: "Edit", image: "pencil") {
                     showingEdit = true
                 }
-                PostButton(label: commentModel.comment.comment.deleted ? "Restore" : "Delete", image: commentModel.comment.comment.deleted ? "trash.slash" : "trash") {
+                let deleted = commentModel.comment.comment.deleted
+                PostButton(label: deleted ? "Restore" : "Delete", image: deleted ? "trash.slash" : "trash") {
                     commentModel.delete(apiModel: apiModel)
                 }
             } else {
+                if apiModel.moderates?.contains(where: { $0.id == commentModel.comment.community.id }) == true {
+                    let removed = commentModel.comment.comment.removed
+                    PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
+                        commentModel.remove(apiModel: apiModel)
+                    }
+                }
                 PostButton(label: "Report", image: "flag") {
                     showingReport = true
                 }
@@ -71,7 +84,7 @@ struct CommentComponent: View {
                     HStack {
                         UserLink(user: commentModel.comment.creator)
                             .accessibility(identifier: "\(commentModel.comment.creator.name) user button")
-                            .foregroundColor(commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
+                            .foregroundColor(commentModel.comment.comment.distinguished ? Color.green : commentModel.comment.creator.id == commentModel.comment.post.creator_id ? Color.blue : Color.primary)
                         ScoreComponent(votableModel: commentModel)
                         Spacer()
                         if !reasons.contains(.screenshot) {
