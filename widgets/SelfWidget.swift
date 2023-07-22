@@ -38,11 +38,12 @@ struct RecentProvider: TimelineProvider {
             }
         }
         _ = cancellable
-        guard let posts = response?.posts else {
+        guard let posts = response?.posts, !posts.isEmpty else {
             return SimpleEntry(date: .now, posts: [])
         }
         let maxIndex = getTargetNum(context.family)
         var widgetPostInfos: [WidgetInfo] = []
+        
         for index in 0 ... min(maxIndex, posts.endIndex - 1) {
             let post = posts[index]
             var image: UIImage?
