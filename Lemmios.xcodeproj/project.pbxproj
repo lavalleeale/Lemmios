@@ -756,7 +756,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					FA4342182A68815200B7213E = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -1257,6 +1257,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1315,6 +1316,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1342,6 +1344,7 @@
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1385,6 +1388,7 @@
 				CODE_SIGN_ENTITLEMENTS = Lemmios/Lemmios.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Lemmios/Preview Content\"";
 				DEVELOPMENT_TEAM = 2GA3QKMF6Y;
 				ENABLE_HARDENED_RUNTIME = YES;
