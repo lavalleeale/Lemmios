@@ -60,9 +60,6 @@ struct CommentComponent: View {
             NavigationLink(value: UserModel(user: commentModel.comment.creator)) {
                 ShowFromComponent(item: user, show: true)
             }
-            PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
-                showingReply = true
-            }
             PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
                 share?(commentModel.comment.id)
             }
@@ -122,7 +119,7 @@ struct CommentComponent: View {
                             Text("removed by mod")
                                 .italic()
                         } else {
-                            Markdown(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
+                            MarkdownView(processMarkdown(input: commentModel.comment.comment.content, stripImages: !commentImages), baseURL: URL(string: apiModel.url)!)
                         }
                     }
                 }

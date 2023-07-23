@@ -95,7 +95,7 @@ struct PostContentComponent: View {
                         .padding(10)
                 } else {
                     HStack {
-                        Markdown(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!)
+                        MarkdownView(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!)
                             .markdownTheme(MarkdownUI.Theme()
                                 .text {
                                     ForegroundColor(.secondary)
@@ -113,7 +113,7 @@ struct PostContentComponent: View {
             }
             if !preview {
                 let body = post.post.deleted ? "*deleted by creator*" : post.post.removed ? "*removed by mod*" : post.post.body ?? ""
-                Markdown(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
+                MarkdownView(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!)
             }
         }
     }
