@@ -6,16 +6,18 @@ struct MarkdownView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     let content: String
     let baseURL: URL?
+    let preview: Bool
     
-    init(_ content: String, baseURL: URL?) {
+    init(_ content: String, baseURL: URL?, preview: Bool = false) {
         self.content = content
         self.baseURL = baseURL
+        self.preview = preview
     }
     
     var body: some View {
         let lemmios = MarkdownUI.Theme()
             .text {
-                ForegroundColor(.primary)
+                ForegroundColor(preview ? .secondary : .primary)
                 FontSize(16)
             }
             .code {

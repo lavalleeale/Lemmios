@@ -95,15 +95,7 @@ struct PostContentComponent: View {
                         .padding(10)
                 } else {
                     HStack {
-                        MarkdownView(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!)
-                            .markdownTheme(MarkdownUI.Theme()
-                                .text {
-                                    ForegroundColor(.secondary)
-                                }
-                                .link {
-                                    ForegroundColor(.blue)
-                                }
-                            )
+                        MarkdownView(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!, preview: true)
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxHeight: 100, alignment: .top)
                             .clipped()
