@@ -24,21 +24,21 @@ class ResolveModel<T: Codable>: ObservableObject, Hashable {
     func resolve(apiModel: ApiModel) {
         if value == nil {
             if thing.host() == apiModel.lemmyHttp?.apiUrl.host() {
-                if T.self == LemmyApi.PostView.self {
+                if T.self == LemmyApi.ApiPost.self {
                     cancellable = apiModel.lemmyHttp?.getPost(id: Int(thing.lastPathComponent)!) { postView, error in
                         DispatchQueue.main.async {
                             if let postView = postView {
-                                self.value = postView as? T
+                                self.value = postView.post_view as? T
                             } else {
                                 self.error = error?.localizedDescription
                             }
                         }
                     }
-                } else if T.self == LemmyApi.CommentView.self {
+                } else if T.self == LemmyApi.ApiComment.self {
                     cancellable = apiModel.lemmyHttp?.getComment(id: Int(thing.lastPathComponent)!) { postView, error in
                         DispatchQueue.main.async {
                             if let postView = postView {
-                                self.value = postView as? T
+                                self.value = postView.comment_view as? T
                             } else {
                                 self.error = error?.localizedDescription
                             }
@@ -46,10 +46,10 @@ class ResolveModel<T: Codable>: ObservableObject, Hashable {
                     }
                 }
             } else {
-                cancellable = apiModel.lemmyHttp!.resolveObject(ap_id: thing) { (value: T?, error: LemmyApi.NetworkError?) in
+                cancellable = apiModel.lemmyHttp!.resolveObject(ap_id: thing) { (value: [String: T]?, error: LemmyApi.NetworkError?) in
                     DispatchQueue.main.async {
                         if let value = value {
-                            self.value = value
+                            self.value = value.first?.value
                         } else {
                             self.error = error?.localizedDescription
                         }
