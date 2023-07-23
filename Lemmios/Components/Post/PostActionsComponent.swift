@@ -17,18 +17,20 @@ struct PostActionsComponent: View {
     let preview: Bool
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 3) {
+            if showInfo {
+                HStack {
+                    if showCommunity {
+                        CommunityLink(community: postModel.community!, prefix: {}, suffix: {})
+                    }
+                    if showUser {
+                        UserLink(user: postModel.creator!)
+                    }
+                }
+            }
             HStack {
                 if showInfo {
                     DynamicStack(vertical: !compact || !preview) {
-                        HStack {
-                            if showCommunity {
-                                CommunityLink(community: postModel.community!, prefix: {}, suffix: {})
-                            }
-                            if showUser {
-                                UserLink(user: postModel.creator!)
-                            }
-                        }
                         HStack(spacing: compact && preview ? 0 : nil) {
                             ScoreComponent(votableModel: postModel, preview: preview)
                             Group {
@@ -48,6 +50,7 @@ struct PostActionsComponent: View {
                             .foregroundStyle(.secondary)
                         }
                     }
+                
                 }
                 if !compact || !preview {
                     Spacer()
