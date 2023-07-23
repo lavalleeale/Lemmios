@@ -1,8 +1,8 @@
 import Combine
-import WidgetKit
 import Foundation
 import LemmyApi
 import SwiftUI
+import WidgetKit
 
 class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     private var id = UUID()
@@ -59,7 +59,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                         self.pageStatus = .done
                     } else {
                         let posts = posts.posts.filter { post in
-                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true)
+                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true) || self.posts.contains { $0.post.id == post.id }
                             if shouldHide {
                                 self.skipped += 1
                             }
