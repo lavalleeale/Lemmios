@@ -14,6 +14,7 @@
 		FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */; };
 		FA0AC6892A6C6264002C891F /* CommunitySelectorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0AC6882A6C6264002C891F /* CommunitySelectorComponent.swift */; };
 		FA0AC68B2A6C6ABC002C891F /* CustomTextEditorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0AC68A2A6C6ABC002C891F /* CustomTextEditorComponent.swift */; };
+		FA0AC68D2A6CA57D002C891F /* ImageSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0AC68C2A6CA57D002C891F /* ImageSelector.swift */; };
 		FA1A33002A5FC2BF000A99CB /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = FA1A32FF2A5FC2BF000A99CB /* ImageViewer */; };
 		FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */; };
 		FA2214932A5B57D80023C696 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2214922A5B57D80023C696 /* SplashView.swift */; };
@@ -177,6 +178,7 @@
 		FA03BEE72A53D96400FC2878 /* ArrowsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowsComponent.swift; sourceTree = "<group>"; };
 		FA0AC6882A6C6264002C891F /* CommunitySelectorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySelectorComponent.swift; sourceTree = "<group>"; };
 		FA0AC68A2A6C6ABC002C891F /* CustomTextEditorComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextEditorComponent.swift; sourceTree = "<group>"; };
+		FA0AC68C2A6CA57D002C891F /* ImageSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelector.swift; sourceTree = "<group>"; };
 		FA1CA2E22A5242D9007A5F88 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		FA2214922A5B57D80023C696 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreateComponent.swift; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				FAF5D06B2A63010B002BD1AD /* PostSharePreview.swift */,
 				FA0AC6882A6C6264002C891F /* CommunitySelectorComponent.swift */,
 				FA0AC68A2A6C6ABC002C891F /* CustomTextEditorComponent.swift */,
+				FA0AC68C2A6CA57D002C891F /* ImageSelector.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -907,6 +910,7 @@
 				FADFF8652A560933006F216A /* Markdown.swift in Sources */,
 				FABC28382A59175C00243C7F /* ApolloImportModel.swift in Sources */,
 				FABCFA662A67656300FF98B9 /* FiltersView.swift in Sources */,
+				FA0AC68D2A6CA57D002C891F /* ImageSelector.swift in Sources */,
 				FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */,
 				FA03BEE82A53D96400FC2878 /* ArrowsComponent.swift in Sources */,
 				FA4596292A59D1C800368DBB /* ColoredListComponent.swift in Sources */,

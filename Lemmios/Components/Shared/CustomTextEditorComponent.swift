@@ -5,12 +5,38 @@ struct CustomTextEditorComponent: View {
     @Binding var text: String
     @State var addLink: ((String, String) -> Void)?
     @State var linkCommunity: ((String) -> Void)?
+    @State var addPhoto: ((String) -> Void)?
     @State var linkTitle = ""
     @State var linkText = ""
+    @State var photoUrl = ""
 
     var body: some View {
-        TextFieldContainer("", text: $text, addLink: $addLink, linkCommunity: $linkCommunity)
-            .popupNavigationView(isPresented: Binding(get: {self.linkCommunity != nil}, set: {_ in self.linkCommunity = nil})) {
+        TextFieldContainer("", text: $text, addLink: $addLink, linkCommunity: $linkCommunity, addPhoto: $addPhoto)
+            .fullScreenCover(isPresented: Binding(get: { self.addPhoto != nil }, set: { _ in self.addPhoto = nil })) {
+                NavigationView {
+                    ColoredListComponent {
+                        ImageSelector(url: $photoUrl, optional: false)
+                    }
+                    .navigationTitle("Select Photo")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") {
+                                self.addPhoto = nil
+                            }
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Done") {
+                                self.addPhoto!(photoUrl)
+                                photoUrl = ""
+                                self.addPhoto = nil
+                            }
+                        }
+                    }
+                    .ignoresSafeArea(.keyboard)
+                }
+            }
+            .popupNavigationView(isPresented: Binding(get: { self.linkCommunity != nil }, set: { _ in self.linkCommunity = nil })) {
                 CommunitySelectorComponent(placeholder: "Community Name") { name in
                     if name != "" {
                         linkCommunity!(name)
@@ -40,12 +66,14 @@ struct TextFieldContainer: UIViewRepresentable {
     private var text: Binding<String>
     private var addLink: Binding<((String, String) -> Void)?>
     private var linkCommunity: Binding<((String) -> Void)?>
+    private var addPhoto: Binding<((String) -> Void)?>
 
-    init(_ placeholder: String, text: Binding<String>, addLink: Binding<((String, String) -> Void)?>, linkCommunity: Binding<((String) -> Void)?>) {
+    init(_ placeholder: String, text: Binding<String>, addLink: Binding<((String, String) -> Void)?>, linkCommunity: Binding<((String) -> Void)?>, addPhoto: Binding<((String) -> Void)?>) {
         self.placeholder = placeholder
         self.text = text
         self.addLink = addLink
         self.linkCommunity = linkCommunity
+        self.addPhoto = addPhoto
     }
 
     func makeCoordinator() -> TextFieldContainer.Coordinator {
@@ -61,11 +89,14 @@ struct TextFieldContainer: UIViewRepresentable {
         let communityButton = UIBarButtonItem(title: "Link to community", image: UIImage(systemName: "person.3.sequence"), primaryAction: UIAction { _ in
             context.coordinator.linkCommunity(textView)
         })
-        let doneButton = UIBarButtonItem(title: "Add Link", image: UIImage(systemName: "link"), primaryAction: UIAction { _ in
+        let linkButton = UIBarButtonItem(title: "Add Link", image: UIImage(systemName: "link"), primaryAction: UIAction { _ in
             context.coordinator.addLink(textView)
         })
+        let photoButton = UIBarButtonItem(title: "Add Photo", image: UIImage(systemName: "camera"), primaryAction: UIAction { _ in
+            context.coordinator.addPhoto(textView)
+        })
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolBar.items = [space, doneButton, communityButton, space]
+        toolBar.items = [space, linkButton, communityButton, photoButton, space]
 
         textView.inputAccessoryView = toolBar
 
@@ -94,10 +125,16 @@ struct TextFieldContainer: UIViewRepresentable {
                 textView.insertText("[\(text)](\(link))")
             }
         }
-        
+
         @objc func linkCommunity(_ textView: UITextView) {
             self.parent.linkCommunity.wrappedValue = { name in
                 textView.insertText("!\(name)")
+            }
+        }
+
+        @objc func addPhoto(_ textView: UITextView) {
+            self.parent.addPhoto.wrappedValue = { url in
+                textView.insertText("![](\(url))")
             }
         }
 
