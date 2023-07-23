@@ -16,7 +16,6 @@ struct MarkdownView: View {
         let lemmios = MarkdownUI.Theme()
             .text {
                 ForegroundColor(.primary)
-                BackgroundColor(selectedTheme.primaryColor)
                 FontSize(16)
             }
             .code {
