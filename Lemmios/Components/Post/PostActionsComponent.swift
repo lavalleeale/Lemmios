@@ -111,6 +111,9 @@ struct PostButtons: View {
     @State var reportReason = ""
     @State var showingShare = false
     @State var showingEdit = false
+    @State var showingRemind = false
+    @State var remindDate = Date()
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     
     var showViewComments: Bool
     var menu: Bool
@@ -135,6 +138,9 @@ struct PostButtons: View {
                 showingReply = true
             }
             if showAll {
+                PostButton(label: "Remind Me...", image: "clock", needsAuth: false) {
+                    showingRemind = true
+                }
                 if let account = apiModel.selectedAccount, let user = postModel.creator, account == user {
                     PostButton(label: postModel.post.deleted ? "Restore" : "Delete", image: postModel.post.deleted ? "trash.slash" : "trash") {
                         postModel.delete(apiModel: apiModel)
@@ -223,6 +229,13 @@ struct PostButtons: View {
                     .labelStyle(.iconOnly)
             }
         }
+        .sheet(isPresented: $showingRemind) {
+            if #available(iOS 16.4, *) {
+                sheet.presentationBackground(selectedTheme.secondaryColor)
+            } else {
+            sheet
+            }
+        }
         .overlay {
             PostSharePreview(postModel: postModel, isPresented: $showingShare, comments: [])
         }
@@ -242,6 +255,56 @@ struct PostButtons: View {
                 showingReport = false
             }
             Button("Cancel", role: .cancel) {}
+        }
+    }
+    
+    var sheet: some View {
+        NavigationView {
+            Form {
+                DatePicker("Date", selection: $remindDate)
+                Button("Submit", action: addReminder)
+            }
+            .navigationTitle("Add Reminder")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        showingRemind = false
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add", action: addReminder)
+                }
+            }
+        }
+        .foregroundColor(nil)
+    }
+    
+    func addReminder() {
+        let content = UNMutableNotificationContent()
+        content.title = "Reminder for \(postModel.post.name)"
+        content.body = "\(postModel.post.ap_id)"
+        // Configure the recurring date.
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: remindDate)
+        
+        // Create the trigger as a repeating event.
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents, repeats: false)
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString,
+                                            content: content, trigger: trigger)
+        
+        // Schedule the request with the system.
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if error != nil {
+                return
+            }
+            
+            if granted {
+                center.add(request) { _ in}
+            }
+            self.showingRemind = false
         }
     }
 }

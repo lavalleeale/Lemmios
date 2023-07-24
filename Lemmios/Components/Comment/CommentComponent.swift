@@ -13,6 +13,8 @@ struct CommentComponent: View {
     @State var showingReply = false
     @State var showingEdit = false
     @State var showingReport = false
+    @State var showingRemind = false
+    @State var remindDate = Date()
     @State var reportReason = ""
     var replyInfo: LemmyApi.ReplyInfo?
     @EnvironmentObject var post: PostModel
@@ -20,6 +22,7 @@ struct CommentComponent: View {
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var postModel: PostModel
     @AppStorage("commentImages") var commentImages = true
+    @AppStorage("selectedTheme") var selectedTheme = Theme.Default
 
     let depth: Int
 
@@ -59,6 +62,9 @@ struct CommentComponent: View {
             let user = commentModel.comment.creator
             NavigationLink(value: UserModel(user: commentModel.comment.creator)) {
                 ShowFromComponent(item: user, show: true)
+            }
+            PostButton(label: "Remind Me...", image: "clock", needsAuth: false) {
+                showingRemind = true
             }
             PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
                 share?(commentModel.comment.id)
@@ -256,6 +262,63 @@ struct CommentComponent: View {
                 commentModel.edit(body: commentBody, apiModel: apiModel)
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
+        }
+        .sheet(isPresented: $showingRemind) {
+            if #available(iOS 16.4, *) {
+                sheet.presentationBackground(selectedTheme.secondaryColor)
+            } else {
+                sheet
+            }
+        }
+    }
+
+    var sheet: some View {
+        NavigationView {
+            Form {
+                DatePicker("Date", selection: $remindDate)
+                Button("Submit", action: addReminder)
+            }
+            .navigationTitle("Add Reminder")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        showingRemind = false
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Add", action: addReminder)
+                }
+            }
+        }
+        .foregroundColor(nil)
+    }
+
+    func addReminder() {
+        let content = UNMutableNotificationContent()
+        content.title = "Reminder for \(postModel.post.name)"
+        content.body = "\(commentModel.comment.comment.ap_id)"
+        // Configure the recurring date.
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: remindDate)
+
+        // Create the trigger as a repeating event.
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents, repeats: false)
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString,
+                                            content: content, trigger: trigger)
+
+        // Schedule the request with the system.
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if error != nil {
+                return
+            }
+
+            if granted {
+                center.add(request) { _ in }
+            }
+            self.showingRemind = false
         }
     }
 }
