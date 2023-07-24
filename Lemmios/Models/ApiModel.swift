@@ -20,6 +20,7 @@ class ApiModel: ObservableObject {
     @Published var unreadCount = 0
     @Published var invalidUser: String?
     @Published var siteInfo: LemmyApi.SiteInfo?
+    @Published var nsfw = false
     
     private let simpleKeychain = SimpleKeychain()
     private var encoder = JSONEncoder()
@@ -211,6 +212,7 @@ class ApiModel: ObservableObject {
         lemmyHttp?.getSiteInfo { siteInfo, _ in
             if let siteInfo = siteInfo {
                 if let user = siteInfo.my_user {
+                    self.nsfw = user.local_user_view?.local_user?.show_nsfw ?? false
                     self.moderates = user.moderates.map { $0.community }
                     self.subscribed = [:]
                     user.follows.map { $0.community }.forEach { community in
@@ -239,6 +241,8 @@ class ApiModel: ObservableObject {
         } else {
             lemmyHttp?.setJwt(jwt: nil)
             subscribed = [:]
+            moderates = []
+            nsfw = false
         }
     }
     

@@ -63,8 +63,9 @@ struct SettingsView: View {
             }
             Section("Other") {
                 NavigationLink("Notifications", value: SettingsNav.Notifications)
-                Toggle("Blur NSFW", isOn: $blurNsfw)
-                
+                if apiModel.nsfw {
+                    Toggle("Blur NSFW", isOn: $blurNsfw)                    
+                }
                 DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
                 Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 NavigationLink("Change Instance", value: SettingsNav.ServerSelector)
