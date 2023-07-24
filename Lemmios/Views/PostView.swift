@@ -5,7 +5,7 @@ import WebKit
 
 struct PostView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
-    @ObservedObject var postModel: PostModel
+    @StateObject var postModel: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var collapsed: Bool = false
