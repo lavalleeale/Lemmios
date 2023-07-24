@@ -23,99 +23,103 @@ struct PostView: View {
             let minDepth = postModel.comments.min { $0.comment.path.split(separator: ".").count < $1.comment.path.split(separator: ".").count }?.comment.path.split(separator: ".").count
             let topLevels = postModel.comments.filter { $0.comment.path.split(separator: ".").count == minDepth }
             if let sharingComments = sharingComments {
-                PostSharePreview(postModel: postModel, isPresented: Binding(get: { self.sharingComments != nil }, set: { _ in self.sharingComments = nil }), comments: sharingComments)                
+                PostSharePreview(postModel: postModel, isPresented: Binding(get: { self.sharingComments != nil }, set: { _ in self.sharingComments = nil }), comments: sharingComments)
             }
             Rectangle()
                 .fill(selectedTheme.backgroundColor)
             ScrollViewReader { value in
-                ScrollView(.vertical) {
-                    // Hack to make sure appear methods are called
-                    LazyVStack {
-                        Text(postModel.post.name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .bold()
-                            .lineLimit(collapsed ? 1 : .max)
-                            .multilineTextAlignment(.leading)
-                        if !collapsed {
-                            Spacer()
-                                .frame(height: 30)
-                            PostContentComponent(post: postModel, preview: false)
-                                .onAppear {
-                                    withAnimation {
-                                        showingPost = true
-                                    }
-                                }
-                                .onDisappear {
-                                    withAnimation {
-                                        showingPost = false
-                                    }
-                                }
+                ColoredListComponent {
+                    Group {
+                        // Hack to make sure appear methods are called
+                        LazyVStack {
+                            Text(postModel.post.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .bold()
+                                .lineLimit(collapsed ? 1 : .max)
+                                .multilineTextAlignment(.leading)
+                            if !collapsed {
+                                Spacer()
+                                    .frame(height: 30)
+                                PostContentComponent(post: postModel, preview: false)
+                                    .onAppear {
+                                        withAnimation {
+                                            showingPost = true
+                                        }
+                                    }
+                                    .onDisappear {
+                                        withAnimation {
+                                            showingPost = false
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
-                    }
-                    .onAppear {
-                        postModel.getPostDetails(apiModel: apiModel)
-                        if !apiModel.seen.contains(postModel.post.id) {
-                            apiModel.seen.append(postModel.post.id)
+                        .onAppear {
+                            postModel.getPostDetails(apiModel: apiModel)
+                            if !apiModel.seen.contains(postModel.post.id) {
+                                apiModel.seen.append(postModel.post.id)
+                            }
                         }
-                    }
-                    .padding(.all, 10)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation {
-                            collapsed.toggle()
+                        .padding(.all, 10)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                collapsed.toggle()
+                            }
                         }
-                    }
-                    if postModel.creator != nil {
-                        PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, rowButtons: true, preview: false)
-                            .onAppear {
-                                if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
-                                    postModel.fetchComments(apiModel: apiModel)
+                        if postModel.creator != nil {
+                            PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, rowButtons: true, preview: false)
+                                .onAppear {
+                                    if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
+                                        postModel.fetchComments(apiModel: apiModel)
+                                    }
+                                }
+                        }
+                        LazyVStack(spacing: 0) {
+                            if let minDepth = minDepth, minDepth > 2 {
+                                HStack {
+                                    Image(systemName: "chevron.up")
+                                    Button("Load parent comment...") {
+                                        postModel.getParent(currentDepth: minDepth, apiModel: apiModel)
+                                    }
+                                    Spacer()
+                                }
+                                .foregroundStyle(Color.accentColor)
+                                .padding()
+                                Divider()
+                            }
+                            ForEach(topLevels) { comment in
+                                CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil, share: share)
+                                    .id(comment.id)
+                                Divider()
+                            }
+                            .environmentObject(postModel)
+                        }
+                        if case .failed = postModel.pageStatus {
+                            HStack {
+                                Text("Lemmy Request Failed, ")
+                                Button("refresh?") {
+                                    postModel.refresh(apiModel: apiModel)
                                 }
                             }
-                    }
-                    LazyVStack(spacing: 0) {
-                        if let minDepth = minDepth, minDepth > 2 {
+                        } else if case .done = postModel.pageStatus {
                             HStack {
-                                Image(systemName: "chevron.up")
-                                    .foregroundStyle(Color.accentColor)
-                                Button("Load parent comment...") {
-                                    postModel.getParent(currentDepth: minDepth, apiModel: apiModel)
-                                }
+                                Text("Last Comment Found ):")
+                            }
+                        } else if case .loading = postModel.pageStatus {
+                            HStack {
+                                Spacer()
+                                ProgressView()
                                 Spacer()
                             }
-                            .padding(.horizontal)
-                            Divider()
                         }
-                        ForEach(topLevels) { comment in
-                            CommentComponent(commentModel: CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") }), depth: 0, collapseParent: nil, share: share)
-                                .id(comment.id)
-                            Divider()
-                        }
-                        .environmentObject(postModel)
-                    }
-                    if case .failed = postModel.pageStatus {
-                        HStack {
-                            Text("Lemmy Request Failed, ")
-                            Button("refresh?") {
-                                postModel.refresh(apiModel: apiModel)
-                            }
-                        }
-                    } else if case .done = postModel.pageStatus {
-                        HStack {
-                            Text("Last Comment Found ):")
-                        }
-                    } else if case .loading = postModel.pageStatus {
-                        HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                    }
 
-                    Spacer()
-                        .frame(height: 100)
+                        Spacer()
+                            .frame(height: 100)
+                    }
+                    .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
+                .listStyle(.plain)
                 .overlay(alignment: .bottomTrailing) {
                     if showingPost, postModel.selectedComment == nil {
                         Button {
