@@ -183,8 +183,8 @@ struct CommentComponent: View {
                             }
                         case "collapse":
                             withAnimation {
-                                if collapseParent != nil {
-                                    collapseParent!()
+                                if let collapseParent = collapseParent {
+                                    collapseParent()
                                 } else {
                                     self.collapsed = true
                                 }

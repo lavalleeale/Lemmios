@@ -127,7 +127,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
             return
         }
         pageStatus = .loading
-        var parentId = selectedComment == nil ? nil : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last!, radix: 10)
+        var parentId = selectedComment == nil ? nil : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last ?? "0", radix: 10)
         if parentId == 0 {
             parentId = nil
         }
