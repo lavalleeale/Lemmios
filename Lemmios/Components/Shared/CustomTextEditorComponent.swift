@@ -83,6 +83,7 @@ struct TextFieldContainer: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<TextFieldContainer>) -> UITextView {
         let textView = UITextView(frame: .zero)
         textView.delegate = context.coordinator
+        textView.font = .preferredFont(forTextStyle: .body)
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
