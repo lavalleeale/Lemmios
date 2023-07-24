@@ -7,8 +7,19 @@ struct ResolveView<T: Codable>: View where T: Equatable {
     @StateObject var resolveModel: ResolveModel<T>
     @State var showingConfirm = false
     var body: some View {
-        Group {
-            ProgressView()
+        ColoredListComponent {
+            if let error = resolveModel.error {
+                Text("Lemmy Error, please refresh")
+            } else {
+                ProgressView()
+            }
+        }
+        .refreshable {
+            if resolveModel.thing.host() != apiModel.lemmyHttp?.apiUrl.host(), apiModel.selectedAccount == nil {
+                showingConfirm = true
+            } else {
+                resolveModel.resolve(apiModel: apiModel)
+            }
         }
         .navigationTitle("Loading")
         .navigationBarTitleDisplayMode(.inline)

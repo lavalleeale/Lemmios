@@ -1,8 +1,8 @@
 import AlertToast
-import SafariServices
-import SwiftUI
 import ImageViewer
 import LemmyApi
+import SafariServices
+import SwiftUI
 
 let communityRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/c\/([a-z_]+)(@[a-z\-.]+)?$/
 let userRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/u\/([0-9a-zA-Z_]+)(@[a-z\-.]+)?$/
@@ -164,6 +164,10 @@ struct ContentView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiPost>(thing: requestedUrl))
                             }
+                        } else if requestedUrl.absoluteString.contains("comment") {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiComment>(thing: requestedUrl))
+                            }
                         }
                         selectedTab.requestedUrl = nil
                     }
@@ -178,6 +182,8 @@ struct ContentView: View {
                     if let requestedUrl = newValue {
                         if requestedUrl.absoluteString.contains("post") {
                             selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiPost>(thing: requestedUrl))
+                        } else if requestedUrl.absoluteString.contains("comment") {
+                            selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiComment>(thing: requestedUrl))
                         }
                         selectedTab.requestedUrl = nil
                     }
