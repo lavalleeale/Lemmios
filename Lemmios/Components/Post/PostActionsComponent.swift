@@ -50,7 +50,6 @@ struct PostActionsComponent: View {
                             .foregroundStyle(.secondary)
                         }
                     }
-                
                 }
                 if !compact || !preview {
                     Spacer()
@@ -233,7 +232,7 @@ struct PostButtons: View {
             if #available(iOS 16.4, *) {
                 sheet.presentationBackground(selectedTheme.secondaryColor)
             } else {
-            sheet
+                sheet
             }
         }
         .overlay {
@@ -284,6 +283,7 @@ struct PostButtons: View {
         let content = UNMutableNotificationContent()
         content.title = "Reminder for \(postModel.post.name)"
         content.body = "\(postModel.post.ap_id)"
+        content.userInfo = postModel.post.dictionary
         // Configure the recurring date.
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: remindDate)
         
@@ -302,7 +302,7 @@ struct PostButtons: View {
             }
             
             if granted {
-                center.add(request) { _ in}
+                center.add(request) { _ in }
             }
             self.showingRemind = false
         }

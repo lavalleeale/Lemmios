@@ -21,6 +21,8 @@
 		FA2A1ED12A56661E008BB1BE /* PostCreateComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */; };
 		FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE90E2A5478EA00546BFF /* UserView.swift */; };
 		FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EE9122A547BE800546BFF /* UserModel.swift */; };
+		FA3F07332A6F3BE500D21731 /* RemindersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F07322A6F3BE500D21731 /* RemindersModel.swift */; };
+		FA3F07352A6F3BFE00D21731 /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3F07342A6F3BFE00D21731 /* RemindersView.swift */; };
 		FA40E9B92A622FB50099D6A3 /* LemmyApi in Frameworks */ = {isa = PBXBuildFile; productRef = FA40E9B82A622FB50099D6A3 /* LemmyApi */; };
 		FA43421B2A68815200B7213E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA43421A2A68815200B7213E /* WidgetKit.framework */; };
 		FA43421D2A68815200B7213E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA43421C2A68815200B7213E /* SwiftUI.framework */; };
@@ -184,6 +186,8 @@
 		FA2A1ED02A56661E008BB1BE /* PostCreateComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreateComponent.swift; sourceTree = "<group>"; };
 		FA2EE90E2A5478EA00546BFF /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		FA2EE9122A547BE800546BFF /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		FA3F07322A6F3BE500D21731 /* RemindersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersModel.swift; sourceTree = "<group>"; };
+		FA3F07342A6F3BFE00D21731 /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
 		FA4342192A68815200B7213E /* widgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = widgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA43421A2A68815200B7213E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FA43421C2A68815200B7213E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -436,6 +440,7 @@
 				FADD205A2A520D8E002CE443 /* ServerSelectorView.swift */,
 				FABEC3072A540D3500620E9A /* SettingsView.swift */,
 				FABCFA652A67656300FF98B9 /* FiltersView.swift */,
+				FA3F07342A6F3BFE00D21731 /* RemindersView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -558,6 +563,7 @@
 				FABB71322A6447E400D39592 /* ResolveModel.swift */,
 				FA4CDA8D2A64D4AA001D38F7 /* WatchersModel.swift */,
 				FA6030112A68688B00E70C9F /* SettingsModel.swift */,
+				FA3F07322A6F3BE500D21731 /* RemindersModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -957,6 +963,7 @@
 				FA77D93F2A674DB5005C0555 /* OpenInLemmiosView.swift in Sources */,
 				FA0AC6892A6C6264002C891F /* CommunitySelectorComponent.swift in Sources */,
 				FADD20592A520A4A002CE443 /* ApiModel.swift in Sources */,
+				FA3F07352A6F3BFE00D21731 /* RemindersView.swift in Sources */,
 				FABC28362A5916A900243C7F /* ApolloImportView.swift in Sources */,
 				FAEE08D22A5A06A100B54142 /* InboxView.swift in Sources */,
 				FAAAF86E2A528D0100C9BFD8 /* AuthenticationView.swift in Sources */,
@@ -969,6 +976,7 @@
 				FA4596272A59C83700368DBB /* ThemeModifiers.swift in Sources */,
 				FA2EE9132A547BE800546BFF /* UserModel.swift in Sources */,
 				FA2EE90F2A5478EA00546BFF /* UserView.swift in Sources */,
+				FA3F07332A6F3BE500D21731 /* RemindersModel.swift in Sources */,
 				FABB71312A6447D900D39592 /* ResolveView.swift in Sources */,
 				FAEE08D42A5A06CB00B54142 /* InboxModel.swift in Sources */,
 				FAA145062A581E88009DDA23 /* UserHeaderComponent.swift in Sources */,

@@ -298,6 +298,7 @@ struct CommentComponent: View {
         let content = UNMutableNotificationContent()
         content.title = "Reminder for \(postModel.post.name)"
         content.body = "\(commentModel.comment.comment.ap_id)"
+        content.userInfo = commentModel.comment.dictionary
         // Configure the recurring date.
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: remindDate)
 

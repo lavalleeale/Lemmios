@@ -121,6 +121,8 @@ struct SettingsView: View {
                 OpenInLemmiosView()
             case .Filters:
                 FiltersView()
+            case .Reminders:
+                RemindersView()
             }
         }
         .navigationTitle("Settings")
@@ -129,7 +131,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector, Read, Notifications, OpenInLemmios, Filters
+    case About, ServerSelector, Read, Notifications, OpenInLemmios, Filters, Reminders
 }
 
 protocol HasCustom {

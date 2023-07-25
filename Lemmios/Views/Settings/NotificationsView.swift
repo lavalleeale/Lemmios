@@ -8,6 +8,7 @@ struct NotificationsView: View {
     @StateObject var watchersModel = WatchersModel()
     var body: some View {
         ColoredListComponent {
+            NavigationLink("Reminders", value: SettingsNav.Reminders)
             if watchersModel.deviceToken == nil {
                 Button("Enable Notifications") {
                     UIApplication.shared.registerForRemoteNotifications()
@@ -89,3 +90,13 @@ struct NotificationsView_Previews: PreviewProvider {
         }
     }
 }
+
+extension Encodable {
+    subscript(key: String) -> Any? {
+        return dictionary[key]
+    }
+    var dictionary: [String: Any] {
+        return (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(self))) as? [String: Any] ?? [:]
+    }
+}
+
