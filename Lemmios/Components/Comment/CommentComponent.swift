@@ -8,15 +8,27 @@ let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 struct CommentComponent: View {
     @Environment(\.redactionReasons) private var reasons
     @StateObject var commentModel: CommentModel
+
     @State var collapsed = false
+
     @State var preview = false
+
     @State var showingReply = false
+
     @State var showingEdit = false
+
     @State var showingReport = false
+    @State var reportReason = ""
+
     @State var showingRemind = false
     @State var remindDate = Date()
-    @State var reportReason = ""
+
+    @State var showingBan = false
+    @State var banReason = ""
+    @State var banDays = ""
+
     var replyInfo: LemmyApi.ReplyInfo?
+
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
@@ -53,6 +65,16 @@ struct CommentComponent: View {
                     let removed = commentModel.comment.comment.removed
                     PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
                         commentModel.remove(apiModel: apiModel)
+                    }
+                    let banned = commentModel.creator_banned_from_community
+                    PostButton(label: banned ? "Unabn from community" : "Ban from community", image: "") {
+                        if banned {
+                            commentModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
+                        } else {
+                            showingBan = true
+                            banReason = ""
+                            banDays = ""
+                        }
                     }
                 }
                 PostButton(label: "Report", image: "flag") {
@@ -269,6 +291,26 @@ struct CommentComponent: View {
             } else {
                 sheet
             }
+        }
+        .alert("Ban", isPresented: $showingBan) {
+            TextField("Reason", text: $banReason)
+            TextField("Ban Length (days) (optional)", text: $banDays)
+                .keyboardType(.numberPad)
+            Button("Ban", role: .destructive) {
+                if let banDays = Int(banDays) {
+                    commentModel.ban(reason: banReason, remove: false, expires: Int(Date.now.timeIntervalSince1970) + banDays * 24 * 60 * 60, apiModel: apiModel)
+                } else {
+                    commentModel.ban(reason: banReason, remove: false, expires: nil, apiModel: apiModel)
+                }
+            }
+            Button("Ban and remove content", role: .destructive) {
+                if let banDays = Int(banDays) {
+                    commentModel.ban(reason: banReason, remove: true, expires: Int(Date.now.timeIntervalSince1970) + banDays * 24 * 60 * 60, apiModel: apiModel)
+                } else {
+                    commentModel.ban(reason: banReason, remove: false, expires: nil, apiModel: apiModel)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 

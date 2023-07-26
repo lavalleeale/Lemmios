@@ -18,6 +18,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
     @Published var likes: Int
     @Published var score: Int
     @Published var saved: Bool
+    @Published var creator_banned_from_community: Bool
     @Published var read: Bool
     @Published var pageStatus = CommentsPageStatus.ready
     @Published var parentStatus = CommentsPageStatus.ready
@@ -42,6 +43,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         self.score = post.counts.score
         self.saved = post.saved ?? false
         self.likes = post.my_vote ?? 0
+        self.creator_banned_from_community = post.creator_banned_from_community ?? false
         if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
             self.sort = LemmyApi.Sort(rawValue: defaultCommentSort)!
         }
@@ -58,6 +60,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         self.score = 0
         self.saved = false
         self.likes = 0
+        self.creator_banned_from_community = false
         if let defaultCommentSort = UserDefaults.standard.string(forKey: "defaultCommentSort") {
             self.sort = LemmyApi.Sort(rawValue: defaultCommentSort)!
         }
@@ -95,6 +98,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
                 self.score = post.counts.score
                 self.saved = post.saved ?? false
                 self.likes = post.my_vote ?? 0
+                self.creator_banned_from_community = false
             } else {
                 os_log("\(error)")
                 self.detailsStatus = .failed
@@ -118,6 +122,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
+                self.creator_banned_from_community = postView.creator_banned_from_community ?? self.creator_banned_from_community
             }
         }.store(in: &cancellable)
     }
@@ -172,6 +177,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
                 self.score = postView.counts.score
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
+                self.creator_banned_from_community = postView.creator_banned_from_community ?? self.creator_banned_from_community
             }
         }.store(in: &cancellable)
     }
@@ -204,8 +210,13 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         }.store(in: &cancellable)
     }
     
+    func ban(reason: String, remove: Bool, expires: Int?, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.banUser(userId: creator!.id, communityId: community!.id, ban: !creator_banned_from_community, reason: reason, remove: remove, expires: expires) { _, _ in }.store(in: &cancellable)
+        self.creator_banned_from_community.toggle()
+    }
+    
     func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp!.editPost(title: title, content: content, url: url, postId: post.id) { newValue, error in
+        apiModel.lemmyHttp!.editPost(title: title, content: content, url: url, postId: post.id) { newValue, _ in
             if let newValue = newValue {
                 self.post = newValue.post_view.post
             }

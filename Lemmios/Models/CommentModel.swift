@@ -11,12 +11,14 @@ class CommentModel: VotableModel {
 
     @Published var comment: LemmyApi.ApiComment
     @Published var children: [LemmyApi.ApiComment]
+    @Published var creator_banned_from_community = false
     
     init(comment: LemmyApi.ApiComment, children: [LemmyApi.ApiComment]) {
         self.comment = comment
         self.children = children
         self.score = comment.counts.score
         self.likes = comment.my_vote ?? 0
+        self.creator_banned_from_community = comment.creator_banned_from_community ?? false
     }
     
     func vote(direction: Bool, apiModel: ApiModel) {
@@ -109,6 +111,11 @@ class CommentModel: VotableModel {
                 self.comment = comment.comment_view
             }
         }.store(in: &cancellable)
+    }
+    
+    func ban(reason: String, remove: Bool, expires: Int?, apiModel: ApiModel) {
+        apiModel.lemmyHttp!.banUser(userId: comment.creator.id, communityId: comment.community.id, ban: !creator_banned_from_community, reason: reason, remove: remove, expires: expires) { _, _ in }.store(in: &cancellable)
+        creator_banned_from_community.toggle()
     }
 }
 

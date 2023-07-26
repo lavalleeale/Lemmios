@@ -105,13 +105,23 @@ struct PostButtons: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var apiModel: ApiModel
+    
     @State var showingReply = false
+    
     @State var showingReport = false
     @State var reportReason = ""
+    
     @State var showingShare = false
+    
     @State var showingEdit = false
+    
     @State var showingRemind = false
     @State var remindDate = Date()
+    
+    @State var showingBan = false
+    @State var banReason = ""
+    @State var banDays = ""
+    
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     
     var showViewComments: Bool
@@ -152,6 +162,16 @@ struct PostButtons: View {
                         let removed = postModel.post.removed
                         PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
                             postModel.remove(apiModel: apiModel)
+                        }
+                        let banned = postModel.creator_banned_from_community
+                        PostButton(label: banned ? "Unabn from community" : "Ban from community", image: "") {
+                            if banned {
+                                postModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
+                            } else {
+                                showingBan = true
+                                banReason = ""
+                                banDays = ""
+                            }
                         }
                     }
                     PostButton(label: "Report", image: "flag") {
@@ -252,6 +272,26 @@ struct PostButtons: View {
             Button("OK") {
                 postModel.report(reason: reportReason, apiModel: apiModel)
                 showingReport = false
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .alert("Ban", isPresented: $showingBan) {
+            TextField("Reason", text: $banReason)
+            TextField("Ban Length (days) (optional)", text: $banDays)
+                .keyboardType(.numberPad)
+            Button("Ban", role: .destructive) {
+                if let banDays = Int(banDays) {
+                    postModel.ban(reason: banReason, remove: false, expires: Int(Date.now.timeIntervalSince1970) + banDays * 24 * 60 * 60, apiModel: apiModel)
+                } else {
+                    postModel.ban(reason: banReason, remove: false, expires: nil, apiModel: apiModel)
+                }
+            }
+            Button("Ban and remove content", role: .destructive) {
+                if let banDays = Int(banDays) {
+                    postModel.ban(reason: banReason, remove: true, expires: Int(Date.now.timeIntervalSince1970) + banDays * 24 * 60 * 60, apiModel: apiModel)
+                } else {
+                    postModel.ban(reason: banReason, remove: false, expires: nil, apiModel: apiModel)
+                }
             }
             Button("Cancel", role: .cancel) {}
         }
