@@ -53,7 +53,6 @@ class ApiModel: ObservableObject {
         }
         if let selectedAccount = UserDefaults(suiteName: "group.com.axlav.lemmios")!.string(forKey: "account"), let account = accounts.first(where: { selectedAccount.contains($0.instance) && selectedAccount.contains($0.username) }) {
             selectAuth(account: account)
-            enablePush(account: account)
         }
     }
     
@@ -105,12 +104,11 @@ class ApiModel: ObservableObject {
     
     func addAuth(username: String, jwt: String) {
         if !accounts.contains(where: { $0.username == username && $0.instance == lemmyHttp?.apiUrl.host() }) {
-            let account = StoredAccount(username: username, jwt: jwt, instance: lemmyHttp!.apiUrl.host()!, notificationsEnabled: false)
+            let account = StoredAccount(username: username, jwt: jwt, instance: lemmyHttp!.apiUrl.host()!, notificationsEnabled: true)
             accounts.append(account)
             try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
             lemmyHttp?.setJwt(jwt: jwt)
             selectAuth(account: account)
-            enablePush(account: account)
             selectedAccount = account
         }
     }
@@ -181,6 +179,7 @@ class ApiModel: ObservableObject {
         
         if let index = accounts.firstIndex(of: account) {
             accounts[index].notificationsEnabled = false
+            try! simpleKeychain.set(try! encoder.encode(accounts), forKey: "accounts")
         }
         
         task.resume()

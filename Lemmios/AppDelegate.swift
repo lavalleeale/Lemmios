@@ -8,7 +8,7 @@ class StartingTab: ObservableObject {
 }
 
 #if DEBUG
-let baseApiUrl = "http://laptop.lan:8080"
+let baseApiUrl = "https://lemmios-dev.lavallee.one"
 #else
 let baseApiUrl = "https://lemmios.lavallee.one"
 #endif

@@ -17,18 +17,6 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>laptop.lan:8080</key>
-			<string></string>
-			<key>meepzee.lan</key>
-			<string></string>
-		</dict>
-	</dict>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>CommunityIntentIntent</string>
