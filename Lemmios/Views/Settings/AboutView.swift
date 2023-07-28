@@ -40,7 +40,7 @@ struct AboutView: View {
                         Label {
                             Text("c/\(path)")
                         } icon: {
-                            Image("Icon")
+                            Image("AppIcon-Preivew")
                                 .resizable()
                                 .clipShape(Circle())
                                 .frame(width: 24, height: 24)

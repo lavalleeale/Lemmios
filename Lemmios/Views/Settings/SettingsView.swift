@@ -63,6 +63,7 @@ struct SettingsView: View {
             }
             Section("Other") {
                 NavigationLink("Notifications", value: SettingsNav.Notifications)
+                NavigationLink("App Icon", value: SettingsNav.AppIcon)
                 if apiModel.nsfw {
                     Toggle("Blur NSFW", isOn: $blurNsfw)                    
                 }
@@ -123,6 +124,8 @@ struct SettingsView: View {
                 FiltersView()
             case .Reminders:
                 RemindersView()
+            case .AppIcon:
+                IconsView()
             }
         }
         .navigationTitle("Settings")
@@ -131,7 +134,7 @@ struct SettingsView: View {
 }
 
 enum SettingsNav: String, Hashable {
-    case About, ServerSelector, Read, Notifications, OpenInLemmios, Filters, Reminders
+    case About, ServerSelector, Read, Notifications, OpenInLemmios, Filters, Reminders, AppIcon
 }
 
 protocol HasCustom {
