@@ -105,14 +105,16 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     }
     
     func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView!.community_view.community.id) { post, _ in
-            if let postView = post?.post_view {
-                self.posts.insert(postView, at: 0)
-                self.postCreated = true
-                self.createdPost = postView
-                WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
-            }
-        }.store(in: &cancellable)
+        if let communityView = communityView {
+            apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView.community_view.community.id) { post, _ in
+                if let postView = post?.post_view {
+                    self.posts.insert(postView, at: 0)
+                    self.postCreated = true
+                    self.createdPost = postView
+                    WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
+                }
+            }.store(in: &cancellable)            
+        }
     }
     
     func follow(apiModel: ApiModel) {

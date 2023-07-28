@@ -15,7 +15,7 @@ struct OpenInLemmiosView: View {
                 Label {
                     Text("Select Open in Lemmios")
                 } icon: {
-                    Image(uiImage: UIImage(named: "Icon.png")!)
+                    Image(uiImage: UIImage(named: "AppIcon-Preview.png")!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
