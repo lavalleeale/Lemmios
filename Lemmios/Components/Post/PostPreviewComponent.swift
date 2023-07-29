@@ -17,7 +17,7 @@ struct PostPreviewComponent: View {
     let showUser: Bool
     let actions: Bool
 
-    init(post: LemmyApi.ApiPost, showCommunity: Bool, showUser: Bool, actions: Bool = true) {
+    init(post: LemmyApi.PostView, showCommunity: Bool, showUser: Bool, actions: Bool = true) {
         self.postModel = PostModel(post: post)
         self.showCommunity = showCommunity
         self.showUser = showUser

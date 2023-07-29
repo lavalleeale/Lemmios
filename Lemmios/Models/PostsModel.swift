@@ -16,14 +16,14 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     }
     
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var posts = [LemmyApi.ApiPost]()
+    @Published var posts = [LemmyApi.PostView]()
     @Published var sort = LemmyApi.Sort.Active
     @Published var time = LemmyApi.TopTime.All
     @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
     @Published var skipped = 0
     @Published var communityView: LemmyApi.CommunityView?
     @Published var postCreated = false
-    @Published var createdPost: LemmyApi.ApiPost?
+    @Published var createdPost: LemmyApi.PostView?
     @Published var notFound = false
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true

@@ -9,11 +9,11 @@ class CommentModel: VotableModel {
     
     private var cancellable: Set<AnyCancellable> = Set()
 
-    @Published var comment: LemmyApi.ApiComment
-    @Published var children: [LemmyApi.ApiComment]
+    @Published var comment: LemmyApi.CommentView
+    @Published var children: [LemmyApi.CommentView]
     @Published var creator_banned_from_community = false
     
-    init(comment: LemmyApi.ApiComment, children: [LemmyApi.ApiComment]) {
+    init(comment: LemmyApi.CommentView, children: [LemmyApi.CommentView]) {
         self.comment = comment
         self.children = children
         self.score = comment.counts.score
@@ -61,7 +61,7 @@ class CommentModel: VotableModel {
         }.store(in: &cancellable)
     }
     
-    func read(replyInfo: LemmyApi.ReplyInfo, apiModel: ApiModel, completion: @escaping () -> Void) {
+    func read(replyInfo: LemmyApi.CommentReply, apiModel: ApiModel, completion: @escaping () -> Void) {
         apiModel.lemmyHttp?.readReply(replyId: replyInfo.id, read: !replyInfo.read) { commentView, _ in
             if commentView != nil {
                 completion()
@@ -119,7 +119,7 @@ class CommentModel: VotableModel {
     }
 }
 
-func isCommentParent(parentId: Int, possibleChild: LemmyApi.ApiComment) -> Bool {
+func isCommentParent(parentId: Int, possibleChild: LemmyApi.CommentView) -> Bool {
     let childParentId = possibleChild.comment.path.components(separatedBy: ".").dropLast().last
     return String(parentId) == childParentId
 }

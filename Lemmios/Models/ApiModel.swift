@@ -14,8 +14,8 @@ class ApiModel: ObservableObject {
     @Published var lemmyHttp: LemmyApi?
     @Published var serverSelected = false
     @Published var accounts = [StoredAccount]()
-    @Published var subscribed: [String: [LemmyApi.ApiCommunityData]]?
-    @Published var moderates: [LemmyApi.ApiCommunityData]?
+    @Published var subscribed: [String: [LemmyApi.Community]]?
+    @Published var moderates: [LemmyApi.Community]?
     @Published var showingAuth = false
     @Published var unreadCount = 0
     @Published var invalidUser: String?
@@ -246,19 +246,19 @@ class ApiModel: ObservableObject {
     }
     
     struct StoredAccount: Codable, Identifiable, Equatable {
-        static func == (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+        static func == (lhs: StoredAccount, rhs: LemmyApi.Person) -> Bool {
             return rhs.actor_id.pathComponents.last! == lhs.username && rhs.actor_id.host() == lhs.instance
         }
         
-        static func == (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+        static func == (lhs: LemmyApi.Person, rhs: StoredAccount) -> Bool {
             return rhs == lhs
         }
         
-        static func != (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+        static func != (lhs: StoredAccount, rhs: LemmyApi.Person) -> Bool {
             return !(lhs == rhs)
         }
         
-        static func != (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+        static func != (lhs: LemmyApi.Person, rhs: StoredAccount) -> Bool {
             return !(lhs == rhs)
         }
         

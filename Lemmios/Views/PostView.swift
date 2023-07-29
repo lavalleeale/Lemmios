@@ -11,7 +11,7 @@ struct PostView: View {
     @State var collapsed: Bool = false
     @State var parentContent: String? = nil
     @State var showingPost = false
-    @State var sharingComments: [LemmyApi.ApiComment]?
+    @State var sharingComments: [LemmyApi.CommentView]?
 
     func share(commentId: Int) {
         let sharingComment = postModel.comments.first { $0.id == commentId }
@@ -69,7 +69,7 @@ struct PostView: View {
                     if postModel.creator != nil {
                         PostActionsComponent(postModel: postModel, showCommunity: true, showUser: true, collapsedButtons: false, rowButtons: true, preview: false)
                             .onAppear {
-                                if postModel.comments.count == (postModel.selectedComment == nil ? 0 : 1) {
+                                if postModel.comments.count == 0 {
                                     postModel.fetchComments(apiModel: apiModel)
                                 }
                             }
@@ -116,7 +116,7 @@ struct PostView: View {
                         .frame(height: 100)
                 }
                 .overlay(alignment: .bottomTrailing) {
-                    if showingPost, postModel.selectedComment == nil {
+                    if showingPost, postModel.selectedCommentPath == nil {
                         Button {
                             withAnimation {
                                 value.scrollTo(topLevels.first?.id, anchor: .top)
@@ -136,10 +136,10 @@ struct PostView: View {
             .refreshable {
                 postModel.refresh(apiModel: apiModel)
             }
-            .toast(isPresenting: .constant(postModel.selectedComment != nil && postModel.community != nil), duration: .infinity) {
+            .toast(isPresenting: .constant(postModel.selectedCommentPath != nil && postModel.community != nil), duration: .infinity) {
                 AlertToast(displayMode: .banner(.pop), type: .regular, title: "View All Comments", subTitle: "This is a single comment thread from the post.", style: .style(backgroundColor: .blue, titleColor: .primary, subTitleColor: .secondary))
             } onTap: {
-                navModel.path.append(PostModel(post: LemmyApi.ApiPost(post: postModel.post, creator: postModel.creator!, community: postModel.community!, counts: postModel.counts!, my_vote: postModel.likes, saved: postModel.saved, creator_banned_from_community: postModel.creator_banned_from_community)))
+                navModel.path.append(PostModel(post: LemmyApi.PostView(post: postModel.post, creator: postModel.creator!, community: postModel.community!, counts: postModel.counts!, my_vote: postModel.likes, saved: postModel.saved, creator_banned_from_community: postModel.creator_banned_from_community)))
             }
             .navigationBarTitle(postModel.counts?.comments == nil ? "Post" : "\(formatNum(num: postModel.counts!.comments)) Comments", displayMode: .inline)
             .toolbar(content: {

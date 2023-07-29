@@ -114,11 +114,14 @@ private struct WithNavigationModifier: ViewModifier {
                 .navigationDestination(for: SearchedModel.self) { searchedModel in
                     SearchedView(searchedModel: searchedModel)
                 }
-                .navigationDestination(for: ResolveModel<LemmyApi.ApiPost>.self) { resolveModel in
+                .navigationDestination(for: ResolveModel<LemmyApi.PostView>.self) { resolveModel in
                     ResolveView(resolveModel: resolveModel)
                 }
-                .navigationDestination(for: ResolveModel<LemmyApi.ApiComment>.self) { resolveModel in
+                .navigationDestination(for: ResolveModel<LemmyApi.CommentView>.self) { resolveModel in
                     ResolveView(resolveModel: resolveModel)
+                }
+                .navigationDestination(for: ModlogModel.self) { modlogModel in
+                    ModlogView(modlogModel: modlogModel)
                 }
                 .fullScreenCover(item: $url) { item in
                     PostUrlViewWrapper(url: item)
@@ -143,9 +146,9 @@ private struct WithNavigationModifier: ViewModifier {
                     navModel.path.append(UserModel(path: "\(match.2)@\(match.1)"))
                 }
             } else if url.absoluteString.firstMatch(of: postRegex) != nil {
-                navModel.path.append(ResolveModel<LemmyApi.ApiPost>(thing: url))
+                navModel.path.append(ResolveModel<LemmyApi.PostView>(thing: url))
             } else if url.absoluteString.firstMatch(of: commentRegex) != nil {
-                navModel.path.append(ResolveModel<LemmyApi.ApiComment>(thing: url))
+                navModel.path.append(ResolveModel<LemmyApi.CommentView>(thing: url))
             } else {
                 self.url = url
             }

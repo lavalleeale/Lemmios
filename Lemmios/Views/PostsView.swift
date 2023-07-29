@@ -134,8 +134,14 @@ struct PostsView: View {
                             postsModel.follow(apiModel: apiModel)
                         }
                         let blocked = postsModel.communityView?.community_view.blocked == true
-                        PostButton(label:blocked ? "Unblock" : "Block", image: "x.circle") {
+                        PostButton(label: blocked ? "Unblock" : "Block", image: "x.circle") {
                             postsModel.block(apiModel: apiModel, block: !blocked)
+                        }
+                        if let communityId = postsModel.communityView?.community_view.id {
+                            PostButton(label: "Modlog", image: "shield") {
+                                navModel.path.append(ModlogModel(communityId: communityId))
+                            }
+                            .tint(.green)
                         }
                     } label: {
                         VStack {

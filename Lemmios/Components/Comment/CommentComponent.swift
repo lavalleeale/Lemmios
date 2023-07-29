@@ -27,7 +27,7 @@ struct CommentComponent: View {
     @State var banReason = ""
     @State var banDays = ""
 
-    var replyInfo: LemmyApi.ReplyInfo?
+    var replyInfo: LemmyApi.CommentReply?
 
     @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
@@ -164,7 +164,7 @@ struct CommentComponent: View {
                             read!()
                         }
                     }
-                    navModel.path.append(PostModel(post: commentModel.comment.post, comment: commentModel.comment))
+                    navModel.path.append(PostModel(post: commentModel.comment.post, comment: commentModel.comment.comment))
                 } else {
                     withAnimation {
                         collapsed.toggle()
@@ -225,7 +225,7 @@ struct CommentComponent: View {
             }
             .contextMenu { menuButtons }
             .overlay {
-                Color.gray.opacity(!preview && postModel.selectedComment?.id == commentModel.comment.id ? 0.3 : 0)
+                Color.gray.opacity(!preview && postModel.selectedCommentPath?.components(separatedBy: ".").last == String(commentModel.comment.id) ? 0.3 : 0)
                     .allowsHitTesting(false)
             }
             if commentModel.comment.counts.child_count != 0 && commentModel.children.isEmpty && !preview {

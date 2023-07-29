@@ -24,16 +24,16 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
     @Published var parentStatus = CommentsPageStatus.ready
     @Published var detailsStatus: CommentsPageStatus
     @Published var sort = LemmyApi.Sort.Hot
-    @Published var comments = [LemmyApi.ApiComment]()
+    @Published var comments = [LemmyApi.CommentView]()
     
     private var cancellable: Set<AnyCancellable> = Set()
-    @Published var post: LemmyApi.ApiPostData
-    @Published var creator: LemmyApi.ApiUserData?
-    @Published var community: LemmyApi.ApiCommunityData?
-    @Published var counts: LemmyApi.ApiPostCounts?
-    @Published var selectedComment: LemmyApi.ApiComment?
+    @Published var post: LemmyApi.Post
+    @Published var creator: LemmyApi.Person?
+    @Published var community: LemmyApi.Community?
+    @Published var counts: LemmyApi.PostAggregates?
+    @Published var selectedCommentPath: String?
     
-    init(post: LemmyApi.ApiPost) {
+    init(post: LemmyApi.PostView) {
         self.read = DBModel.instance.isRead(postId: post.post.id)
         self.detailsStatus = .done
         self.post = post.post
@@ -49,11 +49,10 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         }
     }
     
-    init(post: LemmyApi.ApiPostData, comment: LemmyApi.ApiComment? = nil) {
+    init(post: LemmyApi.Post, comment: LemmyApi.Comment? = nil) {
         self.read = DBModel.instance.isRead(postId: post.id)
         if let comment = comment {
-            self.selectedComment = comment
-            self.comments = [comment]
+            self.selectedCommentPath = comment.path
         }
         self.detailsStatus = .ready
         self.post = post
@@ -71,7 +70,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
             return
         }
         parentStatus = .loading
-        let split = selectedComment!.comment.path.split(separator: ".")
+        let split = selectedCommentPath!.split(separator: ".")
         apiModel.lemmyHttp?.getComment(id: Int(split.dropFirst(currentDepth - 2).first!, radix: 10)!) { comment, error in
             DispatchQueue.main.async {
                 if let comment = comment {
@@ -132,7 +131,7 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
             return
         }
         pageStatus = .loading
-        var parentId = selectedComment == nil ? nil : Int(selectedComment!.comment.path.split(separator: ".").dropLast().last ?? "0", radix: 10)
+        var parentId = selectedCommentPath == nil ? nil : Int(selectedCommentPath!.split(separator: ".").dropLast().last ?? "0", radix: 10)
         if parentId == 0 {
             parentId = nil
         }

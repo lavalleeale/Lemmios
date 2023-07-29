@@ -24,7 +24,7 @@ class ResolveModel<T: Codable>: ObservableObject, Hashable {
     func resolve(apiModel: ApiModel) {
         if value == nil {
             if thing.host() == apiModel.lemmyHttp?.apiUrl.host() {
-                if T.self == LemmyApi.ApiPost.self {
+                if T.self == LemmyApi.PostView.self {
                     cancellable = apiModel.lemmyHttp?.getPost(id: Int(thing.lastPathComponent)!) { postView, error in
                         DispatchQueue.main.async {
                             if let postView = postView {
@@ -34,7 +34,7 @@ class ResolveModel<T: Codable>: ObservableObject, Hashable {
                             }
                         }
                     }
-                } else if T.self == LemmyApi.ApiComment.self {
+                } else if T.self == LemmyApi.CommentView.self {
                     cancellable = apiModel.lemmyHttp?.getComment(id: Int(thing.lastPathComponent)!) { postView, error in
                         DispatchQueue.main.async {
                             if let postView = postView {

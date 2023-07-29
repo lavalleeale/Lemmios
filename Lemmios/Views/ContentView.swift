@@ -162,11 +162,11 @@ struct ContentView: View {
                     if let requestedUrl = selectedTab.requestedUrl {
                         if requestedUrl.absoluteString.contains("post") {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiPost>(thing: requestedUrl))
+                                selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
                             }
                         } else if requestedUrl.absoluteString.contains("comment") {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiComment>(thing: requestedUrl))
+                                selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
                             }
                         }
                         selectedTab.requestedUrl = nil
@@ -181,9 +181,9 @@ struct ContentView: View {
                 .onChange(of: selectedTab.requestedUrl) { newValue in
                     if let requestedUrl = newValue {
                         if requestedUrl.absoluteString.contains("post") {
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiPost>(thing: requestedUrl))
+                            selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
                         } else if requestedUrl.absoluteString.contains("comment") {
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiComment>(thing: requestedUrl))
+                            selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
                         }
                         selectedTab.requestedUrl = nil
                     }
@@ -216,11 +216,11 @@ struct ContentView: View {
                     } else if incomingUrl.absoluteString.firstMatch(of: postRegex) != nil {
                         var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
                         urlComponents.scheme = "https"
-                        selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiPost>(thing: urlComponents.url!))
+                        selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: urlComponents.url!))
                     } else if incomingUrl.absoluteString.firstMatch(of: commentRegex) != nil {
                         var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
                         urlComponents.scheme = "https"
-                        selectedNavModel!.path.append(ResolveModel<LemmyApi.ApiComment>(thing: urlComponents.url!))
+                        selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: urlComponents.url!))
                     }
                 }
                 .toast(isPresenting: $showInvalidUser) {

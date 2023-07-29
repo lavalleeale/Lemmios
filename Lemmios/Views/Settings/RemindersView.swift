@@ -18,7 +18,7 @@ struct RemindersView: View {
                             }
                         }
                     } else if case .comment(let commentData) = reminder.data {
-                        NavigationLink(value: PostModel(post: commentData.post, comment: commentData)) {
+                        NavigationLink(value: PostModel(post: commentData.post, comment: commentData.comment)) {
                             VStack(alignment: .leading) {
                                 Text("Comment: \(commentData.comment.content) in \(commentData.post.name)")
                                 Text(DateFormatter.localizedString(from: reminder.date, dateStyle: .medium, timeStyle: .short))

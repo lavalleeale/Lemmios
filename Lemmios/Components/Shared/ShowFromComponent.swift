@@ -3,7 +3,8 @@ import LemmyApi
 import SwiftUI
 
 struct UserLink: View {
-    let user: LemmyApi.ApiUserData
+    let user: LemmyApi.Person
+    var removeStyle = false
     var showPlaceholder = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
@@ -17,7 +18,10 @@ struct UserLink: View {
         .highPriorityGesture(TapGesture().onEnded {
             navModel.path.append(model)
         })
-        .buttonStyle(.plain)
+        .if(!removeStyle) { view in
+            view
+                .buttonStyle(.plain)
+        }
         .contextMenu {
             ShareLink("Share", item: user.actor_id)
         } preview: {
@@ -28,7 +32,7 @@ struct UserLink: View {
 }
 
 struct CommunityLink<Prefix: View, Suffix: View>: View {
-    let community: LemmyApi.ApiCommunityData
+    let community: LemmyApi.Community
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     var showPlaceholder = false

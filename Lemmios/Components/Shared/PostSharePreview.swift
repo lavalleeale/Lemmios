@@ -14,10 +14,10 @@ struct PostSharePreview: View {
 
     typealias imageRendererType = SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<SwiftUI.ModifiedContent<Lemmios.PostSharePreviewContent, SwiftUI._EnvironmentKeyWritingModifier<SwiftUI.ColorScheme>>, SwiftUI._EnvironmentKeyWritingModifier<Lemmios.ApiModel?>>, SwiftUI._EnvironmentKeyWritingModifier<Swift.Bool>>, SwiftUI._EnvironmentKeyWritingModifier<Swift.Bool>>
 
-    var comments: [LemmyApi.ApiComment]
+    var comments: [LemmyApi.CommentView]
     @StateObject var postShareModel = PostShareModel<imageRendererType>()
 
-    init(postModel: PostModel, isPresented: Binding<Bool>, comments: [LemmyApi.ApiComment]) {
+    init(postModel: PostModel, isPresented: Binding<Bool>, comments: [LemmyApi.CommentView]) {
         self.postModel = postModel
         self._isPresented = isPresented
         self.comments = comments
@@ -97,7 +97,7 @@ struct PostSharePreviewContent: View {
     @Environment(\.colorScheme) var systemColorScheme
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @EnvironmentObject var apiModel: ApiModel
-    let comments: [LemmyApi.ApiComment]
+    let comments: [LemmyApi.CommentView]
     var body: some View {
             let image = postModel.post.UrlData != nil && imageExtensions.contains(postModel.post.UrlData!.pathExtension)
             VStack(alignment: .leading) {

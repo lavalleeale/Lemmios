@@ -55,6 +55,8 @@
 		FA5A461D2A61E26F0041D11B /* AuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A461C2A61E26F0041D11B /* AuthTests.swift */; };
 		FA6030122A68688B00E70C9F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6030112A68688B00E70C9F /* SettingsModel.swift */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
+		FA7260E82A758E6500995467 /* ModlogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7260E72A758E6500995467 /* ModlogModel.swift */; };
+		FA7260EA2A758E7800995467 /* ModlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7260E92A758E7800995467 /* ModlogView.swift */; };
 		FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68B2A572151001AFA61 /* SearchView.swift */; };
 		FA72A68E2A57228A001AFA61 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68D2A57228A001AFA61 /* SearchModel.swift */; };
 		FA72A6902A57299C001AFA61 /* SearchedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72A68F2A57299C001AFA61 /* SearchedView.swift */; };
@@ -219,6 +221,8 @@
 		FA6030112A68688B00E70C9F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
+		FA7260E72A758E6500995467 /* ModlogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModlogModel.swift; sourceTree = "<group>"; };
+		FA7260E92A758E7800995467 /* ModlogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModlogView.swift; sourceTree = "<group>"; };
 		FA72A68B2A572151001AFA61 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		FA72A68D2A57228A001AFA61 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		FA72A68F2A57299C001AFA61 /* SearchedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedView.swift; sourceTree = "<group>"; };
@@ -542,6 +546,7 @@
 				FAEE08D12A5A06A100B54142 /* InboxView.swift */,
 				FA2214922A5B57D80023C696 /* SplashView.swift */,
 				FABB71302A6447D900D39592 /* ResolveView.swift */,
+				FA7260E92A758E7800995467 /* ModlogView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -570,6 +575,7 @@
 				FA6030112A68688B00E70C9F /* SettingsModel.swift */,
 				FA3F07322A6F3BE500D21731 /* RemindersModel.swift */,
 				FAA51FC82A736BBA006EA47F /* IconsModel.swift */,
+				FA7260E72A758E6500995467 /* ModlogModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -945,12 +951,14 @@
 				FA72A6982A573DAD001AFA61 /* Extensions.swift in Sources */,
 				FA72A6922A5729AE001AFA61 /* SearchedModel.swift in Sources */,
 				FABC284A2A5933AC00243C7F /* SettingSuboptionComponent.swift in Sources */,
+				FA7260EA2A758E7800995467 /* ModlogView.swift in Sources */,
 				FADD20562A5209E7002CE443 /* PostsView.swift in Sources */,
 				FAAAF85A2A524D9500C9BFD8 /* PostPreviewComponent.swift in Sources */,
 				FA03BEE62A53CFBA00FC2878 /* NumberComponent.swift in Sources */,
 				FAB93E592A5337B400DE15BB /* PostModel.swift in Sources */,
 				FAA145142A58B89A009DDA23 /* AuthModel.swift in Sources */,
 				FA1CA2E32A5242D9007A5F88 /* PostsModel.swift in Sources */,
+				FA7260E82A758E6500995467 /* ModlogModel.swift in Sources */,
 				FA6030122A68688B00E70C9F /* SettingsModel.swift in Sources */,
 				FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */,
 				FAB93E5F2A533FE800DE15BB /* CommentModel.swift in Sources */,

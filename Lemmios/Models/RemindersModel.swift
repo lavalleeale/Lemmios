@@ -19,9 +19,9 @@ class RemindersModel: ObservableObject {
                 DispatchQueue.main.async {
                     if let trigger = request.trigger as? UNCalendarNotificationTrigger, let date = Calendar.current.date(from: trigger.dateComponents) {
                         let data = try! JSONSerialization.data(withJSONObject: request.content.userInfo)
-                        if let postData = try? self.decoder.decode(LemmyApi.ApiPostData.self, from: data) {
+                        if let postData = try? self.decoder.decode(LemmyApi.Post.self, from: data) {
                             self.requests.append(Reminder(date: date, data: .post(data: postData), id: request.identifier))
-                        } else if let commentData = try? self.decoder.decode(LemmyApi.ApiComment.self, from: data) {
+                        } else if let commentData = try? self.decoder.decode(LemmyApi.CommentView.self, from: data) {
                             self.requests.append(Reminder(date: date, data: .comment(data: commentData), id: request.identifier))
                         }
                     }
@@ -41,7 +41,7 @@ struct Reminder {
     let data: ReminderData
     let id: String
     enum ReminderData {
-        case post(data: LemmyApi.ApiPostData), comment(data: LemmyApi.ApiComment)
+        case post(data: LemmyApi.Post), comment(data: LemmyApi.CommentView)
     }
 }
 

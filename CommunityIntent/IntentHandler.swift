@@ -64,19 +64,19 @@ enum CommunitiesIntentError: String, Error {
 }
 
 struct StoredAccount: Codable, Identifiable, Equatable {
-    static func == (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+    static func == (lhs: StoredAccount, rhs: LemmyApi.Person) -> Bool {
         return rhs.actor_id.pathComponents.last! == lhs.username && rhs.actor_id.host() == lhs.instance
     }
 
-    static func == (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+    static func == (lhs: LemmyApi.Person, rhs: StoredAccount) -> Bool {
         return rhs == lhs
     }
 
-    static func != (lhs: StoredAccount, rhs: LemmyApi.ApiUserData) -> Bool {
+    static func != (lhs: StoredAccount, rhs: LemmyApi.Person) -> Bool {
         return !(lhs == rhs)
     }
 
-    static func != (lhs: LemmyApi.ApiUserData, rhs: StoredAccount) -> Bool {
+    static func != (lhs: LemmyApi.Person, rhs: StoredAccount) -> Bool {
         return !(lhs == rhs)
     }
 

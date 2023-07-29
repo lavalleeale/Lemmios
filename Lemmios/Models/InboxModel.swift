@@ -3,7 +3,7 @@ import Foundation
 import LemmyApi
 
 class InboxModel: ObservableObject {
-    @Published var replies = [LemmyApi.ApiComment]()
+    @Published var replies = [LemmyApi.CommentView]()
     @Published var messages = [LemmyApi.Message]()
     @Published var repliesStatus = PostsPageStatus.ready(nextPage: 1)
     @Published var messagesStatus = PostsPageStatus.ready(nextPage: 1)

@@ -17,6 +17,8 @@ final class SearchTests: XCTestCase {
         app.buttons["Search"].tap()
         app.textFields["Search"].tap()
         app.textFields["Search"].typeText("com\n")
+        app.buttons["Sort"].tapUnhittable()
+        app.buttons["Old"].tap()
         XCTAssert(app.staticTexts["Comment Depth"].waitForExistence(timeout: 10))
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.textFields["Search"].tap()

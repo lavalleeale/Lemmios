@@ -17,7 +17,7 @@ class SearchedModel: ObservableObject, Hashable {
 
     private var cancellable: Set<AnyCancellable> = Set()
     @Published var communities: [LemmyApi.ApiCommunity]?
-    @Published var posts: [LemmyApi.ApiPost]?
+    @Published var posts: [LemmyApi.PostView]?
     @Published var users: [LemmyApi.ApiUser]?
     @Published var sort = LemmyApi.Sort.Top
     @Published var time = LemmyApi.TopTime.All

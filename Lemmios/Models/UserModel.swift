@@ -19,8 +19,8 @@ class UserModel: ObservableObject, Hashable {
     @Published var sort = LemmyApi.Sort.Active
     @Published var time = LemmyApi.TopTime.All
     @Published var userData: LemmyApi.ApiUser?
-    @Published var comments = [LemmyApi.ApiComment]()
-    @Published var posts = [LemmyApi.ApiPost]()
+    @Published var comments = [LemmyApi.CommentView]()
+    @Published var posts = [LemmyApi.PostView]()
     
     @Published var saved = [any WithCounts]()
     @Published var savedPageStatus = PostsPageStatus.ready(nextPage: 1)
@@ -32,7 +32,7 @@ class UserModel: ObservableObject, Hashable {
     
     private var cancellable: Set<AnyCancellable> = Set()
     
-    init(user: LemmyApi.ApiUserData) {
+    init(user: LemmyApi.Person) {
         self.name = "\(user.name)"
         if !user.local {
             name.append("@\(user.actor_id.host()!)")
