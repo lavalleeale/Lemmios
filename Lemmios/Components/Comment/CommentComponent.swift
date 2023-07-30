@@ -165,19 +165,11 @@ struct CommentComponent: View {
                 Spacer()
                     .frame(height: 10)
             }
-            .onChange(of: parent.comment.comment.removed) { _ in
-                if let index = parent.children.firstIndex(where: { $0.id == commentModel.comment.id }) {
-                    for child in parent.children.filter({$0.comment.path.contains(String(commentModel.comment.id))}) {
-                        if let index = commentModel.children.firstIndex(where: { $0.id == child.comment.id }) {
-                            commentModel.children[index].comment.removed = child.comment.removed
-                        }
-                    }
-                    self.commentModel.comment.comment.removed = parent.children[index].comment.removed
-                }
-            }
-            .onChange(of: commentModel.comment.comment.removed) { newValue in
-                if let index = parent.children.firstIndex(where: { $0.id == commentModel.comment.id }) {
-                    parent.children[index].comment.removed = newValue
+            .onChange(of: parent.nuked) { newValue in
+                if newValue {
+                    parent.nuked = false
+                    commentModel.nuked = true
+                    commentModel.comment.comment.removed = true
                 }
             }
             .onTapGesture {

@@ -12,6 +12,7 @@ class CommentModel: VotableModel {
     @Published var comment: LemmyApi.CommentView
     @Published var children: [LemmyApi.CommentView]
     @Published var creator_banned_from_community = false
+    @Published var nuked = false
     
     init(comment: LemmyApi.CommentView, children: [LemmyApi.CommentView]) {
         self.comment = comment
@@ -120,16 +121,10 @@ class CommentModel: VotableModel {
     
     func nuke(apiModel: ApiModel) {
         for child in children.enumerated() {
-            apiModel.lemmyHttp?.removeComment(id: child.element.id, removed: true) { response, _ in
-                DispatchQueue.main.async {
-                    if let response = response {
-                        self.children.remove(at: child.offset)
-                        self.children.insert(response.comment_view, at: child.offset)
-                    }
-                }
-            }.store(in: &cancellable)
+            apiModel.lemmyHttp?.removeComment(id: child.element.id, removed: true) { _, _ in }.store(in: &cancellable)
         }
-        self.remove(apiModel: apiModel)
+        remove(apiModel: apiModel)
+        nuked = true
     }
 }
 
