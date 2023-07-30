@@ -9,7 +9,7 @@ struct AuthenticationView: View {
 
     var body: some View {
         ZStack {
-            if apiModel.accounts.filter({ $0.instance == apiModel.lemmyHttp!.apiUrl.host() }).isEmpty {
+            if apiModel.accounts.filter({ $0.instance == apiModel.lemmyHttp?.apiUrl.host() }).isEmpty {
                 AuthFormComponent(authModel: authModel)
             } else {
                 ColoredListComponent {

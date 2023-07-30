@@ -37,7 +37,9 @@ struct InboxView: View {
                                     }
                                     UIApplication.shared.applicationIconBadgeNumber = apiModel.unreadCount
                                     if index < inboxModel.replies.endIndex {
-                                        inboxModel.replies[index].comment_reply!.read.toggle()
+                                        if inboxModel.replies[safe: index]?.comment_reply != nil {
+                                            inboxModel.replies[index].comment_reply!.read.toggle()
+                                        }
                                     }
                                 }, collapseParent: nil)
                                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
