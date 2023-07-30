@@ -43,7 +43,7 @@ struct RecentProvider: TimelineProvider {
         }
         let maxIndex = getTargetNum(context.family)
         var widgetPostInfos: [WidgetInfo] = []
-        
+
         for index in 0 ... min(maxIndex, posts.endIndex - 1) {
             let post = posts[index]
             var image: UIImage?
@@ -81,7 +81,12 @@ struct RecentWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: RecentProvider()) { entry in
+//                if #available(iOSApplicationExtension 17.0, *) {
+//                    postWidgetView(entry: entry)
+//                        .containerBackground(Color.clear, for: .widget)
+//                } else {
             postWidgetView(entry: entry)
+//                }
         }
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular])
         .configurationDisplayName("Latest Post Widget")

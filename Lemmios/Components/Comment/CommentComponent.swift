@@ -7,6 +7,7 @@ let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
 struct CommentComponent: View {
     @Environment(\.redactionReasons) private var reasons
+    @EnvironmentObject var parent: CommentModel
     @StateObject var commentModel: CommentModel
 
     @State var collapsed = false
@@ -26,6 +27,8 @@ struct CommentComponent: View {
     @State var showingBan = false
     @State var banReason = ""
     @State var banDays = ""
+
+    @State var showingNuke = false
 
     var replyInfo: LemmyApi.CommentReply?
 
@@ -65,6 +68,11 @@ struct CommentComponent: View {
                     let removed = commentModel.comment.comment.removed
                     PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
                         commentModel.remove(apiModel: apiModel)
+                    }
+                    if !removed {
+                        PostButton(label: "Nuke", image: "trash") {
+                            showingNuke = true
+                        }
                     }
                     let banned = commentModel.creator_banned_from_community
                     PostButton(label: banned ? "Unabn from community" : "Ban from community", image: "") {
@@ -156,6 +164,16 @@ struct CommentComponent: View {
                 .padding(.top, 10)
                 Spacer()
                     .frame(height: 10)
+            }
+            .onChange(of: parent.comment.comment.removed) { _ in
+                if let index = parent.children.firstIndex(where: { $0.id == commentModel.comment.id }) {
+                    self.commentModel.comment.comment.removed = parent.children[index].comment.removed
+                }
+            }
+            .onChange(of: commentModel.comment.comment.removed) { newValue in
+                if let index = parent.children.firstIndex(where: { $0.id == commentModel.comment.id }) {
+                    parent.children[index].comment.removed = newValue
+                }
             }
             .onTapGesture {
                 if preview {
@@ -259,6 +277,7 @@ struct CommentComponent: View {
                             self.collapsed = true
                         }
                     }, share: share)
+                        .environmentObject(commentModel)
                 }
             }
             .allowsHitTesting(!collapsed)
@@ -311,6 +330,14 @@ struct CommentComponent: View {
                 }
             }
             Button("Cancel", role: .cancel) {}
+        }
+        .alert("Nuke", isPresented: $showingNuke) {
+            Button("Cancel", role: .cancel) {}
+            Button("Nuke", role: .destructive) {
+                commentModel.nuke(apiModel: apiModel)
+            }
+        } message: {
+            Text("Nuking will delete comment and all (loaded) childern")
         }
     }
 

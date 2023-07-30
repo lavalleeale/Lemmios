@@ -117,6 +117,20 @@ class CommentModel: VotableModel {
         apiModel.lemmyHttp!.banUser(userId: comment.creator.id, communityId: comment.community.id, ban: !creator_banned_from_community, reason: reason, remove: remove, expires: expires) { _, _ in }.store(in: &cancellable)
         creator_banned_from_community.toggle()
     }
+    
+    func nuke(apiModel: ApiModel) {
+        for child in children.enumerated() {
+            apiModel.lemmyHttp?.removeComment(id: child.element.id, removed: true) { response, _ in
+                DispatchQueue.main.async {
+                    if let response = response {
+                        self.children.remove(at: child.offset)
+                        self.children.insert(response.comment_view, at: child.offset)
+                    }
+                }
+            }.store(in: &cancellable)
+        }
+        self.remove(apiModel: apiModel)
+    }
 }
 
 func isCommentParent(parentId: Int, possibleChild: LemmyApi.CommentView) -> Bool {

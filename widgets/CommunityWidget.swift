@@ -81,7 +81,12 @@ struct CommunityWidget: Widget {
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: CommunityIntentIntent.self, provider: CommunityProvider()) { entry in
+//            if #available(iOSApplicationExtension 17.0, *) {
+//                postWidgetView(entry: entry)
+//                    .containerBackground(Color.clear, for: .widget)
+//            } else {
             postWidgetView(entry: entry)
+//            }
         }
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular])
         .configurationDisplayName("Latest Subscribed Widget")
