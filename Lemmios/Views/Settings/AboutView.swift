@@ -11,7 +11,7 @@ struct AboutView: View {
         VStack {
             Spacer()
             HStack(spacing: 20) {
-                Image(uiImage: UIImage(named: "Icon.png")!)
+                Image("AppIcon-Preview")
                     .resizable()
                     .frame(width: 80, height: 80)
                     .clipShape(RoundedRectangle(cornerRadius: 10))

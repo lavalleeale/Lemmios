@@ -50,7 +50,7 @@ struct SplashView: View {
                 Text("Welcome to Lemmios!")
                     .font(.largeTitle)
                     .padding(.top, 50)
-                Image("AppIcon-Preivew")
+                Image("AppIcon-Preview")
                     .resizable()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .aspectRatio(contentMode: .fit)
