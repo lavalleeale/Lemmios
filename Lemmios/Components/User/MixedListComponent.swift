@@ -20,7 +20,8 @@ struct MixedListComponent: View {
                     PostPreviewComponent(post: post, showCommunity: true, showUser: false)
                 }
                 if let comment = item as? LemmyApi.CommentView {
-                    CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: 0, collapseParent: nil)
+                    let model = CommentModel(comment: comment, children: [])
+                    CommentComponent(parent: model, commentModel: model, preview: true, depth: 0, collapseParent: nil)
                 }
                 Rectangle()
                     .fill(.secondary.opacity(0.1))

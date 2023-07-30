@@ -89,9 +89,8 @@ struct PostView: View {
                         }
                         ForEach(topLevels) { comment in
                             let model = CommentModel(comment: comment, children: postModel.comments.filter { $0.comment.path.contains("\(comment.id).") })
-                            CommentComponent(commentModel: model, depth: 0, collapseParent: nil, share: share)
+                            CommentComponent(parent: model, commentModel: model, depth: 0, collapseParent: nil, share: share)
                                 .id(comment.id)
-                                .environmentObject(model)
                             Divider()
                         }
                         .environmentObject(postModel)

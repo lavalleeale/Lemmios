@@ -28,7 +28,8 @@ struct InboxView: View {
                     case .Replies:
                         Group {
                             ForEach(Array(inboxModel.replies.enumerated()), id: \.element.id) { index, reply in
-                                CommentComponent(commentModel: CommentModel(comment: reply, children: []), preview: true, replyInfo: reply.comment_reply!, depth: 0, read: {
+                                let model = CommentModel(comment: reply, children: [])
+                                CommentComponent(parent: model, commentModel: model, preview: true, replyInfo: reply.comment_reply!, depth: 0, read: {
                                     if reply.comment_reply!.read {
                                         apiModel.unreadCount += 1
                                     } else {

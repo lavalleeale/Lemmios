@@ -7,7 +7,7 @@ let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
 struct CommentComponent: View {
     @Environment(\.redactionReasons) private var reasons
-    @EnvironmentObject var parent: CommentModel
+    @ObservedObject var parent: CommentModel
     @StateObject var commentModel: CommentModel
 
     @State var collapsed = false
@@ -32,7 +32,6 @@ struct CommentComponent: View {
 
     var replyInfo: LemmyApi.CommentReply?
 
-    @EnvironmentObject var post: PostModel
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var postModel: PostModel
@@ -267,14 +266,13 @@ struct CommentComponent: View {
                 ForEach(directChildren) { comment in
                     Divider()
                         .padding(.leading, CGFloat(depth + 1) * 10)
-                    CommentComponent(commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1, collapseParent: {
+                    CommentComponent(parent: commentModel, commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1, collapseParent: {
                         if collapseParent != nil {
                             collapseParent!()
                         } else {
                             self.collapsed = true
                         }
                     }, share: share)
-                        .environmentObject(commentModel)
                 }
             }
             .allowsHitTesting(!collapsed)
@@ -362,7 +360,7 @@ struct CommentComponent: View {
 
     func addReminder() {
         let content = UNMutableNotificationContent()
-        content.title = "Reminder for \(postModel.post.name)"
+        content.title = "Reminder for \(commentModel.comment.post.name)"
         content.body = "\(commentModel.comment.comment.ap_id)"
         content.userInfo = commentModel.comment.dictionary
         // Configure the recurring date.

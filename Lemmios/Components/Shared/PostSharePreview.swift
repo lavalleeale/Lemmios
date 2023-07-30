@@ -120,7 +120,8 @@ struct PostSharePreviewContent: View {
                 .padding()
                 VStack(spacing: 0) {
                     ForEach(comments) { comment in
-                        CommentComponent(commentModel: CommentModel(comment: comment, children: []), preview: true, depth: comment.comment.path.components(separatedBy: ".").count - 2, collapseParent: nil)
+                        let model = CommentModel(comment: comment, children: [])
+                        CommentComponent(parent: model, commentModel: model, preview: true, depth: comment.comment.path.components(separatedBy: ".").count - 2, collapseParent: nil)
                     }
                 }
             }
