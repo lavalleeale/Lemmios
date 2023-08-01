@@ -63,7 +63,7 @@ struct ImageSelector: View {
                     }
             }
         }
-        .alert("Resize", isPresented: $showResize) {
+        .alert("Resize (kB)", isPresented: $showResize) {
             let formatter: NumberFormatter = {
                 let formatter = NumberFormatter()
                 formatter.numberStyle = .decimal
