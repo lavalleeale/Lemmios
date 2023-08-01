@@ -21,6 +21,7 @@ struct SettingsView: View {
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("readOnScroll") var readOnScroll = false
+    @AppStorage("totalScore") var totalScore = true
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -39,6 +40,7 @@ struct SettingsView: View {
                 SettingViewComponent(selection: $selectedTheme, desciption: "Theme", options: Theme.allCases)
                 SettingViewComponent(selection: $colorScheme, desciption: "Color Scheme", options: ColorScheme.allCases)
                 Toggle("Pure Black Dark Mode", isOn: $pureBlack)
+                Toggle("Display Total Score", isOn: $totalScore)
                 ZStack {
                     Slider(value: systemFont ? .constant(sizeDouble(size: size)) : $fontSize, in: 0...Double(DynamicTypeSize.allCases.filter { !$0.isAccessibilitySize }.count - 1), step: 1)
                     HStack {

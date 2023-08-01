@@ -5,6 +5,8 @@ import LemmyApi
 class CommentModel: VotableModel {
     @Published var likes: Int
     @Published var score: Int
+    @Published var upvotes: Int
+    @Published var downvotes: Int
     @Published var pageStatus = CommentsPageStatus.ready
     
     private var cancellable: Set<AnyCancellable> = Set()
@@ -18,6 +20,8 @@ class CommentModel: VotableModel {
         self.comment = comment
         self.children = children
         self.score = comment.counts.score
+        self.upvotes = comment.counts.upvotes
+        self.downvotes = comment.counts.downvotes
         self.likes = comment.my_vote ?? 0
         self.creator_banned_from_community = comment.creator_banned_from_community ?? false
     }
@@ -35,6 +39,8 @@ class CommentModel: VotableModel {
         }
         apiModel.lemmyHttp?.voteComment(id: comment.id, target: targetVote) { commentView, _ in
             self.score = commentView?.comment_view.counts.score ?? self.score
+            self.upvotes = commentView?.comment_view.counts.upvotes ?? self.upvotes
+            self.downvotes = commentView?.comment_view.counts.downvotes ?? self.downvotes
             self.likes = targetVote
         }.store(in: &cancellable)
     }

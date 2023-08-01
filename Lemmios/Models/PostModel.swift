@@ -17,6 +17,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
     
     @Published var likes: Int
     @Published var score: Int
+    @Published var upvotes: Int
+    @Published var downvotes: Int
     @Published var saved: Bool
     @Published var creator_banned_from_community: Bool
     @Published var read: Bool
@@ -41,6 +43,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         self.community = post.community
         self.counts = post.counts
         self.score = post.counts.score
+        self.upvotes = post.counts.upvotes
+        self.downvotes = post.counts.downvotes
         self.saved = post.saved ?? false
         self.likes = post.my_vote ?? 0
         self.creator_banned_from_community = post.creator_banned_from_community ?? false
@@ -57,6 +61,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         self.detailsStatus = .ready
         self.post = post
         self.score = 0
+        self.upvotes = 0
+        self.downvotes = 0
         self.saved = false
         self.likes = 0
         self.creator_banned_from_community = false
@@ -95,6 +101,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
                 self.community = post.community
                 self.counts = post.counts
                 self.score = post.counts.score
+                self.upvotes = post.counts.upvotes
+                self.downvotes = post.counts.downvotes
                 self.saved = post.saved ?? false
                 self.likes = post.my_vote ?? 0
                 self.creator_banned_from_community = false
@@ -119,6 +127,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         apiModel.lemmyHttp?.votePost(id: post.id, target: targetVote) { postView, _ in
             if let postView = postView?.post_view {
                 self.score = postView.counts.score
+                self.upvotes = postView.counts.upvotes
+                self.downvotes = postView.counts.downvotes
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
                 self.creator_banned_from_community = postView.creator_banned_from_community ?? self.creator_banned_from_community
@@ -174,6 +184,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         apiModel.lemmyHttp?.savePost(save: !saved, post_id: post.id) { postView, _ in
             if let postView = postView?.post_view {
                 self.score = postView.counts.score
+                self.upvotes = postView.counts.upvotes
+                self.downvotes = postView.counts.downvotes
                 self.saved = postView.saved!
                 self.likes = postView.my_vote!
                 self.creator_banned_from_community = postView.creator_banned_from_community ?? self.creator_banned_from_community
@@ -205,6 +217,8 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
         apiModel.lemmyHttp?.reportPost(postId: post.id, reason: reason) { response, _ in
             if let response = response?.post_report_view {
                 self.score = response.counts.score
+                self.upvotes = response.counts.upvotes
+                self.downvotes = response.counts.downvotes
             }
         }.store(in: &cancellable)
     }
