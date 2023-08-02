@@ -21,6 +21,7 @@ struct SettingsView: View {
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("readOnScroll") var readOnScroll = false
     @AppStorage("totalScore") var totalScore = true
+    @AppStorage("swipeDistance") var swipeDistance = SwipeDistance.Normal
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -65,6 +66,7 @@ struct SettingsView: View {
             Section("Other") {
                 NavigationLink("Notifications", value: SettingsNav.Notifications)
                 NavigationLink("App Icon", value: SettingsNav.AppIcon)
+                SettingViewComponent(selection: $swipeDistance, desciption: "Long Swipe Trigger Point", options: SwipeDistance.allCases)
                 if apiModel.nsfw {
                     Toggle("Blur NSFW", isOn: $blurNsfw)                    
                 }
@@ -190,6 +192,20 @@ enum DefaultStart: RawRepresentable, Codable, CaseIterable {
 
 enum ColorScheme: String, CaseIterable {
     case System, Light, Dark
+}
+
+enum SwipeDistance: String, CaseIterable {
+    case Earlier, Normal, Later
+    var distance: Double {
+        switch self {
+        case .Earlier:
+            return 125
+        case .Normal:
+            return 175
+        case .Later:
+            return 250
+        }
+    }
 }
 
 func sizeDouble(size: DynamicTypeSize) -> Double {

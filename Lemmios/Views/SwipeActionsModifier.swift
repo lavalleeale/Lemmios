@@ -9,15 +9,14 @@ struct SwipeOption: Hashable {
 
 struct SwiperContainer: ViewModifier {
     @State private var offset: CGFloat = 0
-    let minTrailingOffset: CGFloat
     let leadingOptions: [SwipeOption]
     let trailingOptions: [SwipeOption]
     let action: (String) -> Void
+    @AppStorage("swipeDistance") var swipeDistance = SwipeDistance.Normal
 
     init(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], action: @escaping (String) -> Void) {
         self.leadingOptions = leadingOptions
         self.trailingOptions = trailingOptions
-        self.minTrailingOffset = CGFloat(trailingOptions.count) * -125
         self.action = action
     }
 
@@ -50,7 +49,7 @@ struct SwiperContainer: ViewModifier {
                 .layoutPriority(0)
                 .padding(.leading, offset > 0 ? -offset : 0.0)
                 .padding(.trailing, offset < 0 ? offset : 0.0)
-                .clipped()
+                .fixedSize(horizontal: false, vertical: offset != 0)
             ForEach(Array(trailingOptions.enumerated()), id: \.element) { index, option in
                 let showing = calcTrailingShowing(index: index, offset: offset)
                 ZStack {
@@ -88,7 +87,7 @@ struct SwiperContainer: ViewModifier {
                 }
             }
             .onEnded { _ in
-                let index = Int(floor(offset / CGFloat(125)))
+                let index = Int(floor(offset / swipeDistance.distance))
                 if offset > 50, !leadingOptions.isEmpty {
                     action(leadingOptions[min(index, leadingOptions.count - 1)].id)
                 } else if offset < -50, !trailingOptions.isEmpty {
@@ -102,10 +101,10 @@ struct SwiperContainer: ViewModifier {
     }
 
     private func calcLeadingShowing(index: Int, offset: CGFloat) -> Bool {
-        return ((index == leadingOptions.count - 1 || offset <= CGFloat(index + 1) * 125) && (offset > CGFloat(index) * 125))
+        return ((index == leadingOptions.count - 1 || offset <= CGFloat(index + 1) * swipeDistance.distance) && (offset > CGFloat(index) * swipeDistance.distance))
     }
 
     private func calcTrailingShowing(index: Int, offset: CGFloat) -> Bool {
-        return ((index == trailingOptions.count - 1 || offset >= CGFloat(index + 1) * -125) && (offset < CGFloat(index) * -125))
+        return ((index == trailingOptions.count - 1 || offset >= CGFloat(index + 1) * -swipeDistance.distance) && (offset < CGFloat(index) * -swipeDistance.distance))
     }
 }
