@@ -14,17 +14,21 @@ struct PostsView: View {
     var body: some View {
         let isSpecialPath = specialPostPathList.contains(postsModel.path)
         ColoredListComponent {
-            ForEach(postsModel.posts) { post in
-                VStack {
-                    PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
-                        .onAppear {
-                            if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
-                                postsModel.fetchPosts(apiModel: apiModel)
+            ForEach(0 ..< postsModel.posts.count * 2, id: \.self) { post in
+                Group {
+                    if post % 2 == 0 {
+                        let post = postsModel.posts[post / 2]
+                        PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
+                            .onAppear {
+                                if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
+                                    postsModel.fetchPosts(apiModel: apiModel)
+                                }
                             }
-                        }
-                    Rectangle()
-                        .fill(.secondary.opacity(0.1))
-                        .frame(height: 10)
+                    } else {
+                        Rectangle()
+                            .fill(.secondary.opacity(0.1))
+                            .frame(height: 10)
+                    }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowSeparator(.hidden)
@@ -54,6 +58,7 @@ struct PostsView: View {
                 .listRowSeparator(.hidden)
             }
         }
+        .environment(\.defaultMinListRowHeight, 10)
         .coordinateSpace(name: "posts")
         .listStyle(.plain)
         .refreshable {
