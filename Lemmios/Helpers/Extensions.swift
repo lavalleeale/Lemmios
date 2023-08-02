@@ -41,8 +41,8 @@ public extension View {
         modifier(FirstAppear(action: action))
     }
 
-    internal func addSwipe(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], compressable: Bool = true, action: @escaping (String) -> Void) -> some View {
-        return modifier(SwiperContainer(leadingOptions: leadingOptions, trailingOptions: trailingOptions, compressable: compressable, action: action))
+    internal func addSwipe(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], action: @escaping (String) -> Void) -> some View {
+        return modifier(SwiperContainer(leadingOptions: leadingOptions, trailingOptions: trailingOptions, action: action))
     }
 
     func popupNavigationView<Label: View>(isPresented: Binding<Bool>, heightRatio: CGFloat = 2.0, widthRatio: CGFloat = 1.25, @ViewBuilder label: () -> Label) -> some View {

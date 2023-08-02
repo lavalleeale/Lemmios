@@ -8,7 +8,6 @@ struct SettingsView: View {
     @AppStorage("defaultPostSort") var defaultPostSort = LemmyApi.Sort.Active
     @AppStorage("defaultCommentSort") var defaultCommentSort = LemmyApi.Sort.Hot
     @AppStorage("defaultPostSortTime") var defaultPostSortTime = LemmyApi.TopTime.All
-    @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
@@ -70,7 +69,6 @@ struct SettingsView: View {
                     Toggle("Blur NSFW", isOn: $blurNsfw)                    
                 }
                 DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
-                Toggle("Dynamic Text size On Swipe", isOn: $shouldCompressPostOnSwipe)
                 NavigationLink("Change Instance", value: SettingsNav.ServerSelector)
                 if apiModel.selectedAccount != nil {
                     Button("Delete Account") {

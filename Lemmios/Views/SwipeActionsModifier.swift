@@ -9,19 +9,16 @@ struct SwipeOption: Hashable {
 
 struct SwiperContainer: ViewModifier {
     @State private var offset: CGFloat = 0
-    @AppStorage("shouldCompressPostOnSwipe") var shouldCompressPostOnSwipe = false
-    @State var compressable: Bool
     let minTrailingOffset: CGFloat
     let leadingOptions: [SwipeOption]
     let trailingOptions: [SwipeOption]
     let action: (String) -> Void
 
-    init(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], compressable: Bool, action: @escaping (String) -> Void) {
+    init(leadingOptions: [SwipeOption], trailingOptions: [SwipeOption], action: @escaping (String) -> Void) {
         self.leadingOptions = leadingOptions
         self.trailingOptions = trailingOptions
         self.minTrailingOffset = CGFloat(trailingOptions.count) * -125
         self.action = action
-        self.compressable = compressable
     }
 
     func body(content: Content) -> some View {
@@ -49,13 +46,11 @@ struct SwiperContainer: ViewModifier {
                 .frame(maxWidth: showing ? offset : 0)
             }
             content
-                .if(!shouldCompressPostOnSwipe || !compressable) { view in
-                    view.offset(x: offset)
-                        .layoutPriority(0)
-                        .padding(.leading, offset > 0 ? -offset : 0.0)
-                        .padding(.trailing, offset < 0 ? offset : 0.0)
-                        .clipped()
-                }
+                .offset(x: offset)
+                .layoutPriority(0)
+                .padding(.leading, offset > 0 ? -offset : 0.0)
+                .padding(.trailing, offset < 0 ? offset : 0.0)
+                .clipped()
             ForEach(Array(trailingOptions.enumerated()), id: \.element) { index, option in
                 let showing = calcTrailingShowing(index: index, offset: offset)
                 ZStack {
@@ -83,9 +78,9 @@ struct SwiperContainer: ViewModifier {
         .gesture(DragGesture(minimumDistance: 40, coordinateSpace: .local)
             .onChanged { value in
                 var totalSlide = value.translation.width
-                if totalSlide < 0 && trailingOptions.isEmpty {
+                if totalSlide < 0, trailingOptions.isEmpty {
                     totalSlide = 0
-                } else if totalSlide > 0 && leadingOptions.isEmpty {
+                } else if totalSlide > 0, leadingOptions.isEmpty {
                     totalSlide = 0
                 }
                 withAnimation {
@@ -94,9 +89,9 @@ struct SwiperContainer: ViewModifier {
             }
             .onEnded { _ in
                 let index = Int(floor(offset / CGFloat(125)))
-                if offset > 50 && !leadingOptions.isEmpty {
+                if offset > 50, !leadingOptions.isEmpty {
                     action(leadingOptions[min(index, leadingOptions.count - 1)].id)
-                } else if offset < -50 && !trailingOptions.isEmpty {
+                } else if offset < -50, !trailingOptions.isEmpty {
                     action(trailingOptions[min(-index - 1, trailingOptions.count - 1)].id)
                 }
                 withAnimation {

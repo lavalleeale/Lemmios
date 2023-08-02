@@ -27,7 +27,7 @@ struct MessageComponent: View {
             }
         }
         .padding()
-        .addSwipe(leadingOptions: [], trailingOptions: [SwipeOption(id: "read", image: message.private_message.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!), SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)], compressable: true) { option in
+        .addSwipe(leadingOptions: [], trailingOptions: [SwipeOption(id: "read", image: message.private_message.read ? "envelope.badge" : "envelope.open", color: Color(hex: "3880EF")!), SwipeOption(id: "reply", image: "arrowshape.turn.up.left", color: .blue)]) { option in
             if option == "read" {
                 messageModel.read(message: message.private_message, apiModel: apiModel) {
                     if message.private_message.read {
