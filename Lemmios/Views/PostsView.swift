@@ -131,6 +131,11 @@ struct PostsView: View {
             if !isSpecialPath {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
+                        if let communityView = postsModel.communityView {
+                            PostButton(label: "Share", image: "square.and.arrow.up") {
+                                alwaysShare(item: communityView.community_view.community.actor_id)
+                            }
+                        }
                         PostButton(label: "Submit Post", image: "plus") {
                             showingCreate.toggle()
                         }
