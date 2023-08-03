@@ -46,10 +46,8 @@ struct SwiperContainer: ViewModifier {
             }
             content
                 .offset(x: offset)
-                .layoutPriority(0)
                 .padding(.leading, offset > 0 ? -offset : 0.0)
                 .padding(.trailing, offset < 0 ? offset : 0.0)
-                .fixedSize(horizontal: false, vertical: offset != 0)
             ForEach(Array(trailingOptions.enumerated()), id: \.element) { index, option in
                 let showing = calcTrailingShowing(index: index, offset: offset)
                 ZStack {
@@ -81,6 +79,8 @@ struct SwiperContainer: ViewModifier {
                     totalSlide = 0
                 } else if totalSlide > 0, leadingOptions.isEmpty {
                     totalSlide = 0
+                } else if abs(totalSlide) > UIScreen.main.bounds.width / 2 {
+                    totalSlide = abs(totalSlide) / totalSlide * UIScreen.main.bounds.width / 2
                 }
                 withAnimation {
                     offset = totalSlide
