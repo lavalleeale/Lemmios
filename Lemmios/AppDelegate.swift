@@ -1,6 +1,6 @@
-import SwiftUI
 import OSLog
 import SimpleKeychain
+import SwiftUI
 
 class StartingTab: ObservableObject {
     @Published var requestedTab: String?
@@ -26,7 +26,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     private let keychain = SimpleKeychain()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
-        
+
         if ProcessInfo().arguments.contains("test") {
             #if targetEnvironment(simulator)
             // Disable hardware keyboards.
@@ -44,13 +44,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
             UserDefaults.standard.removePersistentDomain(forName: "group.com.axlav.lemmios")
             try! SimpleKeychain().deleteAll()
         }
-        
+
         return true
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         if let url = URL(string: response.notification.request.content.body) {
+            startingTab.requestedUrl = url
+        } else if let urlData = response.notification.request.content.userInfo["url"] as? String, let url = URL(string: urlData) {
             startingTab.requestedUrl = url
         } else {
             startingTab.requestedTab = "Inbox"
