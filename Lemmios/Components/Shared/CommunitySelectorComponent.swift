@@ -6,17 +6,32 @@ struct CommunitySelectorComponent: View {
 
     @State var text = ""
     let placeholder: String
-    let callback: (String) -> Void
+    let callback: (String, Int?) -> Void
+    let allowName: Bool
+    
+    init(placeholder: String, callback: @escaping (String, Int?) -> Void) {
+        self.placeholder = placeholder
+        self.callback = callback
+        allowName = false
+    }
+    
+    init(placeholder: String, callback: @escaping (String) -> Void) {
+        self.placeholder = placeholder
+        self.callback = {str, int in callback(str)}
+        allowName = true
+    }
 
     var body: some View {
         ColoredListComponent {
             Group {
                 TextField(placeholder, text: $text) {
-                    callback(text)
+                    if allowName {
+                        callback(text, nil)
+                    }
                 }
                 if let communities = searchedModel.communities?.filter({ $0.community.name.lowercased().contains(text.lowercased()) }).prefix(5), communities.count != 0 {
                     CommmunityListComponent(communities: communities) { community in
-                        callback("\(community.community.name)@\(community.community.actor_id.host()!)")
+                        callback("\(community.community.name)@\(community.community.actor_id.host()!)", community.id)
                     }
                 }
             }
@@ -37,12 +52,14 @@ struct CommunitySelectorComponent: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button("Cancel") {
-                    callback("")
+                    callback("", nil)
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") {
-                    callback(text)
+            if allowName {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        callback(text, nil)
+                    }
                 }
             }
         }

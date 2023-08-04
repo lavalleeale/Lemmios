@@ -122,6 +122,10 @@ struct PostButtons: View {
     @State var banReason = ""
     @State var banDays = ""
     
+    @State var showingCross = false
+    @State var showingFinalizeCross = false
+    @StateObject var crossModel = CrossModel()
+    
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     
     var showViewComments: Bool
@@ -145,6 +149,9 @@ struct PostButtons: View {
             }
             PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
                 showingReply = true
+            }
+            PostButton(label: "Crosspost", image: "rectangle.on.rectangle") {
+                showingCross = true
             }
             if showAll {
                 PostButton(label: "Remind Me...", image: "clock", needsAuth: false) {
@@ -257,6 +264,27 @@ struct PostButtons: View {
         }
         .overlay {
             PostSharePreview(postModel: postModel, isPresented: $showingShare, comments: [])
+        }
+        .popupNavigationView(isPresented: $showingCross) {
+            CommunitySelectorComponent(placeholder: "Target Community") { _, id in
+                showingCross = false
+                if let id = id {
+                    showingFinalizeCross = true
+                    crossModel.target = id
+                }
+            }
+            .foregroundColor(nil)
+        }
+        .sheet(isPresented: $showingFinalizeCross) {
+            let lines = (postModel.post.body ?? "").components(separatedBy: "\n").map { "> " + $0 }
+            let citedLines = lines.count != 0 ? ["cross-posted from:  \(postModel.post.ap_id)\n"] + lines : lines
+            PostCreateComponent(title: postModel.post.name, postData: citedLines.joined(separator: "\n"), postUrl: postModel.post.UrlData?.absoluteString ?? "", dataModel: crossModel)
+                .foregroundColor(nil)
+        }
+        .onChange(of: crossModel.created) { newValue in
+            if let newValue = newValue {
+                navModel.path.append(PostModel(post: newValue))
+            }
         }
         .sheet(isPresented: $showingEdit) {
             PostCreateComponent(title: postModel.post.name, postData: postModel.post.body ?? "", postUrl: postModel.post.UrlData?.absoluteString ?? "", dataModel: postModel)
