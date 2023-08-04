@@ -135,6 +135,14 @@ struct PostButtons: View {
     
     var buttons: some View {
         Group {
+            if showAll {
+                PostButton(label: "Upvote", image: "arrow.up") {
+                    postModel.vote(direction: true, apiModel: apiModel)
+                }
+                PostButton(label: "Downvote", image: "arrow.down") {
+                    postModel.vote(direction: false, apiModel: apiModel)
+                }
+            }
             if showViewComments {
                 PostButton(label: "Comments", image: "bubble.left.and.bubble.right", needsAuth: false) {
                     dismiss()

@@ -48,6 +48,12 @@ struct CommentComponent: View {
 
     var menuButtons: some View {
         Group {
+            PostButton(label: "Upvote", image: "arrow.up") {
+                commentModel.vote(direction: true, apiModel: apiModel)
+            }
+            PostButton(label: "Downvote", image: "arrow.down") {
+                commentModel.vote(direction: false, apiModel: apiModel)
+            }
             if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
                 if apiModel.moderates?.contains(where: { $0.id == commentModel.comment.community.id }) == true {
                     let distinguished = commentModel.comment.comment.distinguished
