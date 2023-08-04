@@ -87,15 +87,15 @@ struct PostContentComponent: View {
                         }
                     })
             } else if preview {
-                let body = post.post.deleted ? "*deleted by creator*" : post.post.removed ? "*removed by mod*" : post.post.body ?? ""
                 if showCompact {
                     Image(systemName: "text.aligncenter")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(10)
                 } else {
+                    let body = post.post.deleted ? "*deleted by creator*" : post.post.removed ? "*removed by mod*" : post.post.body ?? ""
                     HStack {
-                        MarkdownView(processMarkdown(input: body, stripImages: true), baseURL: URL(string: apiModel.url)!, preview: true)
+                        MarkdownView(processMarkdown(input: body, stripImages: false), baseURL: URL(string: apiModel.url)!, preview: true)
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxHeight: 100, alignment: .top)
                             .clipped()
