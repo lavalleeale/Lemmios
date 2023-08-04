@@ -104,10 +104,6 @@ struct TextFieldContainer: UIViewRepresentable {
         return textView
     }
 
-    func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<TextFieldContainer>) {
-        uiView.text = self.text.wrappedValue
-    }
-
     class Coordinator: NSObject, UITextViewDelegate {
         var parent: TextFieldContainer
 
@@ -140,6 +136,7 @@ struct TextFieldContainer: UIViewRepresentable {
         }
 
         func textViewDidChange(_ textView: UITextView) {
+            
             self.parent.text.wrappedValue = textView.text ?? ""
         }
     }
