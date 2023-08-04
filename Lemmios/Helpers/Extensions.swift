@@ -101,6 +101,7 @@ private struct WithNavigationModifier: ViewModifier {
         NavigationStack(path: $navModel.path) {
             content
                 .toolbarBackground(selectedTheme.backgroundColor, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar(.visible, for: .tabBar)
                 .navigationDestination(for: PostsModel.self) { postsModel in
                     PostsView(postsModel: postsModel)

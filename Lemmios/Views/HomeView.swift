@@ -6,55 +6,53 @@ struct HomeView: View {
     @State var homeShowing = true
 
     var body: some View {
-        ZStack {
-            ColoredListComponent {
+        ColoredListComponent {
+            HStack {
+                Image(systemName: "arrow.up")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding(3)
+                    .background(.red)
+                    .clipShape(Circle())
+                    .frame(width: 24, height: 24)
+                NavigationLink("All", value: PostsModel(path: "All"))
+            }
+            HStack {
+                Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding(3)
+                    .background(.blue)
+                    .clipShape(Circle())
+                    .frame(width: 24, height: 24)
+                NavigationLink("Local", value: PostsModel(path: "Local"))
+            }
+            if let subscribed = apiModel.subscribed {
                 HStack {
-                    Image(systemName: "arrow.up")
+                    Image(systemName: "house")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(3)
-                        .background(.red)
+                        .background(.green)
                         .clipShape(Circle())
                         .frame(width: 24, height: 24)
-                    NavigationLink("All", value: PostsModel(path: "All"))
+                    NavigationLink("Home", value: PostsModel(path: "Subscribed"))
                 }
-                HStack {
-                    Image(systemName: "antenna.radiowaves.left.and.right.slash")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding(3)
-                        .background(.blue)
-                        .clipShape(Circle())
-                        .frame(width: 24, height: 24)
-                    NavigationLink("Local", value: PostsModel(path: "Local"))
-                }
-                if let subscribed = apiModel.subscribed {
-                    HStack {
-                        Image(systemName: "house")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(3)
-                            .background(.green)
-                            .clipShape(Circle())
-                            .frame(width: 24, height: 24)
-                        NavigationLink("Home", value: PostsModel(path: "Subscribed"))
-                    }
-                    ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
-                        Section {
-                            ForEach(subscribed[firstLetter]!) { community in
-                                let model = PostsModel(path: "\(community.name)\(community.local ? "" : "@\(community.actor_id.host()!)")")
-                                NavigationLink(value:model) {
-                                    ShowFromComponent(item: community, show: true)
-                                }
+                ForEach(subscribed.keys.sorted(), id: \.self) { firstLetter in
+                    Section {
+                        ForEach(subscribed[firstLetter]!) { community in
+                            let model = PostsModel(path: "\(community.name)\(community.local ? "" : "@\(community.actor_id.host()!)")")
+                            NavigationLink(value: model) {
+                                ShowFromComponent(item: community, show: true)
                             }
-                        } header: {
-                            Text(firstLetter)
                         }
+                    } header: {
+                        Text(firstLetter)
                     }
                 }
             }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .navigationTitle("Home")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
