@@ -158,7 +158,7 @@ struct ContentView: View {
                     .labelStyle(TabLabelStyle())
                     .background(selectedTheme.backgroundColor)
                 }
-                .padding(.bottom, 5)
+                .padding(.bottom, 10)
                 .ignoresSafeArea()
                 .onAppear {
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
