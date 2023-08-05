@@ -12,7 +12,7 @@ struct SearchView: View {
 
     var body: some View {
         let typing = query != ""
-        VStack {
+        VStack(spacing: 0) {
             ColoredListComponent {
                 Section {
                     ForEach(SearchedModel.SearchType.allCases, id: \.self) { type in
@@ -40,7 +40,7 @@ struct SearchView: View {
             .toast(isPresenting: $searchedModel.rateLimited) {
                 AlertToast(displayMode: .banner(.pop), type: .error(.red), title: "Search rate limit reached")
             }
-            .frame(maxHeight: typing ? .infinity : 0)
+            .frame(maxHeight: typing ? .infinity : 0, alignment: .top)
             .clipped()
             ColoredListComponent {
                 if searchModel.communities.count == 0 {

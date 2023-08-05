@@ -98,36 +98,37 @@ private struct WithNavigationModifier: ViewModifier {
     @State var imageUrl: URL?
 
     func body(content: Content) -> some View {
-        NavigationStack(path: $navModel.path) {
-            content
-                .toolbarBackground(selectedTheme.backgroundColor, for: .navigationBar)
-                .toolbarBackground(.visible, for: .navigationBar)
-                .toolbar(.visible, for: .tabBar)
-                .navigationDestination(for: PostsModel.self) { postsModel in
-                    PostsView(postsModel: postsModel)
-                }
-                .navigationDestination(for: PostModel.self) { postModel in
-                    PostView(postModel: postModel)
-                }
-                .navigationDestination(for: UserModel.self) { userModel in
-                    UserView(userModel: userModel)
-                }
-                .navigationDestination(for: SearchedModel.self) { searchedModel in
-                    SearchedView(searchedModel: searchedModel)
-                }
-                .navigationDestination(for: ResolveModel<LemmyApi.PostView>.self) { resolveModel in
-                    ResolveView(resolveModel: resolveModel)
-                }
-                .navigationDestination(for: ResolveModel<LemmyApi.CommentView>.self) { resolveModel in
-                    ResolveView(resolveModel: resolveModel)
-                }
-                .navigationDestination(for: ModlogModel.self) { modlogModel in
-                    ModlogView(modlogModel: modlogModel)
-                }
-                .fullScreenCover(item: $url) { item in
-                    PostUrlViewWrapper(url: item)
-                        .ignoresSafeArea()
-                }
+        VStack(spacing: 0) {
+            NavigationStack(path: $navModel.path) {
+                content
+                    .toolbarBackground(selectedTheme.backgroundColor, for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
+                    .navigationDestination(for: PostsModel.self) { postsModel in
+                        PostsView(postsModel: postsModel)
+                    }
+                    .navigationDestination(for: PostModel.self) { postModel in
+                        PostView(postModel: postModel)
+                    }
+                    .navigationDestination(for: UserModel.self) { userModel in
+                        UserView(userModel: userModel)
+                    }
+                    .navigationDestination(for: SearchedModel.self) { searchedModel in
+                        SearchedView(searchedModel: searchedModel)
+                    }
+                    .navigationDestination(for: ResolveModel<LemmyApi.PostView>.self) { resolveModel in
+                        ResolveView(resolveModel: resolveModel)
+                    }
+                    .navigationDestination(for: ResolveModel<LemmyApi.CommentView>.self) { resolveModel in
+                        ResolveView(resolveModel: resolveModel)
+                    }
+                    .navigationDestination(for: ModlogModel.self) { modlogModel in
+                        ModlogView(modlogModel: modlogModel)
+                    }
+                    .fullScreenCover(item: $url) { item in
+                        PostUrlViewWrapper(url: item)
+                            .ignoresSafeArea()
+                    }
+            }
             ImageViewComponent(url: imageUrl ?? URL(string: "google.com")!, urlCache: .imageCache, showing: Binding(get: { imageUrl != nil }, set: { _ in imageUrl = nil })) {}
         }
         .environmentObject(navModel)

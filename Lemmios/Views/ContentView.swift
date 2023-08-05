@@ -55,20 +55,7 @@ struct ContentView: View {
             if !splashAccepted {
                 SplashView()
             } else {
-                TabView(selection: Binding(get: { self.selected }, set: {
-                    if $0 == selected {
-                        if let selectedNavModel = selectedNavModel {
-                            selectedNavModel.clear()
-                        } else {
-                            if !apiModel.accounts.isEmpty {
-                                withAnimation(.linear(duration: 0.1)) {
-                                    apiModel.showingAuth.toggle()
-                                }
-                            }
-                        }
-                    }
-                    self.selected = $0
-                })) {
+                VStack(spacing: 0) {
                     Group {
                         ZStack {
                             if !apiModel.serverSelected {
@@ -81,10 +68,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: homeNavModel)
                             }
                         }
-                        .tabItem {
-                            Label("Posts", systemImage: "doc.text.image")
-                        }
-                        .tag(Tab.Posts)
+                        .frame(maxWidth: selected == .Posts ? .infinity : 0, maxHeight: selected == .Posts ? .infinity : 0)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -102,11 +86,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: inboxNavModel)
                             }
                         }
-                        .tabItem {
-                            Label("Inbox", systemImage: "envelope")
-                        }
-                        .badge(apiModel.unreadCount)
-                        .tag(Tab.Inbox)
+                        .frame(maxWidth: selected == .Inbox ? .infinity : 0, maxHeight: selected == .Inbox ? .infinity : 0)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -125,10 +105,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: userNavModel)
                             }
                         }
-                        .tabItem {
-                            Label("Accounts", systemImage: "person.crop.circle")
-                        }
-                        .tag(Tab.Accounts)
+                        .frame(maxWidth: selected == .Accounts ? .infinity : 0, maxHeight: selected == .Accounts ? .infinity : 0)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -140,20 +117,49 @@ struct ContentView: View {
                             }
                         }
                         .handleNavigations(navModel: searchNavModel)
-                        .tabItem {
-                            Label("Search", systemImage: "magnifyingglass")
-                        }
-                        .tag(Tab.Search)
+                        .frame(maxWidth: selected == .Search ? .infinity : 0, maxHeight: selected == .Search ? .infinity : 0)
                         SettingsView()
                             .handleNavigations(navModel: settingsNavModel)
-                            .tabItem {
-                                Label("Settings", systemImage: "gear")
-                            }
-                            .tag(Tab.Settings)
+                            .frame(maxWidth: selected == .Settings ? .infinity : 0, maxHeight: selected == .Settings ? .infinity : 0)
                     }
-                    .toolbarBackground(selectedTheme.backgroundColor, for: .tabBar)
-                    .toolbar(.visible, for: .tabBar)
+                    HStack {
+                        Button { setOrClear(.Posts) } label: { Label("Posts", systemImage: "doc.text.image") }
+                            .foregroundStyle(selected == .Posts ? Color.accentColor : .secondary)
+                        Button { setOrClear(.Inbox) } label: { Label("Inbox", systemImage: "envelope") }
+                            .foregroundStyle(selected == .Inbox ? Color.accentColor : .secondary)
+                            .if(apiModel.unreadCount != 0) { view in view.overlay(alignment: .topTrailing) {
+                                ZStack {
+                                    Circle()
+                                        .fill(.red)
+                                    Text(String(apiModel.unreadCount))
+                                        .foregroundStyle(.white)
+                                }
+                                .frame(width: 20, height: 20)
+                                .scaleEffect(0.8)
+                                .padding(.trailing, 10)
+                                .padding(.top, -10)
+                            }}
+                        Button { setOrClear(.Accounts) } label: { Label("Accounts", systemImage: "person.crop.circle") }
+                            .foregroundStyle(selected == .Accounts ? Color.accentColor : .secondary)
+                            .highPriorityGesture(LongPressGesture().onEnded { _ in
+                                if !apiModel.accounts.isEmpty {
+                                    withAnimation(.linear(duration: 0.1)) {
+                                        apiModel.showingAuth.toggle()
+                                    }
+                                }
+                            })
+                        Button { setOrClear(.Search) } label: { Label("Search", systemImage: "magnifyingglass") }
+                            .foregroundStyle(selected == .Search ? Color.accentColor : .secondary)
+                        Button { setOrClear(.Settings) } label: { Label("Settings", systemImage: "gear") }
+                            .foregroundStyle(selected == .Settings ? Color.accentColor : .secondary)
+                    }
+                    .padding(13)
+                    .buttonStyle(.plain)
+                    .labelStyle(TabLabelStyle())
+                    .background(selectedTheme.backgroundColor)
                 }
+                .padding(.bottom, 5)
+                .ignoresSafeArea()
                 .onAppear {
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
@@ -244,6 +250,14 @@ struct ContentView: View {
         }
         .environment(\.dynamicTypeSize, systemFont ? size : DynamicTypeSize.allCases[Int(fontSize)])
     }
+
+    func setOrClear(_ target: Tab) {
+        if selected == target {
+            selectedNavModel?.clear()
+        } else {
+            selected = target
+        }
+    }
 }
 
 struct PostUrlViewWrapper: UIViewControllerRepresentable {
@@ -262,4 +276,15 @@ extension URL: Identifiable {
 
 enum Tab: String {
     case Posts, Inbox, Accounts, Search, Settings
+}
+
+struct TabLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack {
+            configuration.icon
+                .scaleEffect(1.25)
+            configuration.title
+        }
+        .frame(maxWidth: .infinity)
+    }
 }
