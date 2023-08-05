@@ -141,7 +141,7 @@ struct ContentView: View {
                             }}
                         Button { setOrClear(.Accounts) } label: { Label("Accounts", systemImage: "person.crop.circle") }
                             .foregroundStyle(selected == .Accounts ? Color.accentColor : .secondary)
-                            .highPriorityGesture(LongPressGesture().onEnded { _ in
+                            .simultaneousGesture(LongPressGesture().onEnded { _ in
                                 if !apiModel.accounts.isEmpty {
                                     withAnimation(.linear(duration: 0.1)) {
                                         apiModel.showingAuth.toggle()
