@@ -267,23 +267,25 @@ struct CommentComponent: View {
                 .frame(maxWidth: .infinity)
                 .commentDepthIndicator(depth: depth + 1)
             }
-            LazyVStack(spacing: 0) {
-                let directChildren = commentModel.children.filter { isCommentParent(parentId: commentModel.comment.id, possibleChild: $0) }
-                ForEach(directChildren) { comment in
-                    Divider()
-                        .padding(.leading, CGFloat(depth + 1) * 10)
-                    CommentComponent(parent: commentModel, commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1, collapseParent: {
-                        if collapseParent != nil {
-                            collapseParent!()
-                        } else {
-                            self.collapsed = true
-                        }
-                    }, share: share)
+            if !preview {
+                LazyVStack(spacing: 0) {
+                    let directChildren = commentModel.children.filter { isCommentParent(parentId: commentModel.comment.id, possibleChild: $0) }
+                    ForEach(directChildren) { comment in
+                        Divider()
+                            .padding(.leading, CGFloat(depth + 1) * 10)
+                        CommentComponent(parent: commentModel, commentModel: CommentModel(comment: comment, children: commentModel.children.filter { $0.comment.path.contains("\(comment.id).") }), depth: depth + 1, collapseParent: {
+                            if collapseParent != nil {
+                                collapseParent!()
+                            } else {
+                                self.collapsed = true
+                            }
+                        }, share: share)
+                    }
                 }
+                .allowsHitTesting(!collapsed)
+                .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
+                .clipped()
             }
-            .allowsHitTesting(!collapsed)
-            .frame(maxHeight: commentModel.children.isEmpty || collapsed ? 0 : .infinity)
-            .clipped()
         }
         .alert("Report", isPresented: $showingReport) {
             TextField("Reason", text: $reportReason)
