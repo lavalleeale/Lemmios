@@ -16,7 +16,7 @@ struct SettingsView: View {
     @AppStorage("systemFont") var systemFont = true
     @AppStorage("commentImages") var commentImages = true
     @AppStorage("compact") var compactPosts = false
-    @AppStorage("showCommuntiies") var showCommuntiies = true
+    @AppStorage("showInstances") var showInstances = true
     @AppStorage("hideRead") var hideRead = false
     @AppStorage("enableRead") var enableRead = true
     @AppStorage("readOnScroll") var readOnScroll = false
@@ -33,7 +33,7 @@ struct SettingsView: View {
         ColoredListComponent {
             Section("General") {
                 NavigationLink("Open Lemmy Links in Lemmios", value: SettingsNav.OpenInLemmios)
-                Toggle("Show community names", isOn: $showCommuntiies)
+                Toggle("Show instance names", isOn: $showInstances)
                 NavigationLink("Filters", value: SettingsNav.Filters)
             }
             Section("Appearance") {

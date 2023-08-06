@@ -69,7 +69,7 @@ struct ShowFromComponent<T: WithNameHost>: View {
     var showPlaceholder = false
     var show: Bool
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
-    @AppStorage("showCommuntiies") var showCommuntiies = true
+    @AppStorage("showInstances") var showInstances = true
     @Environment(\.redactionReasons) private var reasons
 
     var body: some View {
@@ -92,7 +92,7 @@ struct ShowFromComponent<T: WithNameHost>: View {
                         Text(item.name.first!.uppercased())
                     }
             }
-            if item.local || !showCommuntiies {
+            if item.local || !showInstances {
                 Text(item.name)
                     .lineLimit(1)
             } else {

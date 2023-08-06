@@ -153,13 +153,12 @@ struct ContentView: View {
                         Button { setOrClear(.Settings) } label: { Label("Settings", systemImage: "gear") }
                             .foregroundStyle(selected == .Settings ? Color.accentColor : .secondary)
                     }
-                    .padding(13)
+                    .padding(.horizontal, 15)
+                    .padding(.top, 10)
                     .buttonStyle(.plain)
                     .labelStyle(TabLabelStyle())
                     .background(selectedTheme.backgroundColor)
                 }
-                .padding(.bottom, 10)
-                .ignoresSafeArea()
                 .onAppear {
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
@@ -282,8 +281,10 @@ struct TabLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack {
             configuration.icon
-                .scaleEffect(1.25)
+                .scaleEffect(1.5)
             configuration.title
+                .padding(.top, 3)
+                .font(.caption)
         }
         .frame(maxWidth: .infinity)
     }
