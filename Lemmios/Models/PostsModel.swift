@@ -104,6 +104,10 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
         fetchPosts(apiModel: apiModel)
     }
     
+    func hideReadPosts() {
+        self.posts = self.posts.filter {!DBModel.instance.isRead(postId: $0.id)}
+    }
+    
     func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
         if let communityView = communityView {
             apiModel.lemmyHttp?.createPost(title: title, content: content, url: url, communityId: communityView.community_view.community.id) { post, _ in

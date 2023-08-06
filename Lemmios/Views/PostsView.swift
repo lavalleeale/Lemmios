@@ -10,52 +10,75 @@ struct PostsView: View {
     @State var showingCreate = false
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var apiModel: ApiModel
+    @AppStorage("showHideRead") var showHideRead = false
 
     var body: some View {
         let isSpecialPath = specialPostPathList.contains(postsModel.path)
-        ColoredListComponent {
-            ForEach(0 ..< postsModel.posts.count * 2, id: \.self) { post in
-                Group {
-                    if post % 2 == 0 {
-                        let post = postsModel.posts[post / 2]
-                        PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
-                            .onAppear {
-                                if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
-                                    postsModel.fetchPosts(apiModel: apiModel)
+        ScrollViewReader { proxy in
+            ColoredListComponent {
+                EmptyView()
+                    .id("top")
+                ForEach(0 ..< postsModel.posts.count * 2, id: \.self) { post in
+                    Group {
+                        if post % 2 == 0 {
+                            let post = postsModel.posts[post / 2]
+                            PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
+                                .onAppear {
+                                    if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
+                                        postsModel.fetchPosts(apiModel: apiModel)
+                                    }
                                 }
-                            }
-                    } else {
-                        Rectangle()
-                            .fill(.secondary.opacity(0.1))
-                            .frame(height: 10)
+                        } else {
+                            Rectangle()
+                                .fill(.secondary.opacity(0.1))
+                                .frame(height: 10)
+                        }
                     }
-                }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowSeparator(.hidden)
-            }
-            if postsModel.notFound {
-                Text("Community not found.")
-            } else if case .failed = postsModel.pageStatus {
-                HStack {
-                    Text("Lemmy Request Failed, ")
-                    Button("refresh?") {
-                        postsModel.refresh(apiModel: apiModel)
-                    }
-                }
-                .listRowSeparator(.hidden)
-            } else if case .done = postsModel.pageStatus {
-                Text("Last Post Found ):")
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .listRowSeparator(.hidden)
-            } else if case .loading = postsModel.pageStatus {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                    if postsModel.skipped != 0 {
-                        Text("Loaded and skipped \(postsModel.skipped) read posts")
-                    }
-                    Spacer()
                 }
-                .listRowSeparator(.hidden)
+                if postsModel.notFound {
+                    Text("Community not found.")
+                } else if case .failed = postsModel.pageStatus {
+                    HStack {
+                        Text("Lemmy Request Failed, ")
+                        Button("refresh?") {
+                            postsModel.refresh(apiModel: apiModel)
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                } else if case .done = postsModel.pageStatus {
+                    Text("Last Post Found ):")
+                        .listRowSeparator(.hidden)
+                } else if case .loading = postsModel.pageStatus {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        if postsModel.skipped != 0 {
+                            Text("Loaded and skipped \(postsModel.skipped) read posts")
+                        }
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                if showHideRead {
+                    Button {
+                        postsModel.hideReadPosts()
+                        withAnimation {
+                            proxy.scrollTo("top")
+                        }
+                    } label: {
+                        Label("Hide Read Posts", systemImage: "eye.slash")
+                            .labelStyle(.iconOnly)
+                    }
+                    .foregroundStyle(.primary)
+                    .padding(20)
+                    .background(Color.blue)
+                    .clipShape(Circle())
+                    .padding([.bottom, .trailing], 5)
+                }
             }
         }
         .environment(\.defaultMinListRowHeight, 10)

@@ -22,6 +22,7 @@ struct SettingsView: View {
     @AppStorage("readOnScroll") var readOnScroll = false
     @AppStorage("totalScore") var totalScore = true
     @AppStorage("swipeDistance") var swipeDistance = SwipeDistance.Normal
+    @AppStorage("showHideRead") var showHideRead = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -111,6 +112,7 @@ struct SettingsView: View {
                 NotificationsView()
             case .Read:
                 ColoredListComponent {
+                    Toggle("Show Hide Read Button", isOn: $showHideRead)
                     Toggle("Disable Marking Posts Read", isOn: Binding(get: { !enableRead }, set: { enableRead = !$0 }))
                     if enableRead {
                         Toggle("Auto Hide Read Posts", isOn: $hideRead)
