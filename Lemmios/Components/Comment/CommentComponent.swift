@@ -59,11 +59,6 @@ struct CommentComponent: View {
             PostButton(label: "Downvote", image: "arrow.down") {
                 commentModel.vote(direction: false, apiModel: apiModel)
             }
-            PostButton(label: "Edit", image: "pencil") {
-                // WHY?????
-                commentModel.objectWillChange.send()
-                showingEdit = true
-            }
             if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
                 if apiModel.moderates?.contains(where: { $0.id == commentModel.comment.community.id }) == true {
                     let distinguished = commentModel.comment.comment.distinguished
@@ -72,6 +67,8 @@ struct CommentComponent: View {
                     }
                 }
                 PostButton(label: "Edit", image: "pencil") {
+                    // WHY?????
+                    commentModel.objectWillChange.send()
                     showingEdit = true
                 }
                 let deleted = commentModel.comment.comment.deleted
