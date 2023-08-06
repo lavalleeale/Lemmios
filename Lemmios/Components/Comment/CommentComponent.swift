@@ -48,11 +48,21 @@ struct CommentComponent: View {
 
     var menuButtons: some View {
         Group {
+            PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
+                // WHY?????
+                commentModel.objectWillChange.send()
+                showingReply = true
+            }
             PostButton(label: "Upvote", image: "arrow.up") {
                 commentModel.vote(direction: true, apiModel: apiModel)
             }
             PostButton(label: "Downvote", image: "arrow.down") {
                 commentModel.vote(direction: false, apiModel: apiModel)
+            }
+            PostButton(label: "Edit", image: "pencil") {
+                // WHY?????
+                commentModel.objectWillChange.send()
+                showingEdit = true
             }
             if let account = apiModel.selectedAccount, account == commentModel.comment.creator {
                 if apiModel.moderates?.contains(where: { $0.id == commentModel.comment.community.id }) == true {
@@ -76,6 +86,8 @@ struct CommentComponent: View {
                     }
                     if !removed {
                         PostButton(label: "Nuke", image: "trash") {
+                            // WHY?????
+                            commentModel.objectWillChange.send()
                             showingNuke = true
                         }
                     }
@@ -84,6 +96,8 @@ struct CommentComponent: View {
                         if banned {
                             commentModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
                         } else {
+                            // WHY?????
+                            commentModel.objectWillChange.send()
                             showingBan = true
                             banReason = ""
                             banDays = ""
@@ -91,6 +105,8 @@ struct CommentComponent: View {
                     }
                 }
                 PostButton(label: "Report", image: "flag") {
+                    // WHY?????
+                    commentModel.objectWillChange.send()
                     showingReport = true
                 }
             }
@@ -99,6 +115,8 @@ struct CommentComponent: View {
                 ShowFromComponent(item: user, show: true)
             }
             PostButton(label: "Remind Me...", image: "clock", needsAuth: false) {
+                // WHY?????
+                commentModel.objectWillChange.send()
                 showingRemind = true
             }
             PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
@@ -219,6 +237,8 @@ struct CommentComponent: View {
                             if apiModel.selectedAccount == nil {
                                 apiModel.getAuth()
                             } else {
+                                // WHY?????
+                                commentModel.objectWillChange.send()
                                 showingReply = true
                             }
                         case "read":

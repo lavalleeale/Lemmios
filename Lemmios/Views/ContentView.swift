@@ -252,7 +252,13 @@ struct ContentView: View {
 
     func setOrClear(_ target: Tab) {
         if selected == target {
-            selectedNavModel?.clear()
+            if let selectedNavModel = selectedNavModel {
+                selectedNavModel.clear()
+            } else if !apiModel.accounts.isEmpty {
+                withAnimation(.linear(duration: 0.1)) {
+                    apiModel.showingAuth.toggle()
+                }
+            }
         } else {
             selected = target
         }
