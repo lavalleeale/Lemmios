@@ -316,17 +316,11 @@ struct CommentComponent: View {
             CommentSheet(title: "Add Comment") { commentBody in
                 commentModel.comment(body: commentBody, apiModel: apiModel)
             }
-            .onAppear {
-                commentModel.objectWillChange.send()
-            }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
         .sheet(isPresented: $showingEdit) {
             CommentSheet(commentBody: commentModel.comment.comment.content, title: "Edit Comment") { commentBody in
                 commentModel.edit(body: commentBody, apiModel: apiModel)
-            }
-            .onAppear {
-                commentModel.objectWillChange.send()
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }

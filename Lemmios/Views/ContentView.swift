@@ -159,6 +159,8 @@ struct ContentView: View {
                     .labelStyle(TabLabelStyle())
                     .background(selectedTheme.backgroundColor)
                 }
+                .padding(.bottom, isBottom() ? 20 : 0)
+                .ignoresSafeArea()
                 .onAppear {
                     if let requestedTab = selectedTab.requestedTab, let tab = Tab(rawValue: requestedTab) {
                         self.selected = tab
@@ -294,4 +296,11 @@ struct TabLabelStyle: LabelStyle {
         }
         .frame(maxWidth: .infinity)
     }
+}
+
+func isBottom() -> Bool {
+    if #available(iOS 11.0, *), let keyWindow = UIApplication.shared.keyWindow, keyWindow.safeAreaInsets.bottom > 0 {
+        return true
+    }
+    return false
 }
