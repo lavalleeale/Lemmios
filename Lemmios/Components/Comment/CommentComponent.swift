@@ -49,9 +49,9 @@ struct CommentComponent: View {
     var menuButtons: some View {
         Group {
             PostButton(label: "Reply", image: "arrowshape.turn.up.left") {
+                showingReply = true
                 // WHY?????
                 commentModel.objectWillChange.send()
-                showingReply = true
             }
             PostButton(label: "Upvote", image: "arrow.up") {
                 commentModel.vote(direction: true, apiModel: apiModel)
@@ -67,9 +67,9 @@ struct CommentComponent: View {
                     }
                 }
                 PostButton(label: "Edit", image: "pencil") {
+                    showingEdit = true
                     // WHY?????
                     commentModel.objectWillChange.send()
-                    showingEdit = true
                 }
                 let deleted = commentModel.comment.comment.deleted
                 PostButton(label: deleted ? "Restore" : "Delete", image: deleted ? "trash.slash" : "trash") {
@@ -83,9 +83,9 @@ struct CommentComponent: View {
                     }
                     if !removed {
                         PostButton(label: "Nuke", image: "trash") {
+                            showingNuke = true
                             // WHY?????
                             commentModel.objectWillChange.send()
-                            showingNuke = true
                         }
                     }
                     let banned = commentModel.creator_banned_from_community
@@ -93,18 +93,18 @@ struct CommentComponent: View {
                         if banned {
                             commentModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
                         } else {
-                            // WHY?????
-                            commentModel.objectWillChange.send()
                             showingBan = true
                             banReason = ""
                             banDays = ""
+                            // WHY?????
+                            commentModel.objectWillChange.send()
                         }
                     }
                 }
                 PostButton(label: "Report", image: "flag") {
+                    showingReport = true
                     // WHY?????
                     commentModel.objectWillChange.send()
-                    showingReport = true
                 }
             }
             let user = commentModel.comment.creator
@@ -112,9 +112,9 @@ struct CommentComponent: View {
                 ShowFromComponent(item: user, show: true)
             }
             PostButton(label: "Remind Me...", image: "clock", needsAuth: false) {
+                showingRemind = true
                 // WHY?????
                 commentModel.objectWillChange.send()
-                showingRemind = true
             }
             PostButton(label: "Share as Image", image: "square.and.arrow.up", needsAuth: false) {
                 share?(commentModel.comment.id)
@@ -234,9 +234,9 @@ struct CommentComponent: View {
                             if apiModel.selectedAccount == nil {
                                 apiModel.getAuth()
                             } else {
+                                showingReply = true
                                 // WHY?????
                                 commentModel.objectWillChange.send()
-                                showingReply = true
                             }
                         case "read":
                             if apiModel.selectedAccount == nil {
@@ -316,11 +316,17 @@ struct CommentComponent: View {
             CommentSheet(title: "Add Comment") { commentBody in
                 commentModel.comment(body: commentBody, apiModel: apiModel)
             }
+            .onAppear {
+                commentModel.objectWillChange.send()
+            }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
         .sheet(isPresented: $showingEdit) {
             CommentSheet(commentBody: commentModel.comment.comment.content, title: "Edit Comment") { commentBody in
                 commentModel.edit(body: commentBody, apiModel: apiModel)
+            }
+            .onAppear {
+                commentModel.objectWillChange.send()
             }
             .presentationDetent([.fraction(0.4), .large], largestUndimmed: .fraction(0.4))
         }
