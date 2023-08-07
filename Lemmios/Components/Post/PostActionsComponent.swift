@@ -6,6 +6,7 @@ struct PostActionsComponent: View {
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @AppStorage("compact") var compact = false
+    @AppStorage("alwaysShowUsernames") var alwaysShowUsernames = false
     
     let showCommunity: Bool
     let showUser: Bool
@@ -23,7 +24,8 @@ struct PostActionsComponent: View {
                     if showCommunity {
                         CommunityLink(community: postModel.community!, prefix: {}, suffix: {})
                     }
-                    if showUser {
+                    if showUser || alwaysShowUsernames {
+                        Text("by")
                         UserLink(user: postModel.creator!)
                     }
                 }

@@ -23,6 +23,7 @@ struct SettingsView: View {
     @AppStorage("totalScore") var totalScore = true
     @AppStorage("swipeDistance") var swipeDistance = SwipeDistance.Normal
     @AppStorage("showHideRead") var showHideRead = false
+    @AppStorage("alwaysShowUsernames") var alwaysShowUsernames = false
     @EnvironmentObject var apiModel: ApiModel
     @EnvironmentObject var navModel: NavModel
     @State var showingDelete = false
@@ -58,6 +59,7 @@ struct SettingsView: View {
             Section("Posts") {
                 NavigationLink("Marking Read / Hiding", value: SettingsNav.Read)
                 Toggle("Compact Posts", isOn: $compactPosts)
+                Toggle("Always Show Usernames", isOn: $alwaysShowUsernames)
                 SettingSuboptionComponent(selection: $defaultPostSort, suboption: $defaultPostSortTime, desciption: "Default Sort", options: LemmyApi.Sort.allCases)
             }
             Section("Comments") {
