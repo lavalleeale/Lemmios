@@ -3,6 +3,7 @@ import Foundation
 import LemmyApi
 import SwiftUI
 import WidgetKit
+import LinkPreview
 
 class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     private var id = UUID()
@@ -64,6 +65,22 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                                 self.skipped += 1
                             }
                             return !shouldHide
+                        }
+                        for post in posts {
+                            if let url = post.post.thumbnail_url, let pathExtension = post.post.UrlData?.pathExtension, imageExtensions.contains(pathExtension) {
+                                let request = URLRequest(url: url)
+                                let config = URLSessionConfiguration.default
+                                config.urlCache = .imageCache
+                                URLSession(configuration: config)
+                                    .dataTask(with: request)
+                                    .resume()
+                            } else if let url = post.post.UrlData, MetadataStorage.metadata(for: url) == nil {
+                                MetadataStorage.getMetadata(url: url) {metadata in
+                                    if let metadata = metadata {
+                                        MetadataStorage.store(metadata)
+                                    }
+                                }
+                            }
                         }
                         self.posts.append(contentsOf: posts)
                         self.pageStatus = .ready(nextPage: page + 1)

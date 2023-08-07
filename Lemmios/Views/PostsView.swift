@@ -112,7 +112,7 @@ struct PostsView: View {
         .onChange(of: apiModel.selectedAccount) { _ in
             postsModel.refresh(apiModel: apiModel)
         }
-        .onReceive(searchedModel.$query.throttle(for: 1, scheduler: RunLoop.main, latest: true)) { newValue in
+        .onReceive(searchedModel.$query.debounce(for: 1, scheduler: RunLoop.main)) { newValue in
             self.searchedModel.reset(removeResults: false)
             if newValue != "" {
                 self.searchedModel.query = newValue

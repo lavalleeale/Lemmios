@@ -71,13 +71,26 @@ struct SettingsView: View {
                 NavigationLink("App Icon", value: SettingsNav.AppIcon)
                 SettingViewComponent(selection: $swipeDistance, desciption: "Long Swipe Trigger Point", options: SwipeDistance.allCases)
                 if apiModel.nsfw {
-                    Toggle("Blur NSFW", isOn: $blurNsfw)                    
+                    Toggle("Blur NSFW", isOn: $blurNsfw)
                 }
                 DefaultStartComponent(selection: $defaultStart, desciption: "Default Community", options: DefaultStart.allCases, customDescription: "Community Name")
                 NavigationLink("Change Instance", value: SettingsNav.ServerSelector)
                 if apiModel.selectedAccount != nil {
                     Button("Delete Account") {
                         showingDelete = true
+                    }
+                }
+            }
+            Section("Cache") {
+                Button {
+                    UserDefaults.standard.removeObject(forKey: "Metadata")
+                    URLCache.imageCache.removeAllCachedResponses()
+                    navModel.objectWillChange.send()
+                } label: {
+                    HStack {
+                        Text("Clear Cache")
+                        Spacer()
+                        Text(ByteCountFormatter().string(fromByteCount: Int64(URLCache.imageCache.currentDiskUsage + URLCache.imageCache.currentMemoryUsage)))
                     }
                 }
             }
