@@ -27,10 +27,10 @@ struct PostActionsComponent: View {
                         UserLink(user: postModel.creator!)
                     }
                 }
+                .padding(rowButtons ? .horizontal : [])
             }
             HStack {
                 if showInfo {
-                    DynamicStack(vertical: !compact || !preview) {
                         HStack(spacing: compact && preview ? 0 : nil) {
                             ScoreComponent(votableModel: postModel, preview: preview)
                             Group {
@@ -49,7 +49,7 @@ struct PostActionsComponent: View {
                             }
                             .foregroundStyle(.secondary)
                         }
-                    }
+                        .padding(rowButtons ? .horizontal : [])
                 }
                 if !compact || !preview {
                     Spacer()
@@ -79,22 +79,6 @@ struct PostActionsComponent: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
                 Divider()
-            }
-        }
-    }
-}
-
-struct DynamicStack<Content: View>: View {
-    let vertical: Bool
-    @ViewBuilder var content: Content
-    var body: some View {
-        if vertical {
-            VStack(alignment: .leading) {
-                content
-            }
-        } else {
-            HStack {
-                content
             }
         }
     }
