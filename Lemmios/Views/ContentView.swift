@@ -56,7 +56,7 @@ struct ContentView: View {
                 SplashView()
             } else {
                 VStack(spacing: 0) {
-                    Group {
+                    ZStack {
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -68,7 +68,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: homeNavModel)
                             }
                         }
-                        .frame(maxWidth: selected == .Posts ? .infinity : 0, maxHeight: selected == .Posts ? .infinity : 0)
+                        .offset(x: selected == .Posts ? 0 : -UIScreen.main.bounds.width)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -86,7 +86,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: inboxNavModel)
                             }
                         }
-                        .frame(maxWidth: selected == .Inbox ? .infinity : 0, maxHeight: selected == .Inbox ? .infinity : 0)
+                        .offset(x: selected == .Inbox ? 0 : -UIScreen.main.bounds.width)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -105,7 +105,7 @@ struct ContentView: View {
                                     .handleNavigations(navModel: userNavModel)
                             }
                         }
-                        .frame(maxWidth: selected == .Accounts ? .infinity : 0, maxHeight: selected == .Accounts ? .infinity : 0)
+                        .offset(x: selected == .Accounts ? 0 : -UIScreen.main.bounds.width)
                         ZStack {
                             if !apiModel.serverSelected {
                                 NavigationView {
@@ -117,10 +117,10 @@ struct ContentView: View {
                             }
                         }
                         .handleNavigations(navModel: searchNavModel)
-                        .frame(maxWidth: selected == .Search ? .infinity : 0, maxHeight: selected == .Search ? .infinity : 0)
+                        .offset(x: selected == .Search ? 0 : -UIScreen.main.bounds.width)
                         SettingsView()
                             .handleNavigations(navModel: settingsNavModel)
-                            .frame(maxWidth: selected == .Settings ? .infinity : 0, maxHeight: selected == .Settings ? .infinity : 0)
+                            .offset(x: selected == .Settings ? 0 : -UIScreen.main.bounds.width)
                     }
                     HStack {
                         Button { setOrClear(.Posts) } label: { Label("Posts", systemImage: "doc.text.image") }
