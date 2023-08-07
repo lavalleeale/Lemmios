@@ -112,14 +112,20 @@ struct SettingsView: View {
                 NotificationsView()
             case .Read:
                 ColoredListComponent {
-                    Toggle("Show Hide Read Button", isOn: $showHideRead)
-                    Toggle("Disable Marking Posts Read", isOn: Binding(get: { !enableRead }, set: { enableRead = !$0 }))
-                    if enableRead {
-                        Toggle("Auto Hide Read Posts", isOn: $hideRead)
-                        Toggle("Mark Read On Scroll", isOn: $readOnScroll)
+                    Section {
+                        Toggle("Show Hide Read Button", isOn: $showHideRead)
                     }
-                    Button("Clear Read") {
-                        DBModel.instance.clear()
+                    Section {
+                        Toggle("Disable Marking Posts Read", isOn: Binding(get: { !enableRead }, set: { enableRead = !$0 }))
+                        if enableRead {
+                            Toggle("Auto Hide Read Posts", isOn: $hideRead)
+                            Toggle("Mark Read On Scroll", isOn: $readOnScroll)
+                        }
+                    }
+                    Section {
+                        Button("Clear Read") {
+                            DBModel.instance.clear()
+                        }
                     }
                 }
             case .OpenInLemmios:

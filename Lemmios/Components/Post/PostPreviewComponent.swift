@@ -131,7 +131,7 @@ struct PostPreviewComponent: View {
                 let pos = geo.frame(in: CoordinateSpace.named("posts")).origin.y
                 Rectangle()
                     .onChange(of: pos) { [pos] newValue in
-                        if enableRead, readOnScroll, pos >= 0, newValue < 0 {
+                        if enableRead, readOnScroll, pos >= 50, newValue < 50 {
                             DBModel.instance.read(postId: postModel.post.id)
                             postModel.read = true
                         }
