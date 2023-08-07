@@ -1,9 +1,11 @@
+import LemmyApi
 import SwiftUI
 
 struct HomeView: View {
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @EnvironmentObject var apiModel: ApiModel
     @State var homeShowing = true
+    @State var searchText = ""
 
     var body: some View {
         ColoredListComponent {
@@ -27,7 +29,10 @@ struct HomeView: View {
                     .frame(width: 24, height: 24)
                 NavigationLink("Local", value: PostsModel(path: "Local"))
             }
-            if let subscribed = apiModel.subscribed {
+            if let subscribedArray = apiModel.subscribed?.map({ (key: String, value: [LemmyApi.Community]) in
+                (key, value.filter { searchText == "" || $0.name.lowercased().contains(searchText.lowercased()) })
+            }).filter({ !$0.1.isEmpty }) {
+                let subscribed = Dictionary(uniqueKeysWithValues: subscribedArray)
                 HStack {
                     Image(systemName: "house")
                         .resizable()
@@ -52,6 +57,7 @@ struct HomeView: View {
                 }
             }
         }
+        .searchable(text: $searchText)
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.inline)
     }
