@@ -169,11 +169,11 @@ struct ContentView: View {
                     if let requestedUrl = selectedTab.requestedUrl {
                         if requestedUrl.absoluteString.contains("post") {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
+                                appendView(model: ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
                             }
                         } else if requestedUrl.absoluteString.contains("comment") {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
+                                appendView(model: ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
                             }
                         }
                         selectedTab.requestedUrl = nil
@@ -188,9 +188,9 @@ struct ContentView: View {
                 .onChange(of: selectedTab.requestedUrl) { newValue in
                     if let requestedUrl = newValue {
                         if requestedUrl.absoluteString.contains("post") {
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
+                            appendView(model: ResolveModel<LemmyApi.PostView>(thing: requestedUrl))
                         } else if requestedUrl.absoluteString.contains("comment") {
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
+                            appendView(model: ResolveModel<LemmyApi.CommentView>(thing: requestedUrl))
                         }
                         selectedTab.requestedUrl = nil
                     }
@@ -204,31 +204,26 @@ struct ContentView: View {
                         if let host = incomingUrl.host(), let tab = Tab(rawValue: host) {
                             selected = tab
                         }
-                        var selectedNavModel = selectedNavModel
-                        if selectedNavModel == nil {
-                            selectedNavModel = homeNavModel
-                            selected = .Posts
-                        }
                         if let match = incomingUrl.absoluteString.firstMatch(of: communityRegex) {
                             if let instance = match.3 {
-                                selectedNavModel!.path.append(PostsModel(path: "\(match.2)\(instance)"))
+                                appendView(model: PostsModel(path: "\(match.2)\(instance)"))
                             } else {
-                                selectedNavModel!.path.append(PostsModel(path: "\(match.2)@\(match.1)"))
+                                appendView(model: PostsModel(path: "\(match.2)@\(match.1)"))
                             }
                         } else if let match = incomingUrl.absoluteString.firstMatch(of: userRegex) {
                             if let instance = match.3 {
-                                selectedNavModel!.path.append(UserModel(path: "\(match.2)\(instance)"))
+                                appendView(model: UserModel(path: "\(match.2)\(instance)"))
                             } else {
-                                selectedNavModel!.path.append(UserModel(path: "\(match.2)@\(match.1)"))
+                                appendView(model: UserModel(path: "\(match.2)@\(match.1)"))
                             }
                         } else if incomingUrl.absoluteString.firstMatch(of: postRegex) != nil {
                             var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
                             urlComponents.scheme = "https"
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.PostView>(thing: urlComponents.url!))
+                            appendView(model: ResolveModel<LemmyApi.PostView>(thing: urlComponents.url!))
                         } else if incomingUrl.absoluteString.firstMatch(of: commentRegex) != nil {
                             var urlComponents = URLComponents(url: incomingUrl, resolvingAgainstBaseURL: false)!
                             urlComponents.scheme = "https"
-                            selectedNavModel!.path.append(ResolveModel<LemmyApi.CommentView>(thing: urlComponents.url!))
+                            appendView(model: ResolveModel<LemmyApi.CommentView>(thing: urlComponents.url!))
                         }
                     }
                 }
@@ -265,6 +260,15 @@ struct ContentView: View {
             }
         } else {
             selected = target
+        }
+    }
+
+    func appendView(model: any Hashable) {
+        if let selectedNavModel = selectedNavModel {
+            selectedNavModel.path.append(model)
+        } else {
+            selected = .Posts
+            homeNavModel.path.append(model)
         }
     }
 }
