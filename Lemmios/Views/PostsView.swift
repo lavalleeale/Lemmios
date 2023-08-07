@@ -23,6 +23,7 @@ struct PostsView: View {
                         if post % 2 == 0 {
                             let post = postsModel.posts[post / 2]
                             PostPreviewComponent(post: post, showCommunity: isSpecialPath, showUser: !isSpecialPath)
+                                .id(post.id)
                                 .onAppear {
                                     if postsModel.posts.count > 0 && post.id == postsModel.posts.last?.id {
                                         postsModel.fetchPosts(apiModel: apiModel)
