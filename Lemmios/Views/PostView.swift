@@ -29,6 +29,8 @@ struct PostView: View {
                 .fill(selectedTheme.primaryColor)
             ScrollViewReader { value in
                 ScrollView {
+                    EmptyView()
+                        .id("top")
                     // Hack to make sure appear methods are called
                     LazyVStack {
                         Text(postModel.post.name)
@@ -64,6 +66,7 @@ struct PostView: View {
                     .onTapGesture {
                         withAnimation {
                             collapsed.toggle()
+                            value.scrollTo("top")
                         }
                     }
                     if postModel.creator != nil {
