@@ -16,6 +16,9 @@ struct InboxView: View {
                             inboxModel.getMessages(apiModel: apiModel, onlyUnread: newValue)
                             inboxModel.getReplies(apiModel: apiModel, onlyUnread: newValue)
                         }
+                    Button("Mark All Read") {
+                        inboxModel.markAllRead(apiModel: apiModel)
+                    }
                     Picker("Type", selection: $showing) {
                         ForEach(InboxSections.allCases, id: \.self) {
                             Text($0.rawValue)

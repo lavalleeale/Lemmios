@@ -48,6 +48,23 @@ class InboxModel: ObservableObject {
         }.store(in: &cancellable)
     }
     
+    func markAllRead(apiModel: ApiModel) {
+        for reply in replies.enumerated().filter({ !$0.element.comment_reply!.read }) {
+            apiModel.lemmyHttp?.readReply(replyId: reply.element.comment_reply!.id, read: !reply.element.comment_reply!.read) { commentView, _ in
+                if commentView != nil {
+                    self.replies[reply.offset].comment_reply!.read.toggle()
+                }
+            }.store(in: &cancellable)
+        }
+        for message in messages.enumerated().filter({ !$0.element.private_message.read }) {
+            apiModel.lemmyHttp?.readMessage(messageId: message.element.private_message.id, read: !message.element.private_message.read) { commentView, _ in
+                if commentView != nil {
+                    self.messages[message.offset].private_message.read.toggle()
+                }
+            }.store(in: &cancellable)
+        }
+    }
+    
     func reset() {
         cancellable.removeAll()
         replies.removeAll()

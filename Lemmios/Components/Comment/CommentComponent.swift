@@ -196,7 +196,7 @@ struct CommentComponent: View {
                 if preview {
                     if let replyInfo = replyInfo, replyInfo.read == false {
                         commentModel.read(replyInfo: replyInfo, apiModel: apiModel) {
-                            read!()
+                            read?()
                         }
                     }
                     navModel.path.append(PostModel(post: commentModel.comment.post, comment: commentModel.comment.comment))
@@ -243,7 +243,7 @@ struct CommentComponent: View {
                                 apiModel.getAuth()
                             } else {
                                 commentModel.read(replyInfo: replyInfo!, apiModel: apiModel) {
-                                    read!()
+                                    read?()
                                 }
                             }
                         case "collapse":
