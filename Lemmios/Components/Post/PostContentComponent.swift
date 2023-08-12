@@ -69,6 +69,7 @@ struct PostContentComponent: View {
                     }
                     ImageViewComponent(url: url, urlCache: .imageCache, showing: $showingImage) {
                         PostActionsComponent(postModel: post, showCommunity: false, showUser: false, collapsedButtons: false, rowButtons: true, showInfo: false, image: true, preview: false)
+                            .padding(.bottom, isBottom() ? 20 : 0)
                     }
                 }
             } else if !post.post.deleted, let url = post.post.UrlData {
