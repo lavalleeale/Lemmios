@@ -31,11 +31,10 @@ struct MessageComponent: View {
             if option == "read" {
                 messageModel.read(message: message.private_message, apiModel: apiModel) {
                     if message.private_message.read {
-                        apiModel.unreadCount += 1
+                        UIApplication.shared.applicationIconBadgeNumber += 1
                     } else {
-                        apiModel.unreadCount -= 1
+                        UIApplication.shared.applicationIconBadgeNumber -= 1
                     }
-                    UIApplication.shared.applicationIconBadgeNumber = apiModel.unreadCount
                     self.message.private_message.read.toggle()
                 }
             } else {

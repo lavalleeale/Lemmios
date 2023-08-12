@@ -32,11 +32,10 @@ struct InboxView: View {
                                     let model = CommentModel(comment: reply, children: [])
                                     CommentComponent(parent: model, commentModel: model, preview: true, replyInfo: reply.comment_reply!, depth: 0, read: {
                                         if reply.comment_reply!.read {
-                                            apiModel.unreadCount += 1
+                                            UIApplication.shared.applicationIconBadgeNumber += 1
                                         } else {
-                                            apiModel.unreadCount -= 1
+                                            UIApplication.shared.applicationIconBadgeNumber -= 1
                                         }
-                                        UIApplication.shared.applicationIconBadgeNumber = apiModel.unreadCount
                                         if index < inboxModel.replies.endIndex {
                                             if inboxModel.replies[safe: index]?.comment_reply != nil {
                                                 inboxModel.replies[index].comment_reply!.read.toggle()

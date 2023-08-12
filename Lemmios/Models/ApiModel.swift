@@ -17,7 +17,6 @@ class ApiModel: ObservableObject {
     @Published var subscribed: [String: [LemmyApi.Community]]?
     @Published var moderates: [LemmyApi.Community]?
     @Published var showingAuth = false
-    @Published var unreadCount = 0
     @Published var invalidUser: String?
     @Published var siteInfo: LemmyApi.SiteInfo?
     @Published var nsfw = false
@@ -28,8 +27,6 @@ class ApiModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     private var serverInfoCancellable: AnyCancellable?
     private var deviceTokenCancellable: AnyCancellable?
-    
-    private var timer: Timer?
     
     init(doNothing: Bool) {}
     
@@ -156,8 +153,6 @@ class ApiModel: ObservableObject {
             selectedAccount = nil
             UserDefaults(suiteName: "group.com.axlav.lemmios")!.removeObject(forKey: "account")
             lemmyHttp?.setJwt(jwt: nil)
-            unreadCount = 0
-            timer?.invalidate()
         }
         if account.notificationsEnabled == true {
             disablePush(account: account)
@@ -188,23 +183,10 @@ class ApiModel: ObservableObject {
     func selectAuth(account: StoredAccount) {
         _ = selectServer(url: account.instance)
         selectedAccount = account
-        unreadCount = 0
         lemmyHttp?.setJwt(jwt: account.jwt)
         UserDefaults(suiteName: "group.com.axlav.lemmios")!.set("\(account.username)@\(account.instance)", forKey: "account")
         WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
         WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentCommunity")
-        if let timer = timer {
-            timer.fire()
-        } else {
-            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-                self.lemmyHttp?.getUnreadCount { unreadCount, _ in
-                    if let unreadCount = unreadCount {
-                        self.unreadCount = unreadCount.replies + unreadCount.private_messages
-                    }
-                }.store(in: &self.cancellable)
-            }
-            timer!.fire()
-        }
         if account.notificationsEnabled == true {
             enablePush(account: account)
         }

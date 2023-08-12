@@ -10,6 +10,8 @@ let postRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/post\/([0-9]+)$/
 let commentRegex = /^(?:https|lemmiosapp):\/\/([a-zA-Z\-\.]+?)\/comment\/([0-9]+)$/
 
 struct ContentView: View {
+    let unreadTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
+
     @AppStorage("selectedTheme") var selectedTheme = Theme.Default
     @AppStorage("colorScheme") var colorScheme = ColorScheme.System
     @AppStorage("pureBlack") var pureBlack = false
@@ -27,6 +29,7 @@ struct ContentView: View {
     @ObservedObject var userNavModel = NavModel(startNavigated: false)
     @ObservedObject var settingsNavModel = NavModel(startNavigated: false)
     @ObservedObject var inboxNavModel = NavModel(startNavigated: false)
+    @ObservedObject var unreadModel = UnreadModel()
     @State var showingAuth = false
     @State var selected = Tab.Posts
     @State var showInvalidUser = false
@@ -127,18 +130,22 @@ struct ContentView: View {
                             .foregroundStyle(selected == .Posts ? Color.accentColor : .secondary)
                         Button { setOrClear(.Inbox) } label: { Label("Inbox", systemImage: "envelope") }
                             .foregroundStyle(selected == .Inbox ? Color.accentColor : .secondary)
-                            .if(apiModel.unreadCount != 0) { view in view.overlay(alignment: .topTrailing) {
+                            .overlay(alignment: .topTrailing) {
                                 ZStack {
                                     Circle()
                                         .fill(.red)
-                                    Text(String(apiModel.unreadCount))
+                                    Text(String(unreadModel.unreadCount))
                                         .foregroundStyle(.white)
                                 }
                                 .frame(width: 20, height: 20)
                                 .scaleEffect(0.8)
                                 .padding(.trailing, 10)
                                 .padding(.top, -10)
-                            }}
+                                .opacity(unreadModel.unreadCount == 0 ? 0 : 1)
+                            }
+                            .onReceive(unreadTimer) { _ in
+                                unreadModel.check(apiModel: apiModel)
+                            }
                         Button { setOrClear(.Accounts) } label: { Label("Accounts", systemImage: "person.crop.circle") }
                             .foregroundStyle(selected == .Accounts ? Color.accentColor : .secondary)
                             .simultaneousGesture(LongPressGesture().onEnded { _ in
