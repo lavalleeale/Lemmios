@@ -176,6 +176,11 @@ struct PostsView: View {
                                 navModel.path.append(ModlogModel(communityId: communityId))
                             }
                             .tint(.green)
+                            if apiModel.moderates?.contains {$0.id == communityId} == true {
+                                PostButton(label: "Reports", image: "shield") {
+                                    navModel.path.append(ReportsModel(communityId: communityId))
+                                }
+                            }
                         }
                     } label: {
                         VStack {

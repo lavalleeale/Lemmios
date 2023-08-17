@@ -55,6 +55,8 @@
 		FA5A461B2A61E2670041D11B /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A461A2A61E2670041D11B /* SearchTests.swift */; };
 		FA5A461D2A61E26F0041D11B /* AuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A461C2A61E26F0041D11B /* AuthTests.swift */; };
 		FA6030122A68688B00E70C9F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6030112A68688B00E70C9F /* SettingsModel.swift */; };
+		FA6608DC2A8EB41C003D34CC /* ReportsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6608DB2A8EB41C003D34CC /* ReportsModel.swift */; };
+		FA6608DE2A8EB6A5003D34CC /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6608DD2A8EB6A5003D34CC /* ReportsView.swift */; };
 		FA68BDEC2A58DD9900F2FE3D /* AuthFormComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */; };
 		FA7260E82A758E6500995467 /* ModlogModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7260E72A758E6500995467 /* ModlogModel.swift */; };
 		FA7260EA2A758E7800995467 /* ModlogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7260E92A758E7800995467 /* ModlogView.swift */; };
@@ -222,6 +224,8 @@
 		FA5A461A2A61E2670041D11B /* SearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		FA5A461C2A61E26F0041D11B /* AuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTests.swift; sourceTree = "<group>"; };
 		FA6030112A68688B00E70C9F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		FA6608DB2A8EB41C003D34CC /* ReportsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsModel.swift; sourceTree = "<group>"; };
+		FA6608DD2A8EB6A5003D34CC /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
 		FA68BDEA2A58C45700F2FE3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA68BDEB2A58DD9900F2FE3D /* AuthFormComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormComponent.swift; sourceTree = "<group>"; };
 		FA7260E72A758E6500995467 /* ModlogModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModlogModel.swift; sourceTree = "<group>"; };
@@ -551,6 +555,7 @@
 				FA2214922A5B57D80023C696 /* SplashView.swift */,
 				FABB71302A6447D900D39592 /* ResolveView.swift */,
 				FA7260E92A758E7800995467 /* ModlogView.swift */,
+				FA6608DD2A8EB6A5003D34CC /* ReportsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -582,6 +587,7 @@
 				FA7260E72A758E6500995467 /* ModlogModel.swift */,
 				FA4344C22A7CCFE700799AE9 /* CrossModel.swift */,
 				FA8793502A87F52D00BB61A9 /* UnreadModel.swift */,
+				FA6608DB2A8EB41C003D34CC /* ReportsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -941,6 +947,7 @@
 				FABB71332A6447E400D39592 /* ResolveModel.swift in Sources */,
 				FAA145082A581F23009DDA23 /* MixedListComponent.swift in Sources */,
 				FAA51FCB2A736F03006EA47F /* IconsView.swift in Sources */,
+				FA6608DC2A8EB41C003D34CC /* ReportsModel.swift in Sources */,
 				FAA51FC92A736BBA006EA47F /* IconsModel.swift in Sources */,
 				FA4CEC5C2A64B03B002AEB75 /* AddWatcherComponent.swift in Sources */,
 				FA44D6B12A538E710086AD56 /* SwipeActionsModifier.swift in Sources */,
@@ -970,6 +977,7 @@
 				FA72A6962A573C99001AFA61 /* ShowFromComponent.swift in Sources */,
 				FAB93E5F2A533FE800DE15BB /* CommentModel.swift in Sources */,
 				FABEC3082A540D3500620E9A /* SettingsView.swift in Sources */,
+				FA6608DE2A8EB6A5003D34CC /* ReportsView.swift in Sources */,
 				FA72A68C2A572151001AFA61 /* SearchView.swift in Sources */,
 				FADD20432A5204B3002CE443 /* ArtemisApp.swift in Sources */,
 				FACA76EE2A64A6C300D96136 /* NotificationsView.swift in Sources */,

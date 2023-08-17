@@ -105,11 +105,7 @@ class CommentModel: VotableModel {
     }
     
     func report(reason: String, apiModel: ApiModel) {
-        apiModel.lemmyHttp?.reportComment(commentId: comment.id, reason: reason) { response, _ in
-            if let response = response {
-                self.comment = response.comment_report_view
-            }
-        }.store(in: &cancellable)
+        apiModel.lemmyHttp?.reportComment(commentId: comment.id, reason: reason) { _, _ in }.store(in: &cancellable)
     }
     
     func distinguish(apiModel: ApiModel) {
@@ -131,6 +127,11 @@ class CommentModel: VotableModel {
         }
         remove(apiModel: apiModel)
         nuked = true
+    }
+    
+    func updateReport(reportInfo: ReportView, apiModel: ApiModel) {
+        apiModel.lemmyHttp?.updateCommentReport(reportId: Int(reportInfo.id.components(separatedBy: "_").last ?? "0") ?? 0, resolved: !reportInfo.resolved) {_, _ in}
+            .store(in: &cancellable)
     }
 }
 

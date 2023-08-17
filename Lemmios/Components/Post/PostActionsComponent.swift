@@ -33,25 +33,25 @@ struct PostActionsComponent: View {
             }
             HStack {
                 if showInfo {
-                        HStack(spacing: compact && preview ? 0 : nil) {
-                            ScoreComponent(votableModel: postModel, preview: preview)
-                            Group {
-                                HStack(spacing: compact && preview ? 0 : 3) {
-                                    Image(systemName: "bubble.left.and.bubble.right")
-                                        .scaleEffect(compact && preview ? 0.5 : 0.8)
-                                    Text(formatNum(num: postModel.counts!.comments))
-                                        .font(compact && preview ? .caption : nil)
-                                }
-                                HStack(spacing: compact && preview ? 0 : 3) {
-                                    Image(systemName: "clock")
-                                        .scaleEffect(compact && preview ? 0.5 : 0.8)
-                                    Text(postModel.counts!.published.relativeDateAsString())
-                                        .font(compact && preview ? .caption : nil)
-                                }
+                    HStack(spacing: compact && preview ? 0 : nil) {
+                        ScoreComponent(votableModel: postModel, preview: preview)
+                        Group {
+                            HStack(spacing: compact && preview ? 0 : 3) {
+                                Image(systemName: "bubble.left.and.bubble.right")
+                                    .scaleEffect(compact && preview ? 0.5 : 0.8)
+                                Text(formatNum(num: postModel.counts!.comments))
+                                    .font(compact && preview ? .caption : nil)
                             }
-                            .foregroundStyle(.secondary)
+                            HStack(spacing: compact && preview ? 0 : 3) {
+                                Image(systemName: "clock")
+                                    .scaleEffect(compact && preview ? 0.5 : 0.8)
+                                Text(postModel.counts!.published.relativeDateAsString())
+                                    .font(compact && preview ? .caption : nil)
+                            }
                         }
-                        .padding(rowButtons ? .horizontal : [])
+                        .foregroundStyle(.secondary)
+                    }
+                    .padding(rowButtons ? .horizontal : [])
                 }
                 if !compact || !preview {
                     Spacer()
@@ -89,6 +89,7 @@ struct PostActionsComponent: View {
 struct PostButtons: View {
     @ObservedObject var postModel: PostModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.reportInfo) private var reportInfo
     @EnvironmentObject var navModel: NavModel
     @EnvironmentObject var apiModel: ApiModel
     
@@ -158,39 +159,6 @@ struct PostButtons: View {
                     PostButton(label: "Edit", image: "pencil") {
                         showingEdit = true
                     }
-                } else {
-                    if apiModel.moderates?.contains(where: { $0.id == postModel.community?.id }) == true {
-                        let removed = postModel.post.removed
-                        PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
-                            postModel.remove(apiModel: apiModel)
-                        }
-                        let banned = postModel.creator_banned_from_community
-                        PostButton(label: banned ? "Unabn from community" : "Ban from community", image: "") {
-                            if banned {
-                                postModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
-                            } else {
-                                showingBan = true
-                                banReason = ""
-                                banDays = ""
-                            }
-                        }
-                    }
-                    PostButton(label: "Report", image: "flag") {
-                        showingReport = true
-                    }
-                }
-                if let community = postModel.community, let communityHost = community.actor_id.host() {
-                    let localCommunity = community.local
-                    let communityName = community.name
-                    let path = localCommunity ? communityName : "\(communityName)@\(communityHost)"
-                    NavigationLink(value: PostsModel(path: path)) {
-                        ShowFromComponent(item: community, show: true)
-                    }
-                }
-                if let user = postModel.creator {
-                    NavigationLink(value: UserModel(user: user)) {
-                        ShowFromComponent(item: user, show: true)
-                    }
                 }
                 Button { showingShare = true } label: {
                     Label {
@@ -230,6 +198,54 @@ struct PostButtons: View {
                 }
             }
             .foregroundStyle(.secondary)
+            if showAll {
+                if let community = postModel.community, let communityHost = community.actor_id.host() {
+                    let localCommunity = community.local
+                    let communityName = community.name
+                    let path = localCommunity ? communityName : "\(communityName)@\(communityHost)"
+                    NavigationLink(value: PostsModel(path: path)) {
+                        ShowFromComponent(item: community, show: true)
+                    }
+                }
+                if let user = postModel.creator {
+                    NavigationLink(value: UserModel(user: user)) {
+                        ShowFromComponent(item: user, show: true)
+                    }
+                }
+                if apiModel.moderates?.contains(where: { $0.id == postModel.community?.id }) == true {
+                    Menu("Moderation") {
+                        let removed = postModel.post.removed
+                        PostButton(label: removed ? "Restore" : "Remove", image: removed ? "trash.slash" : "trash") {
+                            postModel.remove(apiModel: apiModel)
+                        }
+                        let banned = postModel.creator_banned_from_community
+                        PostButton(label: banned ? "Unabn from community" : "Ban from community", image: "") {
+                            if banned {
+                                postModel.ban(reason: "", remove: false, expires: nil, apiModel: apiModel)
+                            } else {
+                                showingBan = true
+                                banReason = ""
+                                banDays = ""
+                            }
+                        }
+                    }
+                    if let reportInfo = reportInfo {
+                        if reportInfo.resolved {
+                            PostButton(label: "Unresolve Report", image: "xmark") {
+                                postModel.updateReport(reportInfo: reportInfo, apiModel: apiModel)
+                            }
+                        } else {
+                            PostButton(label: "Resolve Report", image: "checkmark") {
+                                postModel.updateReport(reportInfo: reportInfo, apiModel: apiModel)
+                            }
+                        }
+                    } else {
+                        PostButton(label: "Report", image: "flag") {
+                            showingReport = true
+                        }
+                    }
+                }
+            }
         }
     }
     

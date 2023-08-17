@@ -235,4 +235,9 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
             }
         }.store(in: &cancellable)
     }
+    
+    func updateReport(reportInfo: ReportView, apiModel: ApiModel) {
+        apiModel.lemmyHttp?.updatePostReport(reportId: Int(reportInfo.id.components(separatedBy: "_").last ?? "0") ?? 0, resolved: !reportInfo.resolved) {_, _ in}
+            .store(in: &cancellable)
+    }
 }

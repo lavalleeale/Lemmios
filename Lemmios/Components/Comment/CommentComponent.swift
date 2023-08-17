@@ -7,6 +7,7 @@ let colors = [Color.green, Color.red, Color.orange, Color.yellow]
 
 struct CommentComponent: View {
     @Environment(\.redactionReasons) private var reasons
+    @Environment(\.reportInfo) private var reportInfo
     @ObservedObject var parent: CommentModel
     @StateObject var commentModel: CommentModel
 
@@ -101,10 +102,22 @@ struct CommentComponent: View {
                         }
                     }
                 }
-                PostButton(label: "Report", image: "flag") {
-                    showingReport = true
-                    // WHY?????
-                    commentModel.objectWillChange.send()
+                if let reportInfo = reportInfo {
+                    if reportInfo.resolved {
+                        PostButton(label: "Unresolve Report", image: "xmark") {
+                            commentModel.updateReport(reportInfo: reportInfo, apiModel: apiModel)
+                        }
+                    } else {
+                        PostButton(label: "Resolve Report", image: "checkmark") {
+                            commentModel.updateReport(reportInfo: reportInfo, apiModel: apiModel)
+                        }
+                    }
+                } else {
+                    PostButton(label: "Report", image: "flag") {
+                        // WHY?????
+                        commentModel.objectWillChange.send()
+                        showingReport = true
+                    }
                 }
             }
             let user = commentModel.comment.creator

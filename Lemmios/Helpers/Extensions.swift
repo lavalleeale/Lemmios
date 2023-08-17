@@ -124,6 +124,9 @@ private struct WithNavigationModifier: ViewModifier {
                     .navigationDestination(for: ModlogModel.self) { modlogModel in
                         ModlogView(modlogModel: modlogModel)
                     }
+                    .navigationDestination(for: ReportsModel.self) { reportsModel in
+                        ReportsView(reportsModel: reportsModel)
+                    }
                     .fullScreenCover(item: $url) { item in
                         PostUrlViewWrapper(url: item)
                             .ignoresSafeArea()
@@ -331,6 +334,10 @@ private struct ShowCommunities: EnvironmentKey {
     static let defaultValue = true
 }
 
+private struct ReportInfo: EnvironmentKey {
+    static let defaultValue: ReportView? = nil
+}
+
 extension EnvironmentValues {
     var showUsernames: Bool {
         get { self[ShowUsernames.self] }
@@ -340,6 +347,11 @@ extension EnvironmentValues {
     var showCommunities: Bool {
         get { self[ShowCommunities.self] }
         set { self[ShowCommunities.self] = newValue }
+    }
+
+    var reportInfo: ReportView? {
+        get { self[ReportInfo.self] }
+        set { self[ReportInfo.self] = newValue }
     }
 }
 
