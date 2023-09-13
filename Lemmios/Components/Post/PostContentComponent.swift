@@ -30,8 +30,19 @@ struct PostContentComponent: View {
                         .clipped()
                         .cornerRadius(showCompact ? 12 : 0)
                 }, placeholder: {
-                    ProgressView()
-                        .hidden(if: reasons.contains(.screenshot))
+                    if !preview, let thumbnail_url = post.post.thumbnail_url {
+                        CachedAsyncImage(url: thumbnail_url, urlCache: .imageCache, content: { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        }, placeholder: {
+                            ProgressView()
+                                .hidden(if: reasons.contains(.screenshot))
+                        })
+                    } else {
+                        ProgressView()
+                            .hidden(if: reasons.contains(.screenshot))
+                    }
                 })
                 .blur(radius: !blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
                 .padding(!blurNsfw || showingNSFW || !post.post.nsfw ? 0 : 20)
