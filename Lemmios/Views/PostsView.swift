@@ -51,7 +51,7 @@ struct PostsView: View {
                 } else if case .done = postsModel.pageStatus {
                     Text("Last Post Found ):")
                         .listRowSeparator(.hidden)
-                } else if case .loading = postsModel.pageStatus {
+                } else if postsModel.pageStatus.isLoading {
                     HStack {
                         Spacer()
                         ProgressView()

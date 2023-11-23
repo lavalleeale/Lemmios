@@ -1,9 +1,9 @@
 import Combine
 import Foundation
 import LemmyApi
+import LinkPreview
 import SwiftUI
 import WidgetKit
-import LinkPreview
 
 class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     private var id = UUID()
@@ -20,7 +20,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     @Published var posts = [LemmyApi.PostView]()
     @Published var sort = LemmyApi.Sort.Active
     @Published var time = LemmyApi.TopTime.All
-    @Published var pageStatus = PostsPageStatus.ready(nextPage: 1)
+    @Published var pageStatus = PostsSpecificPageStatus.readyInt(nextPage: 1)
     @Published var skipped = 0
     @Published var communityView: LemmyApi.CommunityView?
     @Published var postCreated = false
@@ -42,9 +42,6 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     }
     
     func fetchPosts(apiModel: ApiModel) {
-        guard case let .ready(page) = pageStatus else {
-            return
-        }
         if posts.isEmpty && !specialPostPathList.contains(path) {
             apiModel.lemmyHttp?.getCommunity(name: path) { posts, _ in
                 if let posts = posts {
@@ -52,21 +49,30 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                 }
             }.store(in: &cancellable)
         }
-        pageStatus = .loading(page: page)
-        apiModel.lemmyHttp?.getPosts(path: path, page: page, sort: sort, time: time) { posts, error in
+        if case let .readyInt(page) = pageStatus {
+            pageStatus = .loadingInt(page: page)
+            apiModel.lemmyHttp?.getPosts(path: path, page: page, sort: sort, time: time, receiveValue: handlePosts(apiModel: apiModel)).store(in: &cancellable)
+        } else if case let .readyCursor(page) = pageStatus {
+            pageStatus = .loadingCursor
+            apiModel.lemmyHttp?.getPosts(path: path, pageCursor: page, sort: sort, time: time, receiveValue: handlePosts(apiModel: apiModel)).store(in: &cancellable)
+        }
+    }
+    
+    func handlePosts(apiModel: ApiModel) -> ((LemmyApi.ApiPosts?, LemmyApi.NetworkError?) -> Void) {
+        return { (posts: LemmyApi.ApiPosts?, error: LemmyApi.NetworkError?) in
             DispatchQueue.main.async {
                 if let posts = posts {
                     if posts.posts.isEmpty {
                         self.pageStatus = .done
                     } else {
-                        let posts = posts.posts.filter { post in
+                        let postList = posts.posts.filter { post in
                             let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true) || self.posts.contains { $0.post.id == post.id }
                             if shouldHide {
                                 self.skipped += 1
                             }
                             return !shouldHide
                         }
-                        for post in posts {
+                        for post in postList {
                             if let url = post.post.thumbnail_url, let pathExtension = post.post.UrlData?.pathExtension, imageExtensions.contains(pathExtension) {
                                 let request = URLRequest(url: url)
                                 let config = URLSessionConfiguration.default
@@ -75,16 +81,22 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                                     .dataTask(with: request)
                                     .resume()
                             } else if let url = post.post.UrlData, MetadataStorage.metadata(for: url) == nil {
-                                MetadataStorage.getMetadata(url: url) {metadata in
+                                MetadataStorage.getMetadata(url: url) { metadata in
                                     if let metadata = metadata {
                                         MetadataStorage.store(metadata)
                                     }
                                 }
                             }
                         }
-                        self.posts.append(contentsOf: posts)
-                        self.pageStatus = .ready(nextPage: page + 1)
-                        if posts.isEmpty {
+                        self.posts.append(contentsOf: postList)
+                        if let nextPage = posts.next_page {
+                            self.pageStatus = .readyCursor(nextPage: nextPage)
+                        } else {
+                            if case let .loadingInt(page) = self.pageStatus {
+                                self.pageStatus = .readyInt(nextPage: page + 1)
+                            }
+                        }
+                        if postList.isEmpty {
                             self.fetchPosts(apiModel: apiModel)
                         }
                     }
@@ -97,12 +109,12 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                     self.pageStatus = .failed
                 }
             }
-        }.store(in: &cancellable)
+        }
     }
     
     func refresh(apiModel: ApiModel) {
         cancellable.removeAll()
-        pageStatus = PostsPageStatus.ready(nextPage: 1)
+        pageStatus = PostsSpecificPageStatus.readyInt(nextPage: 1)
         notFound = false
         posts.removeAll()
         fetchPosts(apiModel: apiModel)
@@ -116,13 +128,13 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
     func changeSort(sort: LemmyApi.Sort, apiModel: ApiModel) {
         self.sort = sort
         cancellable.removeAll()
-        pageStatus = PostsPageStatus.ready(nextPage: 1)
+        pageStatus = PostsSpecificPageStatus.readyInt(nextPage: 1)
         posts.removeAll()
         fetchPosts(apiModel: apiModel)
     }
     
     func hideReadPosts() {
-        self.posts = self.posts.filter {!DBModel.instance.isRead(postId: $0.id)}
+        posts = posts.filter { !DBModel.instance.isRead(postId: $0.id) }
     }
     
     func receivePostData(title: String, content: String, url: String, apiModel: ApiModel) {
@@ -134,7 +146,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                     self.createdPost = postView
                     WidgetCenter.shared.reloadTimelines(ofKind: "com.axlav.lemmios.recentPost")
                 }
-            }.store(in: &cancellable)            
+            }.store(in: &cancellable)
         }
     }
     
@@ -153,6 +165,24 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                     self.communityView = communityView
                 }
             }.store(in: &cancellable)
+        }
+    }
+}
+
+enum PostsSpecificPageStatus {
+    case readyCursor(nextPage: String)
+    case readyInt(nextPage: Int)
+    case loadingInt(page: Int)
+    case loadingCursor, failed, done
+    
+    var isLoading: Bool {
+        switch self {
+        case let .loadingInt(page):
+            return true
+        case .loadingCursor:
+            return true
+        default:
+            return false
         }
     }
 }

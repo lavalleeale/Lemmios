@@ -56,7 +56,7 @@ struct RecentProvider: TimelineProvider {
             widgetPostInfos.append(WidgetInfo(
                 postName: post.post.name,
                 postBody: post.post.body,
-                postUrl: URL(string: post.post.ap_id.absoluteString.replacingOccurrences(of: "$https", with: "lemmiosapp", options: .regularExpression))!,
+                postUrl: URL(string: "\(lemmyApi.baseUrl.replacingOccurrences(of: "$https", with: "lemmiosapp", options: .regularExpression))/post/\(post.post.id)")!,
                 postCommunity: post.community.name,
                 postCreator: post.creator.name,
                 score: post.counts.score,
