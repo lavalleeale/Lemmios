@@ -7,13 +7,13 @@ struct UserHeaderComponent: View {
         HStack {
             if let person_view = person_view {
                 VStack {
-                    Text(String(person_view.counts.comment_score))
-                    Text("Comment Score")
+                    Text(String(person_view.counts.comment_count))
+                    Text("Comment Count")
                         .foregroundStyle(.secondary)
                 }
                 VStack {
-                    Text(String(person_view.counts.post_score))
-                    Text("Post Score")
+                    Text(String(person_view.counts.post_count))
+                    Text("Post Count")
                         .foregroundStyle(.secondary)
                 }
                 VStack {
