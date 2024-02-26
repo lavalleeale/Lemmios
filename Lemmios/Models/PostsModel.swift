@@ -66,7 +66,7 @@ class PostsModel: ObservableObject, Hashable, PostDataReceiver {
                         self.pageStatus = .done
                     } else {
                         let postList = posts.posts.filter { post in
-                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.contains($0) }.contains(true) || self.posts.contains { $0.post.id == post.id }
+                            let shouldHide = (self.hideRead && self.enableRead && DBModel.instance.isRead(postId: post.id)) || self.filters.map { post.post.name.lowercased().contains($0.lowercased()) }.contains(true) || self.posts.contains { $0.post.id == post.id }
                             if shouldHide {
                                 self.skipped += 1
                             }
