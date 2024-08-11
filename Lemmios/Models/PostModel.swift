@@ -129,9 +129,11 @@ class PostModel: VotableModel, Hashable, PostDataReceiver {
                 self.score = postView.counts.score
                 self.upvotes = postView.counts.upvotes
                 self.downvotes = postView.counts.downvotes
-                self.saved = postView.saved!
-                self.likes = postView.my_vote!
                 self.creator_banned_from_community = postView.creator_banned_from_community ?? self.creator_banned_from_community
+                if let saved = postView.saved {
+                    self.saved = saved
+                }
+                self.likes = postView.my_vote ?? targetVote
             }
         }.store(in: &cancellable)
     }
